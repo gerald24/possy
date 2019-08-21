@@ -3,8 +3,8 @@
 Possy was created based on [Boris's](https://github.com/boris779) idea to print out tasks, bugs and other issues on POS Printer (e.g. Epson TM-T20II) instead of using Post-it®. This can be used as an addition for ***physical scrum and kanban boards***.
 
 Possy is split into 2 parts:
-- [possy-daemon](https://github.com/gerald24/possy-daemon)
-- [possy-service](https://github.com/gerald24/possy-service)
+- possy-daemon
+- possy-service
 
 ## possy-daemon
 

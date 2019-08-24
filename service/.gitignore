@@ -1,0 +1,11 @@
+/target/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### Vaadin
+webpack.generated.js
+/src/main/resources/application.yml

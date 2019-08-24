@@ -1,0 +1,42 @@
+/*
+ * This file is part of possy.
+ *
+ * possy is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * possy is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with possy. If not, see <http://www.gnu.org/licenses/>.
+ */
+:host([drawer-opened]) {
+  --vaadin-app-layout-drawer-offset-right: var(--_vaadin-app-layout-drawer-offset-size);
+}
+
+:host([overlay]) {
+  --vaadin-app-layout-drawer-offset-right: 0;
+}
+
+:host([primary-section="drawer"][drawer-opened]:not([overlay])) [part="navbar"] {
+  right: var(--vaadin-app-layout-drawer-offset-right, 0);
+}
+
+[part="drawer"] {
+  left: auto;
+  right: var(--vaadin-app-layout-navbar-offset-left, 0);
+  transform: translateX(100%);
+}
+
+:host([drawer-opened]) [part="drawer"] {
+  transform: translateX(0%);
+}
+
+:host([drawer-opened]:not([overlay])) {
+  padding-left: 0;
+  padding-right: var(--vaadin-app-layout-drawer-offset-right);
+}

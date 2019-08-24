@@ -1,0 +1,68 @@
+/*
+ * This file is part of possy.
+ *
+ * possy is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * possy is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with possy. If not, see <http://www.gnu.org/licenses/>.
+ */
+@media (max-width: 586px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+.print-queue-layout {
+  border: 1px solid #444;
+  background: hsl(214, 35%, 19%);
+  overflow-y: auto;
+}
+
+body[theme~="light"] .print-queue-layout {
+  background: hsl(214, 35%, 90%);
+}
+
+.print-queue-view {
+  background: hsl(214, 35%, 17%);
+}
+
+body[theme~="light"] .print-queue-view {
+  background: hsl(214, 35%, 90%);
+}
+
+possy-print-request-item {
+  background: #444;
+}
+
+body[theme~="light"] possy-print-request-item {
+  background: #eee;
+}
+
+.jira-project {
+  border: 1px solid gray;
+  border-radius: 2px;
+  padding: 4px 8px 4px 8px;
+  width: 300px;
+  font-size: large;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.story-container {
+  overflow-y: auto;
+}
+
+.task-container {
+  border: 1px solid gray;
+  border-radius: 2px;
+}

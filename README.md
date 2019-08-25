@@ -27,3 +27,38 @@ edit/create profile
 edit/create profile 
 * see application.properties in service/src/main/resources
 
+
+# Installation
+
+There are different ways to integrate your possy-printer in your network, depending on which model you are using. All descripted installations are based on TM-T20II with wired network connection. If you are using a raspberrypi you use your printer also in a wifi environment as descripted.
+
+## Raspberry Pi (Wifi)
+This installation method is recommended, in wifi networks and if you need your printers 24x7 available.
+
+### Setup your Pi
+
+### Setup cups
+
+### Add one (or more) POS-Printer to cups
+
+### Setup possy-daemon
+
+### Setup possy-service
+
+### Start printing
+
+## Wired installations
+
+You can also connect your TM-T20II directly to your network via LAN. In this case you should use DHCP and get the IP-Adress from your printer(s). 
+
+### Linux 
+
+#### Setup possy-daemon
+
+#### Stetup possy-service
+
+### Windows 
+
+#### Setup possy-daemon
+
+#### Stetup possy-service

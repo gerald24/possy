@@ -39,11 +39,10 @@ This installation method is recommended, in wifi networks and if you need your p
 
 Using Noobs is recommended to setup your pi. Use Wifi for your regular network connection. For the wired lan connection, it is recommended to use fixed IP-Adresses for the PI and also for the Printers.
 
-Use EpsonNet Config for Windows or Mac to setup the IP-Adress of your printer.
+Use EpsonNet Config for Windows or Mac to setup the IP-Adress of your printer from Epson Website for your printer
+https://download.epson-biz.com/modules/pos/ 
 
-
-
-![Epson Net with fixed IP Adress](https://github.com/gerald24/possy/blob/installation_guide/documentation/screenshots/epsonNet_fixedIp.png)
+<img src="https://github.com/gerald24/possy/blob/installation_guide/documentation/screenshots/epsonNet_fixedIp.png" width="600">
 
 ### Setup cups
 
@@ -59,7 +58,7 @@ Use EpsonNet Config for Windows or Mac to setup the IP-Adress of your printer.
 
 You can also connect your TM-T20II directly to your network via LAN. In this case you should use DHCP and get the IP-Adress from your printer(s). In this case use Epson Net to set automatic IP for your printer(s).
 
-![Epson Net with DHCP Settings](https://github.com/gerald24/possy/blob/installation_guide/documentation/screenshots/epsonNet_dhcp.png)
+<img src="https://github.com/gerald24/possy/blob/installation_guide/documentation/screenshots/epsonNet_dhcp.png" width="600">
 
 ### Linux 
 

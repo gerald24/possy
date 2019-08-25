@@ -37,6 +37,10 @@ This installation method is recommended, in wifi networks and if you need your p
 
 ### Setup your Pi
 
+Using Noobs is recommended to setup your pi. Use Wifi for your regular network connection. For the wired lan connection, it is recommended to use fixed IP-Adresses for the PI and also for the Printers.
+
+Use EpsonNet Config for Windows or Mac to setup the IP-Adress of your printer. <
+
 ### Setup cups
 
 ### Add one (or more) POS-Printer to cups

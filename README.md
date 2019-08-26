@@ -25,5 +25,5 @@ edit/create profile
 ## service
 
 edit/create profile 
-* see application.properties in service/src/main/resources
+* see application.yml in service/src/main/resources
 

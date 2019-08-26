@@ -27,7 +27,4 @@
 /src/main/resources/Arial Black.ttf
 /src/main/resources/application-prod.properties
 
-### Vaadin
-webpack.generated.js
-node
-node_modules
+/package.json

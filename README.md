@@ -12,20 +12,20 @@ The daemon part connects to a possy-service and fetches print requests (simply t
 
 ## possy-service
 
-The service is a vaadin frontend, which creates print requests either by retrieving content from jira or get manually entered issues.
+The service is a Vaadin frontend, which creates print requests either by retrieving content from jira or get manually entered issues.
 
 # Configuration
 
 ## daemon
 
 edit/create profile 
-* see application.properties in daemon/src/main/resources
-* copy fonts to daemon/src/main/resources
+* see `application.properties` in `daemon/src/main/resources`
+* copy fonts to `daemon/src/main/resources`
 
 ## service
 
 edit/create profile 
-* see application.properties in service/src/main/resources
+* see `application.yml` in `service/src/main/resources`
 
 
 # Installation

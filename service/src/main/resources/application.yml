@@ -1,0 +1,39 @@
+logging:
+  level:
+    org.atmosphere: warn
+
+jira:
+  url: https://jira.changeme.at/rest/api/2/
+  browse:
+    url: https://jira.changeme.at/browse/
+  username: changeme
+  password: changeme
+  projects: PRJ1,PRJ2,PRJ3
+
+server:
+  compression:
+    enabled:  true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: possy
+  devtools:
+    restart:
+      # Workaround for https://github.com/vaadin/flow/issues/5947
+      additional-exclude: META-INF/VAADIN/config/**
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  security:
+    user:
+      name: possy
+      password: possy
+
+vaadin:
+  compatibilityMode: false
+  productionMode: false
+

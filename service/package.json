@@ -1,6 +1,6 @@
 {
-  "name": "no-name",
-  "license": "UNLICENSED",
+  "name": "possy-service",
+  "license": "GNU AGPL v3",
   "dependencies": {
     "@polymer/polymer": "3.2.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",

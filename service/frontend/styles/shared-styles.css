@@ -14,11 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-@media (max-width: 586px) {
-  .hide-on-mobile {
-    display: none;
-  }
-}
 
 .print-queue-layout {
   border: 1px solid #444;

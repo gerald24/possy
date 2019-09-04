@@ -24,7 +24,7 @@ import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.applayout.DrawerToggle
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.html.H2
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -34,6 +34,7 @@ import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.TabVariant
 import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.router.*
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
 import net.g24.possy.service.model.PrintRequest
@@ -51,6 +52,7 @@ import java.util.*
         CssImport(value = "./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
 )
 @Theme(value = Lumo::class)
+@PWA(name = "Possy", shortName = "Possy")
 class MainLayout(@Value("\${spring.application.name}") val appName: String, val printRequestQueueService: PrintRequestQueueService) : AppLayout(), RouterLayout, AfterNavigationObserver {
     private var dark = false
     private val themeToggleButton = Button("Switch to") { toggleThemeVariant() }
@@ -86,7 +88,6 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
                 .orElse(null)
     }
 
-
     private fun initNavigationBar() {
         val branding = initBranding()
 
@@ -97,12 +98,11 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
         addToNavbar(DrawerToggle())
     }
 
-    private fun initBranding(): H1 {
-        val appName = H1(appName)
+    private fun initBranding(): H2 {
+        val appName = H2(appName)
         appName.addClassName("app-name")
         appName.element.style.set("margin", "0")
         appName.element.style.set("padding-left", "0.25em")
-        appName.addClassName("hide-on-mobile")
         return appName
     }
 

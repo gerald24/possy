@@ -9,8 +9,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV SPRING_PROFILES_ACTIVE prod
 
-ADD service-1.0-SNAPSHOT.jar /tmp/service-1.0-SNAPSHOT.jar
+ADD service-0.0.0-SNAPSHOT.jar /tmp/service-0.0.0-SNAPSHOT.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/tmp/service-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/tmp/service-0.0.0-SNAPSHOT.jar"]

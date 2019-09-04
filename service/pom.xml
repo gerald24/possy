@@ -20,10 +20,10 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <java.version>1.8</java.version>
-    <kotlin.version>1.3.41</kotlin.version>
+    <kotlin.version>1.3.50</kotlin.version>
 
     <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
-    <vaadin.version>14.0.1</vaadin.version>
+    <vaadin.version>14.0.2</vaadin.version>
     <logback.version>1.2.3</logback.version>
   </properties>
 

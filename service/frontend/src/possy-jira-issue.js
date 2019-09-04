@@ -86,16 +86,6 @@ class PossyJiraIssue extends PolymerElement {
     handleClick() {
         // handler implemented server-side
     }
-
-    connectedCallback() {
-        super.connectedCallback();
-        console.log('my-element created!', this);
-    }
-
-    ready() {
-        super.ready();
-        console.log("ready", this);
-    }
 }
 
 customElements.define(PossyJiraIssue.is, PossyJiraIssue);

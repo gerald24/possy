@@ -7,9 +7,10 @@ RUN ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
+ENV SPRING_PROFILES_ACTIVE prod
 
-ADD possy-service-1.0-SNAPSHOT.jar /tmp/possy-service-1.0-SNAPSHOT.jar
+ADD service-1.0-SNAPSHOT.jar /tmp/service-1.0-SNAPSHOT.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/tmp/possy-service-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/tmp/service-1.0-SNAPSHOT.jar"]

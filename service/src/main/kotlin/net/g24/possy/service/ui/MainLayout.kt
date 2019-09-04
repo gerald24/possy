@@ -44,7 +44,8 @@ import org.springframework.beans.factory.annotation.Value
 import java.util.*
 
 /**
- * @author: Gerald Leeb
+ * @author Gerald Leeb
+ * @author Alex Gassner
  */
 @Push
 @CssImport.Container(
@@ -103,6 +104,7 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
         appName.addClassName("app-name")
         appName.element.style.set("margin", "0")
         appName.element.style.set("padding-left", "0.25em")
+        appName.addClassName("hide-on-mobile")
         return appName
     }
 

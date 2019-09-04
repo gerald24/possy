@@ -49,10 +49,11 @@ public class JiraIssue {
     public PrintTemplate getTemplate() {
         String id = getIssueTypeId();
 
-        if ("1".equals(id)) {
+        // TODO https://github.com/gerald24/possy/issues/3
+        if ("1".equals(id) || "10200".equals(id) || "10800".equals(id) || "11105".equals(id)) {
             return PrintTemplate.BUG;
         }
-        if ("10101".equals(id)) {
+        if ("10101".equals(id) || "10201".equals(id)) {
             return PrintTemplate.STORY;
         }
 

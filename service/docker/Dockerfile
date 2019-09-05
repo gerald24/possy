@@ -1,4 +1,4 @@
-FROM openjdk:12.0.1-jdk-oraclelinux7
+FROM openjdk:11.0.4-jre-stretch
 
 # fix timezone
 RUN ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime

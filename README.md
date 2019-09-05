@@ -6,11 +6,11 @@ Possy is split into 2 parts:
 - possy-daemon
 - possy-service
 
-## possy-daemon
+## possy-daemon [![Heroku possy-daemon](https://heroku-badge.herokuapp.com/?app=possy-daemon)](https://possy-daemon.herokuapp.com/)
 
 The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to one or more connected POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
 
-## possy-service
+## possy-service [![Heroku possy-service](https://heroku-badge.herokuapp.com/?app=possy-service)](https://possy-service.herokuapp.com/)
 
 The service is a Vaadin frontend, which creates print requests either by retrieving content from jira or get manually entered issues.
 

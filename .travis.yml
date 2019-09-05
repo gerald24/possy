@@ -3,4 +3,9 @@ sudo: false
 cache:
   directories:
   - $HOME/.m2
-script: mvn clean verify
+script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar
+addons:
+  sonarcloud:
+    organization: "gerald24"
+    token:
+      secure: "jlQxCSSWxoq71tDxYXdyT7z+uwaYmF4/1+qmryKi7fQRGrUOhmMJ9aAm6SHAPAdxwUrJO2LGHzWLQbiCyVHqcvCpAt+BmAZS7uaCergCm2ovnhEsMwp+cRqfUc5wdy98tjF1jUM10NyNNgzk1m5aodvyUSGQWsHskmnbt2Bsnu9bNkvzcHHySunlOvrb/uQhwKSZA2khWHspqB22u/Rn4pSJFNhDbmh8J0r/PFVwguk1NkSywLXF8F9XFcKCeRSj0ojRvA/lT9OB6/2UEBTTggVVLAXDqwsRTZE4uE1gxyoUhNS5zraZo2a3qsoXtKZTBKOvttIpp3a9DRcuGwaWVBYrrm8XP00A4TX79p8nxUTxXDZFPKjEDdkFCyfQzVHbnNdxqxrVLMS2N2bn9Qm86wpoY+SDmXvr9h+YcwKvPjwae2mmTYNOU48mbXSF4LG9rEnZzolO2xFVT+2gyfPWt0ZG/FIeagnP7BV30yyoiFQVZMZjQezkLbocLDri+DxOxl634ftB2MsMJj/yjuEXWlehcpPwColjYbE2g39rVGxmfazlbTymk4YGeT2Hf/CAOCpFWHvrVVpt5NioZlzx+kb7kiI1+prJxc6ponrBKSoBHnj/e82rzTEFqBG1wO4fyluIx2utvunjbqOaawDen2b/pbhAAzG5oxbpZup+aQA="

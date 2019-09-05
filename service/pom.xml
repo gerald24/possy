@@ -221,6 +221,7 @@
 				<version>2.0.10</version>
 				<configuration>
 					<appName>possy-service</appName>
+					<jdkVersion>${java.version}</jdkVersion>
 					<includeTarget>false</includeTarget>
 					<includes>
 						<include>target/${project.name}-${project.version}.jar</include>

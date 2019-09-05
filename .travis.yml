@@ -16,6 +16,9 @@ stages:
   - compile-test-analyze
   - deploy
 
+# skip Travis default mvn step
+install: true
+
 jobs:
   include:
     - stage: compile-test-analyze
@@ -25,4 +28,6 @@ jobs:
       # HEROKU_API_KEY
       env:
         secure: "2hRmhn9iVLFpXIAncBWqydrxOVq33DIeGqLAWeGcmfeG7m/lAnEOvOXFtIh7darJLomfsUdt5ujEocyTvJGeJfve0X9BxPc1z4FKTLLBoGjXk35wShJ98guq5YiVFyh+EVFUInsSVTroMWvBytrgql34WbX9y3dVVGGsrVA0jukcSrxPmliVOggDDXAbCMsZvtAhax8cO0A86FDu0sHFvs1EHEjoAn3biHkXB4LViZVORZucR0F8mg66KygwI0nzdaDpiJS0S8xzjKIgTYSyuALsobI4SLKk7XD6d9CpS7jUQ55aZzxuuDRKCpJecjVX4ZLmVjACrtSnTJvnj9Ed+S4EZS5WRWgNLZXafGCW932/mbycNp2nxkZbIJooZbGHeXHOt+JUrlgA9HXgTrYAsaKGHFTOkihLLvt7YqjABY5UH4zStgeZ8z93Yi2qHHsTf1R/ZVx6g9+446zJmNJ5j8LDIyYBMobxkAA6U6c0OyQnIaiQUHnw4TNYqY4x8AeGt24p7jDb3PGc5dBnQL4KMoC74KJdLIftjWm5jkk7bZEOh29uwyUg6GyPnHNawfWHpRqB5U8HEa2TrrpS7RRGgxJkVF5Alvz3Ux66XfRiTFq1ZsNbV39CZ2m4/KP1JNbL8LGRrrX1gGyUS49P2MEPKwQf1KLjm6VHy2wnbwVUq/w="
-      script: mvn clean heroku:deploy -DskipTests -Pprod
+      script:
+      - sh -c 'cd service && mvn clean heroku:deploy -DskipTests -Pprod'
+      - sh -c 'cd daemon && mvn clean heroku:deploy -DskipTests -Pprod'

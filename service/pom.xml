@@ -227,7 +227,7 @@
 						<include>target/${project.name}-${project.version}.jar</include>
 					</includes>
 					<processTypes>
-						<web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/*.jar</web>
+						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dvaadin.productionMode=true -jar target/*.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>

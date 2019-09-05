@@ -1,0 +1,23 @@
+language: java
+jdk: openjdk11
+sudo: false
+
+addons:
+  sonarcloud:
+    organization: "gerald24"
+    token:
+      secure: "jlQxCSSWxoq71tDxYXdyT7z+uwaYmF4/1+qmryKi7fQRGrUOhmMJ9aAm6SHAPAdxwUrJO2LGHzWLQbiCyVHqcvCpAt+BmAZS7uaCergCm2ovnhEsMwp+cRqfUc5wdy98tjF1jUM10NyNNgzk1m5aodvyUSGQWsHskmnbt2Bsnu9bNkvzcHHySunlOvrb/uQhwKSZA2khWHspqB22u/Rn4pSJFNhDbmh8J0r/PFVwguk1NkSywLXF8F9XFcKCeRSj0ojRvA/lT9OB6/2UEBTTggVVLAXDqwsRTZE4uE1gxyoUhNS5zraZo2a3qsoXtKZTBKOvttIpp3a9DRcuGwaWVBYrrm8XP00A4TX79p8nxUTxXDZFPKjEDdkFCyfQzVHbnNdxqxrVLMS2N2bn9Qm86wpoY+SDmXvr9h+YcwKvPjwae2mmTYNOU48mbXSF4LG9rEnZzolO2xFVT+2gyfPWt0ZG/FIeagnP7BV30yyoiFQVZMZjQezkLbocLDri+DxOxl634ftB2MsMJj/yjuEXWlehcpPwColjYbE2g39rVGxmfazlbTymk4YGeT2Hf/CAOCpFWHvrVVpt5NioZlzx+kb7kiI1+prJxc6ponrBKSoBHnj/e82rzTEFqBG1wO4fyluIx2utvunjbqOaawDen2b/pbhAAzG5oxbpZup+aQA="
+
+cache:
+  directories:
+  - $HOME/.m2
+  
+stages:
+  - name: "compile, test and analyze"
+    script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar
+  - name: "deploy to heroku"
+    if: branch = master
+    # HEROKU_API_KEY
+    env:
+      secure: "2hRmhn9iVLFpXIAncBWqydrxOVq33DIeGqLAWeGcmfeG7m/lAnEOvOXFtIh7darJLomfsUdt5ujEocyTvJGeJfve0X9BxPc1z4FKTLLBoGjXk35wShJ98guq5YiVFyh+EVFUInsSVTroMWvBytrgql34WbX9y3dVVGGsrVA0jukcSrxPmliVOggDDXAbCMsZvtAhax8cO0A86FDu0sHFvs1EHEjoAn3biHkXB4LViZVORZucR0F8mg66KygwI0nzdaDpiJS0S8xzjKIgTYSyuALsobI4SLKk7XD6d9CpS7jUQ55aZzxuuDRKCpJecjVX4ZLmVjACrtSnTJvnj9Ed+S4EZS5WRWgNLZXafGCW932/mbycNp2nxkZbIJooZbGHeXHOt+JUrlgA9HXgTrYAsaKGHFTOkihLLvt7YqjABY5UH4zStgeZ8z93Yi2qHHsTf1R/ZVx6g9+446zJmNJ5j8LDIyYBMobxkAA6U6c0OyQnIaiQUHnw4TNYqY4x8AeGt24p7jDb3PGc5dBnQL4KMoC74KJdLIftjWm5jkk7bZEOh29uwyUg6GyPnHNawfWHpRqB5U8HEa2TrrpS7RRGgxJkVF5Alvz3Ux66XfRiTFq1ZsNbV39CZ2m4/KP1JNbL8LGRrrX1gGyUS49P2MEPKwQf1KLjm6VHy2wnbwVUq/w="
+    script: mvn clean heroku:deploy -DskipTests -Pprod

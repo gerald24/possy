@@ -9,6 +9,8 @@
 	<version>0.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>possy</name>
+
 	<modules>
 		<module>daemon</module>
 		<module>service</module>

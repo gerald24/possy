@@ -26,18 +26,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
+import rst.pdfbox.layout.shape.RoundRect;
+import rst.pdfbox.layout.text.Position;
 
-public class TemplateRenderer implements LayoutRenderer {
-
-    @Override
-    public void render(
-            final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
-            throws IOException {
-        renderIssueAsHeader(printRequest, doc, contents, renderContext);
-        renderContent(printRequest, doc, contents, renderContext);
-        renderWeight(printRequest, doc, contents, renderContext);
-        renderTag(printRequest, doc, contents, renderContext);
-    }
+public abstract class TemplateRenderer implements LayoutRenderer {
 
     protected void renderContent(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
@@ -53,8 +45,6 @@ public class TemplateRenderer implements LayoutRenderer {
                 contentFont.getFont(doc),
                 contentFont.getSize(),
                 contentFont.getLineHeight());
-
-        drawRect(contents, renderContext.getWidth(), renderContext.getHeight(), renderContext.getMarginBorder());
     }
 
     protected void renderIssueAsHeader(
@@ -114,14 +104,14 @@ public class TemplateRenderer implements LayoutRenderer {
         float textWidth = getTextWidth(text, font, fontSize);
 
         contents.setNonStrokingColor(180, 180, 180);
-        float hBorder = 4.0f;
+        float hBorder = 6.0f;
         float vBorder = (footerFont.getLineHeight() - footerFont.getSize()) / 2.0f;
         float baseline = fontSize / 6.0f; // how to calc baseline?
         float w = textWidth + 2 * hBorder;
         float h = footerFont.getLineHeight();
         float x = renderContext.getWidth() - 2 * renderContext.getMarginBorder() - w;
         float y = 2 * renderContext.getMarginBorder();
-        contents.addRect(x, y, w, h);
+        new RoundRect(hBorder).add(doc, contents, new Position(x, y + h), w, h);
         contents.fill();
 
         contents.setNonStrokingColor(255, 255, 255);
@@ -130,9 +120,18 @@ public class TemplateRenderer implements LayoutRenderer {
 
     }
 
-    protected void drawRect(final PDPageContentStream contents, final float width, final float height, final float marginBorder) throws IOException {
+    protected void drawLightRect(final PDPageContentStream contents, final float width, final float height, final float marginBorder)
+            throws IOException {
         contents.setStrokingColor(100, 100, 100);
         contents.setLineWidth(0.5f);
+        contents.addRect(marginBorder, marginBorder, width - 2 * marginBorder, height - 2 * marginBorder);
+        contents.stroke();
+    }
+
+    protected void drawBoldRect(final PDPageContentStream contents, final float width, final float height, final float marginBorder)
+            throws IOException {
+        contents.setStrokingColor(0, 0, 0);
+        contents.setLineWidth(2);
         contents.addRect(marginBorder, marginBorder, width - 2 * marginBorder, height - 2 * marginBorder);
         contents.stroke();
     }

@@ -1,89 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.1.7.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
 
-	<groupId>net.g24.possy</groupId>
-	<artifactId>daemon</artifactId>
-	<version>0.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+  <groupId>net.g24.possy</groupId>
+  <artifactId>daemon</artifactId>
+  <version>0.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>1.8</java.version>
-		<cups4j.version>0.7.1</cups4j.version>
-		<pdfbox.version>2.0.16</pdfbox.version>
-	</properties>
+    <java.version>1.8</java.version>
+    <cups4j.version>0.7.1</cups4j.version>
+    <pdfbox.version>2.0.16</pdfbox.version>
+    <pdfbox2-layout.version>1.0.0</pdfbox2-layout.version>
+  </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.cups4j</groupId>
-			<artifactId>cups4j</artifactId>
-			<version>${cups4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
-			<version>${pdfbox.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox-tools</artifactId>
-			<version>${pdfbox.version}</version>
-		</dependency>
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.cups4j</groupId>
+      <artifactId>cups4j</artifactId>
+      <version>${cups4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox-tools</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
+      <artifactId>pdfbox2-layout</artifactId>
+      <version>${pdfbox2-layout.version}</version>
+    </dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.heroku.sdk</groupId>
-				<artifactId>heroku-maven-plugin</artifactId>
-				<version>2.0.10</version>
-				<configuration>
-					<appName>possy-daemon</appName>
-					<jdkVersion>${java.version}</jdkVersion>
-					<includeTarget>false</includeTarget>
-					<includes>
-						<include>target/${project.name}-${project.version}.jar</include>
-					</includes>
-					<processTypes>
-						<web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/*.jar</web>
-					</processTypes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>2.0.10</version>
+        <configuration>
+          <appName>possy-daemon</appName>
+          <jdkVersion>${java.version}</jdkVersion>
+          <includeTarget>false</includeTarget>
+          <includes>
+            <include>target/${project.name}-${project.version}.jar</include>
+          </includes>
+          <processTypes>
+            <web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/*.jar</web>
+          </processTypes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 
 </project>

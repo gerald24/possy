@@ -29,3 +29,12 @@ The service is a Vaadin frontend, which creates print requests either by retriev
 1. Open `http://localhost:8080/` in browser
 1. Login with username `possy` and password `possy`
 1. If you want to run your app production mode, run `mvn spring-boot:run -Pprod`
+
+## Contributing
+You want to contribute? Great! Thanks for being awesome!
+Please see the project related [issues](https://github.com/gerald24/possy/issues)
+before you start coding. Pull requests are always welcome!
+
+### Code & Style
+In short, we provide an `.editorconfig` file.
+For more information please have a look at https://editorconfig.org/.

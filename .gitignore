@@ -17,14 +17,12 @@
 *.ipr
 
 ### NetBeans ###
-/nbproject/private/
-/build/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-
+nbproject/private
+build
+nbbuild
+dist
+nbdist
+.nb-gradle
 
 webpack.generated.js
 package-lock.json

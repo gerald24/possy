@@ -8,11 +8,11 @@ cups:
 
 possy:
   service:
-    url: https://possy.url.at
+    url: http://localhost:8080
     username: possy
     password: possy
   pdf-generator:
-    redirect_to_file: false
+    redirect_to_file: true
     fonts:
       header:
         font: SourceSansPro-Black.ttf

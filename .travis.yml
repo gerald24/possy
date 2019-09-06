@@ -24,10 +24,13 @@ install: true
 jobs:
   include:
     - stage: compile-test
+      if: fork = true # skip this step for internal use to avoid compiling twice, analyze step step will compile too
       script: mvn clean verify
+
     - stage: analyze
       if: fork = false
       script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar
+
     - stage: deploy-docker
       if: branch = master AND fork = false AND type = push
       env:
@@ -37,9 +40,9 @@ jobs:
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - sh -c 'cd service && mvn clean verify -DskipTests -Pprod'
-        - docker build -t ${DOCKER_HUB_USERNAME}/possy-service:latest && docker push ${DOCKER_HUB_USERNAME}/possy-service:latest service'
+        - docker build -t ${DOCKER_HUB_USERNAME}/possy-service:latest && docker push ${DOCKER_HUB_USERNAME}/possy-service:latest service
         - sh -c 'cd daemon && mvn clean verify -DskipTests'
-        - docker build -t ${DOCKER_HUB_USERNAME}/possy-daemon:latest && docker push ${DOCKER_HUB_USERNAME}/possy-daemon:latest daemon'
+        - docker build -t ${DOCKER_HUB_USERNAME}/possy-daemon:latest && docker push ${DOCKER_HUB_USERNAME}/possy-daemon:latest daemon
 
     - stage: deploy-heroku
       if: branch = master AND fork = false AND type = push

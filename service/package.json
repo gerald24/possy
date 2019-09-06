@@ -4,8 +4,7 @@
   "dependencies": {
     "@polymer/polymer": "3.2.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
-    "@vaadin/flow-deps": "./target/frontend",
-    "sortablejs": "^1.10.0-rc3"
+    "@vaadin/flow-deps": "./target/frontend"
   },
   "devDependencies": {
     "webpack": "4.30.0",

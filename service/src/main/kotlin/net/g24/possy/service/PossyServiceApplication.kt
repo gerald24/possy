@@ -57,7 +57,6 @@ class PossyServlet : VaadinServlet() {
     }
 
     private fun setAccessControlHeaders(resp: HttpServletResponse) {
-        // resp.setHeader("Access-Control-Allow-Origin", "http://localhost:8080")
         resp.setHeader("Access-Control-Allow-Methods", "*")
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type")
         resp.setHeader("Access-Control-Allow-Credentials", "true")

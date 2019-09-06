@@ -47,8 +47,9 @@ import org.springframework.web.client.RestTemplate;
 public class JiraService {
 
     private static final String STORY_POINTS_CUSTOM_FIELD = "customfield_10102";
+    private static final String EPOS_POINTS_CUSTOM_FIELD = "customfield_10105";
     private static final String GET_ISSUES = "%s/search?fields=%s&jql=%s&maxResults=%d";
-    private static final String RESULT_FIELDS = "issuetype,key,summary," + STORY_POINTS_CUSTOM_FIELD;
+    private static final String RESULT_FIELDS = "issuetype,key,summary," + STORY_POINTS_CUSTOM_FIELD + "," + EPOS_POINTS_CUSTOM_FIELD;
     private static final String RECENT_ISSUES_FOR_PROJECT_JQL = "project=%s+AND+(created>=-1w+OR+updated>=-1w)+ORDER+BY+updated+DESC";
     private static final String ENCODING = "UTF-8";
 
@@ -133,7 +134,7 @@ public class JiraService {
 
     private Pattern keyKeyPattern() {
         return Pattern.compile(String.format("^(%s)?(\\d+)$",
-                Arrays.stream(this.projects).map(project -> project + "-").collect(Collectors.joining("|"))));
+                                             Arrays.stream(this.projects).map(project -> project + "-").collect(Collectors.joining("|"))));
     }
 
 }

@@ -39,7 +39,7 @@ class PossyPrintRequestItem(printRequest: PrintRequest) : PolymerTemplate<PossyP
 
     init {
         setId(printRequest.id.toString())
-        model.setHeader(printRequest.header)
+        model.setHeader(printRequest.issue ?: "")
         model.setContent(printRequest.contentAsString)
         model.setTemplate(printRequest.template.toString())
         model.setTemplateName(printRequest.template.name)

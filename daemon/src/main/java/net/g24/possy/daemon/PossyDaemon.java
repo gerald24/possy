@@ -18,10 +18,10 @@ package net.g24.possy.daemon;
 
 import java.util.Arrays;
 
+import net.g24.possy.daemon.configuration.PossyProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -41,8 +41,8 @@ public class PossyDaemon {
 
     @Autowired
     public PossyDaemon(
-            @Value("${possy.url}") String url, RestTemplate restTemplate, PossyService possyService) {
-        this.url = url;
+            PossyProperties possyProperties, RestTemplate restTemplate, PossyService possyService) {
+        this.url = possyProperties.getService().getUrl();
         this.restTemplate = restTemplate;
         this.possyService = possyService;
     }
@@ -59,7 +59,7 @@ public class PossyDaemon {
         Arrays.stream(printRequests).forEach(printRequest -> {
             try {
                 logger.info("processing {}", printRequest);
-                possyService.print(printRequest.getTemplate(), printRequest.getHeader(), printRequest.getContent(), printRequest.getMimetype());
+                possyService.print(printRequest);
             } catch (Exception e) {
                 logger.error("Error while printing " + printRequest, e);
             }

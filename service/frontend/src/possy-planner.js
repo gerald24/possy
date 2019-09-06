@@ -173,7 +173,7 @@ class PossyStory extends PolymerElement {
       <div id="task-container" class="list-group"></div>
       <vaadin-button class="add-task" on-click="addTask">Add Task</vaadin-button>
       <vaadin-confirm-dialog id="remove-dialog" cancel header="Confirm delete" confirm-text="Delete Story" confirm-theme="error primary">
-       Delete all story?
+       Delete story?
       </vaadin-confirm-dialog>
     `;
     }
@@ -278,14 +278,14 @@ class PossyPlanner extends PolymerElement {
       <p class="browser-hint">Please use Chrome until styling issues will be solved for Firefox and Safari.</p>
       <div id="story-container" class="list-group"></div>
       <vaadin-button class="add-story" on-click="addStory">Add Story</vaadin-button>
-      <vaadin-button class="print" on-click="confirmPrintAndReset">Print & Reset</vaadin-button>
+      <vaadin-button class="print" on-click="confirmPrint">Print</vaadin-button>
       <vaadin-button class="reset" on-click="confirmReset">Reset</vaadin-button>
       <p class="db-hint">Data will be stored in browser's DB only (local).</p>
       <vaadin-confirm-dialog id="reset-dialog" cancel header="Confirm reset" confirm-text="Reset" confirm-theme="error primary">
        Delete all stories and tasks?
       </vaadin-confirm-dialog>
-      <vaadin-confirm-dialog id="print-and-reset-dialog" cancel header="Confirm print and reset" confirm-text="Print & Reset">
-       Print all stories and tasks, and reset?
+      <vaadin-confirm-dialog id="print-dialog" cancel header="Confirm print" confirm-text="Print">
+       Print all stories and tasks?
       </vaadin-confirm-dialog>
     `;
     }
@@ -305,9 +305,8 @@ class PossyPlanner extends PolymerElement {
         });
         this._loadStories();
         this.$["reset-dialog"].addEventListener('confirm', event => this._reset());
-        this.$["print-and-reset-dialog"].addEventListener('confirm', event => this._printAndReset());
+        this.$["print-dialog"].addEventListener('confirm', event => this._print());
     }
-
     addStory() {
         var newStory = this._addStory()
         newStory.addTask();
@@ -322,8 +321,8 @@ class PossyPlanner extends PolymerElement {
         this.$["reset-dialog"].opened = true;
     }
 
-    confirmPrintAndReset() {
-        this.$["print-and-reset-dialog"].opened = true;
+    confirmPrint() {
+        this.$["print-dialog"].opened = true;
     }
 
     _dataChanged() {
@@ -348,9 +347,8 @@ class PossyPlanner extends PolymerElement {
     }
 
 
-    _printAndReset() {
+    _print() {
         this.$server.print(this.getStories());
-        this._reset();
     }
 
     _reset() {

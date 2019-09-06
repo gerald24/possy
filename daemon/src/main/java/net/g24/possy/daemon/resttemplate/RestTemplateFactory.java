@@ -16,6 +16,7 @@
  */
 package net.g24.possy.daemon.resttemplate;
 
+import net.g24.possy.daemon.configuration.PossyProperties;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,19 +33,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class RestTemplateFactory implements FactoryBean<RestTemplate>, InitializingBean {
 
-    private final String url;
-    private final String username;
-    private final String password;
+    private final PossyProperties.Service possyService;
     private RestTemplate restTemplate;
 
     @Autowired
-    public RestTemplateFactory(@Value("${possy.url}") String url,
-                               @Value("${possy.username}") String username,
-                               @Value("${possy.password}") String password) {
+    public RestTemplateFactory(PossyProperties possyProperties) {
         super();
-        this.url = url;
-        this.username = username;
-        this.password = password;
+        this.possyService = possyProperties.getService();
     }
 
     @Override
@@ -64,10 +59,10 @@ public class RestTemplateFactory implements FactoryBean<RestTemplate>, Initializ
 
     @Override
     public void afterPropertiesSet() {
-        HttpHost host = HttpHost.create(url);
+        HttpHost host = HttpHost.create(possyService.getUrl());
         final ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactoryBasicAuth(host);
         restTemplate = new RestTemplate(requestFactory);
-        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
+        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(possyService.getUsername(), possyService.getPassword()));
     }
 
 }

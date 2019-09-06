@@ -33,18 +33,24 @@ public class PrintRequest {
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private final UUID id = UUID.randomUUID();
     private final PrintTemplate template;
-    private final String header;
+    private final String issue;
+    private final String weight;
+    private final String tag;
     private final String mimetype;
     private final byte[] content;
     private boolean consumed;
 
-    public PrintRequest(final PrintTemplate template, final String header, final String content) {
-        this(template, header, "text/plain", content.getBytes(CHARSET));
+    public PrintRequest(
+            final PrintTemplate template, final String issue, final String weight, final String tag, final String content) {
+        this(template, issue, weight, tag, "text/plain", content.getBytes(CHARSET));
     }
 
-    public PrintRequest(final PrintTemplate template, final String header, final String mimetype, final byte[] content) {
+    public PrintRequest(
+            final PrintTemplate template, final String issue, final String weight, final String tag, final String mimetype, final byte[] content) {
         this.template = template;
-        this.header = header;
+        this.issue = issue;
+        this.weight = weight;
+        this.tag = tag;
         this.mimetype = mimetype;
         this.content = content;
     }
@@ -65,8 +71,16 @@ public class PrintRequest {
         return template;
     }
 
-    public String getHeader() {
-        return header;
+    public String getIssue() {
+        return issue;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public byte[] getContent() {
@@ -74,11 +88,11 @@ public class PrintRequest {
     }
 
     public String toString() {
-        return header;
+        return issue;
     }
 
     public boolean isValid() {
-        return template != null && (template == PrintTemplate.FREEFORM || StringUtils.isNotBlank(header)) && content != null && content.length > 0;
+        return template != null && (template == PrintTemplate.FREEFORM || StringUtils.isNotBlank(issue)) && content != null && content.length > 0;
     }
 
     public String getContentAsString() {
@@ -87,7 +101,7 @@ public class PrintRequest {
 
     public boolean contentEquals(final PrintRequest other) {
         return Objects.equals(this.template, other.template) &&
-                (this.template != PrintTemplate.FREEFORM && Objects.equals(this.header, other.header)) &&
+                (this.template != PrintTemplate.FREEFORM && Objects.equals(this.issue, other.issue)) &&
                 Objects.equals(this.mimetype, other.mimetype) &&
                 Arrays.equals(this.content, other.content);
     }

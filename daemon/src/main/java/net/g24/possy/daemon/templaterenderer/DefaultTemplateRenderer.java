@@ -14,23 +14,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon.templaterenderer;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
-/**
- * @author: Gerald Leeb
- */
-@SpringBootApplication
-@EnableScheduling
-@EnableConfigurationProperties
-public class PossyDaemonApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
-    }
+public class DefaultTemplateRenderer extends TemplateRenderer {
 
 }

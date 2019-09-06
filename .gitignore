@@ -25,9 +25,6 @@
 /.nb-gradle/
 
 
-/src/main/resources/Comic Sans MS.ttf
-/src/main/resources/Arial Black.ttf
-/src/main/resources/application-prod.properties
 
 webpack.generated.js
 package-lock.json

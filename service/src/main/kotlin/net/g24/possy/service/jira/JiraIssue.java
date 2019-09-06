@@ -78,10 +78,6 @@ public class JiraIssue {
 
     public PrintRequest asPrintRequest() {
         String header = getKey();
-        String sp = getStoryPoints();
-        if (sp != null) {
-            header = header + " (" + sp + ")";
-        }
-        return new PrintRequest(getTemplate(), header, getSummary());
+        return new PrintRequest(getTemplate(), header, getStoryPoints(), null, getSummary());
     }
 }

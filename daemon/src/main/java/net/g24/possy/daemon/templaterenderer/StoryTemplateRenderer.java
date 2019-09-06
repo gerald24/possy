@@ -14,23 +14,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon.templaterenderer;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import java.io.IOException;
 
-/**
- * @author: Gerald Leeb
- */
-@SpringBootApplication
-@EnableScheduling
-@EnableConfigurationProperties
-public class PossyDaemonApplication {
+import net.g24.possy.daemon.PrintRequest;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
+public class StoryTemplateRenderer extends TemplateRenderer {
+
+    @Override
+    public void render(
+            final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
+            throws IOException {
+        super.render(printRequest, doc, contents, renderContext);
+        renderWeight(printRequest, doc, contents, renderContext);
     }
-
 }

@@ -16,6 +16,7 @@
  */
 package net.g24.possy.daemon;
 
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,9 +27,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PrintRequest {
 
+    private static final Charset CHARSET = Charset.forName("UTF-8");
+
     private UUID id;
     private PrintTemplate template;
-    private String header;
+    private String issue;
+    private String weight;
+    private String tag;
     private byte[] content;
     private String mimetype;
 
@@ -40,12 +45,30 @@ public class PrintRequest {
         return template;
     }
 
-    public String getHeader() {
-        return header;
+    public String getIssue() {
+        return issue;
+    }
+    public boolean hasIssue() {
+        return issue != null && issue.length() > 0;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public boolean hasWeight() {return weight != null && weight.length() > 0;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public byte[] getContent() {
         return content;
+    }
+
+    public String getContentAsString() {
+        return new String(content, CHARSET);
     }
 
     public String getMimetype() {
@@ -54,10 +77,9 @@ public class PrintRequest {
 
     public String toString() {
         return String.format("%s (%s) %s [%s]",
-                id,
-                template,
-                header == null || header.isEmpty() ? "<freeform>" : header,
-                mimetype == null ? "text" : mimetype);
+                             id,
+                             template,
+                             issue == null || issue.isEmpty() ? "<no issue>" : issue,
+                             mimetype == null ? "text" : mimetype);
     }
-
 }

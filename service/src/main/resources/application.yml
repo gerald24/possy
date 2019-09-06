@@ -36,4 +36,5 @@ spring:
 vaadin:
   compatibilityMode: false
   productionMode: false
+  whitelisted-packages: "net/g24/possy/service/ui"
 

@@ -50,11 +50,11 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
         initContent()
 
         add(
-            HorizontalLayout().apply {
-                add(printTemplateSelector, printButton)
-                isSpacing = true
-            },
-            header
+                HorizontalLayout().apply {
+                    add(printTemplateSelector, printButton)
+                    isSpacing = true
+                },
+                header
         )
         addAndExpand(content)
 
@@ -130,6 +130,7 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
                 PrintRequest(
                         printTemplateSelector.value,
                         if (printTemplateSelector.value == PrintTemplate.FREEFORM) "" else header.value,
+                        null, null,
                         content.value
                 )
         )

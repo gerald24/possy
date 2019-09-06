@@ -19,6 +19,8 @@ package net.g24.possy.service.service;
 import java.util.Collection;
 import java.util.UUID;
 
+import net.g24.possy.service.model.PrintRequest;
+import net.g24.possy.service.model.PrintTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import net.g24.possy.service.model.PrintRequest;
-import net.g24.possy.service.model.PrintTemplate;
 
 // TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
 
@@ -54,9 +53,9 @@ public class ApiService {
     @RequestMapping(value = "/printitem/create", method = RequestMethod.POST)
     public PrintRequest createRequest(
             @RequestParam(name = "template") String template,
-            @RequestParam(name = "header") String header,
+            @RequestParam(name = "issue") String issue,
             @RequestParam(name = "content") String content) {
-        return queue.addItem(new PrintRequest(PrintTemplate.forValue(template), header, content));
+        return queue.addItem(new PrintRequest(PrintTemplate.forValue(template), issue, null, null, content));
     }
 
     @RequestMapping(value = "/printitem/{id}", method = RequestMethod.DELETE)

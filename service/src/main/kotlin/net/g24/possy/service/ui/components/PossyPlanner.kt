@@ -57,12 +57,12 @@ class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit
                                 PrintRequest(
                                         PrintTemplate.FREEFORM,
                                         storyDetail,
-                                        "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
+                                        null, null, "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
                                 )
                         )
                         headerPrinted = true
                     }
-                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, "", taskDetail))
+                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, storyDetail, null, null, taskDetail))
                 }
             }
         }

@@ -16,19 +16,19 @@
  */
 package net.g24.possy.daemon;
 
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
+import net.g24.possy.daemon.configuration.CupsProperties;
+import net.g24.possy.daemon.configuration.PossyProperties;
 import org.cups4j.CupsClient;
 import org.cups4j.CupsPrinter;
 import org.cups4j.PrintJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 // TODO https://github.com/gerald24/possy/issues/3
@@ -39,40 +39,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class PossyService {
 
-    private static final Charset CHARSET = Charset.forName("UTF-8");
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final String host;
-    private final int port;
-    private final String printerWhite;
-    private final String printerPink;
-    private final String printerYellow;
-    private final boolean redirectToFile;
+    private final CupsProperties cupsProperties;
+    private final PossyProperties possyProperties;
     private final PdfGenerator pdfGenerator;
 
     private int jobId = 0;
     private CupsClient client;
 
+    @Autowired
     public PossyService(
-            @Value("${cups.host}") String host,
-            @Value("${cups.port}") int port,
-            @Value("${cups.printer.white}") String printerWhite,
-            @Value("${cups.printer.pink}") String printerPink,
-            @Value("${cups.printer.yellow}") String printerYellow,
-            @Value("${redirect_to_file}") boolean redirectToFile,
-            @Autowired PdfGenerator pdfGenerator) {
-        this.host = host;
-        this.port = port;
-        this.printerWhite = printerWhite;
-        this.printerPink = printerPink;
-        this.printerYellow = printerYellow;
-        this.redirectToFile = redirectToFile;
+            CupsProperties cupsProperties, PossyProperties possyProperties, PdfGenerator pdfGenerator) {
+        this.cupsProperties = cupsProperties;
+        this.possyProperties = possyProperties;
         this.pdfGenerator = pdfGenerator;
     }
 
     @PostConstruct
     public void setUpCupsClient() throws Exception {
-        client = new CupsClient(host, port);
+        client = new CupsClient(cupsProperties.getHost(), cupsProperties.getPort());
         try {
             listAllPrinters(client);
         } catch (Exception e) {
@@ -80,28 +65,28 @@ public class PossyService {
         }
     }
 
-    public void print(final PrintTemplate template, final String header, final byte[] content, final String mimetype) throws Exception {
-        if (template == PrintTemplate.IMAGE) {
-            printImage(header, content, mimetype);
+    public void print(final PrintRequest printRequest) throws Exception {
+        if (printRequest.getTemplate() == PrintTemplate.IMAGE) {
+            printImage(printRequest.getContent(), printRequest.getMimetype());
         } else {
-            printDocument(template, header, new String(content, CHARSET));
+            printDocument(printRequest);
         }
     }
 
-    private void printImage(final String header, final byte[] content, final String mimetype) {
+    private void printImage(final byte[] content, final String mimetype) {
         // TODO implement (https://github.com/gerald24/possy/issues/4)
     }
 
-    private void printDocument(final PrintTemplate template, final String header, final String content) throws Exception {
-        byte[] out = pdfGenerator.createPdf(template, header, content);
+    private void printDocument(final PrintRequest printRequest) throws Exception {
+        byte[] out = pdfGenerator.createPdf(printRequest);
 
         final Map<String, String> attribs = new HashMap<>();
         attribs.put("document-format", "application/pdf");
 
-        if (redirectToFile) {
+        if (possyProperties.getPdfGenerator().isRedirectToFile()) {
             Files.write(Files.createTempFile("possy", ".pdf").toAbsolutePath(), out);
         } else {
-            CupsPrinter cupsPrinter = getCupsPrinter(template);
+            CupsPrinter cupsPrinter = getCupsPrinter(printRequest.getTemplate());
             org.cups4j.PrintJob pj = new PrintJob.Builder(out)
                     .jobName("Possy #" + ++jobId)
                     .attributes(attribs)
@@ -125,14 +110,14 @@ public class PossyService {
     private String getPrinter(final PrintTemplate template) {
         switch (template.getPaper()) {
             case WHITE:
-                return printerWhite;
+                return cupsProperties.getPrinters().getWhite();
             case PINK:
-                return printerPink;
+                return cupsProperties.getPrinters().getPink();
             case YELLOW:
-                return printerYellow;
+                return cupsProperties.getPrinters().getYellow();
         }
         // default
-        return printerPink;
+        return cupsProperties.getPrinters().getPink();
     }
 
     private void listAllPrinters(CupsClient client) throws Exception {

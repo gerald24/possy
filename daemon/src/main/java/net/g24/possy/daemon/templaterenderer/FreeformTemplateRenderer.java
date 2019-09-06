@@ -28,6 +28,7 @@ public class FreeformTemplateRenderer extends TemplateRenderer {
     public void render(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
             throws IOException {
+        renderIssue(printRequest, doc, contents, renderContext);
         renderContent(printRequest, doc, contents, renderContext);
         drawLightRect(contents, renderContext.getWidth(), renderContext.getHeight(), renderContext.getMarginBorder());
         renderTag(printRequest, doc, contents, renderContext);

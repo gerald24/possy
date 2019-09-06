@@ -73,7 +73,7 @@ public class JiraIssue {
     }
 
     public String getStoryPoints() {
-        return fields != null && fields.getCustomfield_10102() != null ? fields.getCustomfield_10102().intValue() + " SP" : null;
+        return fields != null && fields.getCustomfield_10102() != null ? "" + fields.getCustomfield_10102().intValue() : null;
     }
 
     public String getEposPoints() {

@@ -47,7 +47,7 @@ public abstract class TemplateRenderer implements LayoutRenderer {
                 contentFont.getLineHeight());
     }
 
-    protected void renderIssueAsHeader(
+    protected void renderIssue(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
             throws IOException {
         if (printRequest.hasIssue()) {

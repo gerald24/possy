@@ -28,7 +28,7 @@ public class DefaultTemplateRenderer extends TemplateRenderer {
     public void render(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
             throws IOException {
-        renderIssueAsHeader(printRequest, doc, contents, renderContext);
+        renderIssue(printRequest, doc, contents, renderContext);
         renderContent(printRequest, doc, contents, renderContext);
         drawLightRect(contents, renderContext.getWidth(), renderContext.getHeight(), renderContext.getMarginBorder());
         renderWeight(printRequest, doc, contents, renderContext);

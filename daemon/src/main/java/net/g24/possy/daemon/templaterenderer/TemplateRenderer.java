@@ -35,6 +35,8 @@ public class TemplateRenderer implements LayoutRenderer {
             throws IOException {
         renderIssueAsHeader(printRequest, doc, contents, renderContext);
         renderContent(printRequest, doc, contents, renderContext);
+        renderWeight(printRequest, doc, contents, renderContext);
+        renderTag(printRequest, doc, contents, renderContext);
     }
 
     protected void renderContent(
@@ -83,29 +85,48 @@ public class TemplateRenderer implements LayoutRenderer {
 
         contents.setStrokingColor(100, 100, 100);
         contents.setLineWidth(0.5f);
-        float w = textWidth + 5.0f;
-        float h = headerFont.getSize();
+        float hBorder = 3.0f;
+        float vBorder = (headerFont.getLineHeight() - headerFont.getSize()) / 2.0f;
+        float baseline = fontSize / 6.0f; // how to calc baseline?
+        float w = textWidth + 2 * hBorder;
+        float h = headerFont.getLineHeight();
         float x = renderContext.getWidth() - renderContext.getMarginBorder() - w;
         float y = renderContext.getHeight() - renderContext.getMarginBorder() - h;
         contents.addRect(x, y, w, h);
         contents.stroke();
 
-        showTextAt(contents, text, new Cursor(x + 2.5f, y + 4.0f), font, fontSize);
+        contents.setNonStrokingColor(0, 0, 0);
+        showTextAt(contents, text, new Cursor(x + hBorder, y + vBorder + baseline), font, fontSize);
     }
 
-    protected void renderIssueAsFooter(
+    protected void renderTag(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
             throws IOException {
-        if (!printRequest.hasIssue()) {
+        if (!printRequest.hasTag()) {
             return;
         }
+
+        String text = printRequest.getTag();
         FontContext footerFont = renderContext.getFooterFont();
-        showTextAt(
-                contents,
-                printRequest.getIssue(),
-                new Cursor(renderContext.getCursor().x, renderContext.getCursor().x),
-                footerFont.getFont(doc),
-                footerFont.getSize());
+        PDTrueTypeFont font = footerFont.getFont(doc);
+        int fontSize = footerFont.getSize();
+
+        float textWidth = getTextWidth(text, font, fontSize);
+
+        contents.setNonStrokingColor(180, 180, 180);
+        float hBorder = 4.0f;
+        float vBorder = (footerFont.getLineHeight() - footerFont.getSize()) / 2.0f;
+        float baseline = fontSize / 6.0f; // how to calc baseline?
+        float w = textWidth + 2 * hBorder;
+        float h = footerFont.getLineHeight();
+        float x = renderContext.getWidth() - 2 * renderContext.getMarginBorder() - w;
+        float y = 2 * renderContext.getMarginBorder();
+        contents.addRect(x, y, w, h);
+        contents.fill();
+
+        contents.setNonStrokingColor(255, 255, 255);
+        showTextAt(contents, text, new Cursor(x + hBorder, y + vBorder + baseline), font, fontSize);
+        contents.setNonStrokingColor(0, 0, 0);
 
     }
 

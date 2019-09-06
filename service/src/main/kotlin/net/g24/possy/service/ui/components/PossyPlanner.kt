@@ -62,7 +62,7 @@ class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit
                         )
                         headerPrinted = true
                     }
-                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, storyDetail, null, null, taskDetail))
+                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, null, null, storyDetail, taskDetail))
                 }
             }
         }

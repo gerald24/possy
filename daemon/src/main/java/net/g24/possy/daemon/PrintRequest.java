@@ -48,6 +48,7 @@ public class PrintRequest {
     public String getIssue() {
         return issue;
     }
+
     public boolean hasIssue() {
         return issue != null && issue.length() > 0;
     }
@@ -56,11 +57,16 @@ public class PrintRequest {
         return weight;
     }
 
-    public boolean hasWeight() {return weight != null && weight.length() > 0;
+    public boolean hasWeight() {
+        return weight != null && weight.length() > 0;
     }
 
     public String getTag() {
         return tag;
+    }
+
+    public boolean hasTag() {
+        return tag != null && tag.length() > 0;
     }
 
     public byte[] getContent() {

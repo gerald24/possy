@@ -20,7 +20,7 @@ import net.g24.possy.service.model.PrintRequest;
 import net.g24.possy.service.model.PrintTemplate;
 
 // TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
-// TODO find better solution for custom fields (e.g. story)
+// TODO find better solution for custom fields (e.g. story, epos)
 
 /**
  * @author: Gerald Leeb
@@ -76,8 +76,12 @@ public class JiraIssue {
         return fields != null && fields.getCustomfield_10102() != null ? fields.getCustomfield_10102().intValue() + " SP" : null;
     }
 
+    public String getEposPoints() {
+        return fields != null && fields.getCustomfield_10105() != null ? fields.getCustomfield_10105() : null;
+    }
+
     public PrintRequest asPrintRequest() {
         String header = getKey();
-        return new PrintRequest(getTemplate(), header, getStoryPoints(), null, getSummary());
+        return new PrintRequest(getTemplate(), header, getStoryPoints(), getEposPoints(), getSummary());
     }
 }

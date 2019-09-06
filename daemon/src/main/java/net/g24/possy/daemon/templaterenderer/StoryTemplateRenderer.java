@@ -16,19 +16,6 @@
  */
 package net.g24.possy.daemon.templaterenderer;
 
-import java.io.IOException;
-
-import net.g24.possy.daemon.PrintRequest;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
 public class StoryTemplateRenderer extends TemplateRenderer {
 
-    @Override
-    public void render(
-            final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
-            throws IOException {
-        super.render(printRequest, doc, contents, renderContext);
-        renderWeight(printRequest, doc, contents, renderContext);
-    }
 }

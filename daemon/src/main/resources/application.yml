@@ -23,8 +23,8 @@ possy:
         size: 16
         line-height: 20
       footer:
-        font: SourceSansPro-ExtraLight.ttf
-        size: 16
+        font: SourceSansPro-Regular.ttf
+        size: 12
         line-height: 20
     pages:
       story: # page height usually 72.0f but for TM88IV lower
@@ -47,3 +47,6 @@ possy:
         height: 80.0
         border: 1.0
         margin: 3.0
+
+server:
+  port: 8081

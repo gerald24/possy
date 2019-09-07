@@ -17,10 +17,8 @@
 package net.g24.possy.service.ui
 
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.H2
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.BeforeEvent
 import com.vaadin.flow.router.HasUrlParameter
@@ -30,6 +28,7 @@ import net.g24.possy.service.extensions.asFormatted
 import net.g24.possy.service.jira.JiraIssue
 import net.g24.possy.service.jira.JiraService
 import net.g24.possy.service.ui.components.PossyJiraIssue
+import net.g24.possy.service.ui.components.asComponent
 import java.time.LocalDateTime
 
 /**
@@ -39,7 +38,7 @@ import java.time.LocalDateTime
 @PageTitle("Possy Project")
 class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
 
-    val projectHeader = H2("Project").apply { element.style.set("margin", "0 0 0 10px") }
+    val projectHeader = Div().apply { addClassName("jira-project-header") }
     val updatedInfo = Span()
     val updateTriggerButton = Button("Update") { loadIssues() }
     val issuesContainer = VerticalLayout().apply { isMargin = false; isPadding = false }
@@ -50,17 +49,18 @@ class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintR
         addClassName("possy-project")
         updatedInfo.addClassName("jira-recent-timestamp")
         issuesContainer.element.style.set("overflow-y", "auto")
-
-        add(HorizontalLayout(projectHeader, updatedInfo, updateTriggerButton).apply {
-            defaultVerticalComponentAlignment = FlexComponent.Alignment.BASELINE
-            isMargin = false
-        })
+        add(projectHeader)
         addAndExpand(issuesContainer)
     }
 
     override fun setParameter(event: BeforeEvent, parameter: String) {
         project = parameter
-        projectHeader.text = "Project $project"
+        projectHeader.apply {
+            removeAll()
+            jiraService.projectImages[project!!].asComponent(project!!)?.let { add(it) }
+            add(Span("Project $project").apply { addClassName("jira-project-title") })
+            add(updatedInfo, updateTriggerButton)
+        }
         loadIssues()
     }
 

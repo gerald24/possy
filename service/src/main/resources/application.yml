@@ -4,11 +4,9 @@ logging:
 
 jira:
   url: https://jira.changeme.at/rest/api/2/
-  browse:
-    url: https://jira.changeme.at/browse/
+  browse-url: https://jira.changeme.at/browse/
   username: changeme
   password: changeme
-  projects: PRJ1,PRJ2,PRJ3
 
 server:
   compression:

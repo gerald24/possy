@@ -14,33 +14,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.jira;
+package net.g24.possy.service.configuration
 
-// TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
+import org.springframework.validation.annotation.Validated
 
-
-/**
- * @author: Gerald Leeb
- */
-public class JiraIssueType {
-
-    private String id;
-
-    private String name;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-}
+@Component
+@ConfigurationProperties(prefix = "jira")
+@Validated
+class JiraConfiguration(
+        var url: String? = null,
+        var browseUrl: String? = null,
+        var username: String? = null,
+        var password: String? = null)

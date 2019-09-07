@@ -55,7 +55,7 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
     override fun setParameter(event: BeforeEvent, @OptionalParameter parameter: String?) {
         parameter?.let {
             val project = parameter.trim().toLowerCase()
-            jiraService.projects.find { it.toLowerCase() == project }?.let { projectSelector.value = it }
+            jiraService.projects.find { it.key.toLowerCase() == project }?.let { projectSelector.value = it.key }
             event.location.queryParameters.parameters["jql"]?.let { searchField.value = it.firstOrNull() ?: "" }
         }
     }
@@ -66,7 +66,7 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
     }
 
     private fun initProjectSelector() {
-        val items = jiraService.projects.sorted()
+        val items = jiraService.projects.map { it.key }
         projectSelector.setItems(items)
         projectSelector.value = items.firstOrNull()
         projectSelector.isAllowCustomValue = false

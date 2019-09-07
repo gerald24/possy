@@ -2,12 +2,39 @@
 
 Possy was created based on [Boris's](https://github.com/boris779) idea to print out tasks, bugs and other issues on POS Printer (e.g. Epson TM-T20II) instead of using Post-it®. This can be used as an addition for ***physical scrum and kanban boards***.
 
+## Overview
+
 ![Overview](resources/Overview.png)
 
+## Components
 
 Possy is split into 2 parts:
 - possy-daemon
 - possy-service
+
+## Issuetypes
+
+Possy knows 4 different types of issues:
+- Stories
+- Tasks
+- Bugs
+- Freeform (like a note)
+
+## Printers
+
+The issuetypes are mapped to 3 different printer which might use different colors:
+- Stories -> white
+- Tasks -> white
+- Bugs -> pink
+- Freeform -> yellow
+
+## Planner
+
+The Planner helps to batch print Freeform issues - Usecase: physical scrum and kanban boards
+
+![Planner-Screenshot](resources/Planner-Screenshot.png)
+
+# Possy-Components
 
 ## possy-daemon [![Heroku possy-daemon](https://heroku-badge.herokuapp.com/?app=possy-daemon)](https://possy-daemon.herokuapp.com/)
 

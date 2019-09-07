@@ -31,7 +31,6 @@ class PrintRequestQueueService {
     private val listeners = ArrayList<Listener>()
     private val queue = ConcurrentLinkedQueue<PossyIssue>()
 
-    // TODO replace with eventbus ?
     interface Listener {
 
         fun itemAdded(request: PossyIssue)

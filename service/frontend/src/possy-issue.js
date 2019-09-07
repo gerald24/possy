@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-// TODO https://github.com/gerald24/possy/issues/3 (see styling issues e.g. Incident, Story, etc.)
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 class PossyIssue extends PolymerElement {

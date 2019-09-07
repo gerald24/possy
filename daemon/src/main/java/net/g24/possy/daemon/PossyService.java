@@ -31,8 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-// TODO https://github.com/gerald24/possy/issues/3
-
 /**
  * @author: Gerald Leeb
  */

@@ -26,7 +26,7 @@ import com.vaadin.flow.component.textfield.TextArea
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
-import net.g24.possy.service.model.PrintRequest
+import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 
 /**
@@ -127,7 +127,7 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
             return
         }
         printRequestCreation.printUnconfirmed(
-                PrintRequest(
+                PossyIssue(
                         printTemplateSelector.value,
                         if (printTemplateSelector.value == PrintTemplate.FREEFORM) "" else header.value,
                         null, null,

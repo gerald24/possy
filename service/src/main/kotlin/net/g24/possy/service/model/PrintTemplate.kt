@@ -14,19 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.jira
+package net.g24.possy.service.model
 
-data class AvatarUrls(val `48x48`: String, val `32x32`: String, val `24x24`: String, val `16x16`: String)
+/**
+ * @author: Gerald Leeb
+ */
+enum class PrintTemplate private constructor(val printer: String) {
+    BUG("Pink"),
+    TASK("White"),
+    STORY("White"),
+    IMAGE("White"),
+    FREEFORM("Yellow");
 
-data class JiraProject(val key: String, val name: String, val avatarUrls: AvatarUrls)
 
-data class JiraIssue(val key: String, var fields: Map<String, Any> = mutableMapOf()) {
-    fun allValues(): Map<String, Any?>? {
-        val values = fields.toMutableMap()
-        values["key"] = key
-        return values.toMap()
+    companion object {
+
+        fun forValue(template: String): PrintTemplate {
+            return values().firstOrNull { it.name.equals(template, ignoreCase = true) }?:BUG
+        }
+
     }
 }
-
-data class JqlIssueResult(val issues: List<JiraIssue>)
 

@@ -20,14 +20,14 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
-import net.g24.possy.service.model.PrintRequest
+import net.g24.possy.service.model.PossyIssue
 
 /**
  * @author: Gerald Leeb
  */
 @Tag("possy-print-request-item")
 @JsModule("./src/possy-print-request-item.js")
-class PossyPrintRequestItem(printRequest: PrintRequest) : PolymerTemplate<PossyPrintRequestItem.PossyPrintRequestItemModel>() {
+class PossyPrintRequestItem(printRequest: PossyIssue) : PolymerTemplate<PossyPrintRequestItem.PossyPrintRequestItemModel>() {
 
     interface PossyPrintRequestItemModel : TemplateModel {
         fun setHeader(header: String)
@@ -39,7 +39,7 @@ class PossyPrintRequestItem(printRequest: PrintRequest) : PolymerTemplate<PossyP
 
     init {
         setId(printRequest.id.toString())
-        model.setHeader(printRequest.issue ?: "")
+        model.setHeader(printRequest.key ?: "")
         model.setContent(printRequest.contentAsString)
         model.setTemplate(printRequest.template.toString())
         model.setTemplateName(printRequest.template.name)

@@ -27,4 +27,22 @@ class JiraConfiguration(
         var url: String? = null,
         var browseUrl: String? = null,
         var username: String? = null,
-        var password: String? = null)
+        var password: String? = null,
+        val jql: JQL = JQL(),
+        val mapping: Mapping = Mapping()) {
+
+    class JQL(
+            var projectsRecentIssues: String? = null,
+            var fields: List<String>? = emptyList())
+
+    class Mapping(
+            var content: String? = null,
+            var weight: String? = null,
+            var tag: String? = null,
+            var templateField: String? = null,
+            var bug: List<String>? = emptyList(),
+            var story: List<String>? = emptyList())
+
+}
+
+

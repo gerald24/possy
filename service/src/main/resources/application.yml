@@ -7,6 +7,27 @@ jira:
   browse-url: https://jira.changeme.at/browse/
   username: changeme
   password: changeme
+  jql:
+    projects-recent-issues: "project=%s+AND+(created>=-1w+OR+updated>=-1w)+AND+(issuetype!=10100)+ORDER+BY+updated+DESC"
+    fields:
+      - issuetype
+      - key
+      - summary
+      - customfield_10102 # story points
+      - customfield_10105 # epos reference
+  mapping:
+    content: summary
+    weight: customfield_10102
+    tag: customfield_10105*.summary # * means pointer to another issue
+    template-field: issuetype.id
+    bug:
+      - 1
+      - 10200
+      - 10800
+      - 11105
+    story:
+      - 10101
+      - 10201
 
 server:
   compression:

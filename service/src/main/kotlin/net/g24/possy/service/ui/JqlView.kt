@@ -28,7 +28,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
 import net.g24.possy.service.jira.JiraService
-import net.g24.possy.service.ui.components.PossyJiraIssue
+import net.g24.possy.service.ui.components.PossyIssueComponent
 
 
 /**
@@ -120,10 +120,10 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
             }
             val size = issues.size
             if (size == 1) {
-                resultContainer.add(PossyJiraIssue(issues.first()) { printRequestCreation.confirm(it) })
+                resultContainer.add(PossyIssueComponent(issues.first()) { printRequestCreation.confirm(it) })
                 return
             }
-            issues.forEach { issue -> resultContainer.add(PossyJiraIssue(issue) { printRequestCreation.confirm(it) }) }
+            issues.forEach { issue -> resultContainer.add(PossyIssueComponent(issue) { printRequestCreation.confirm(it) }) }
             resultContainer.add(Button("Print all $size issues", VaadinIcon.PRINT.create()) { printRequestCreation.printAll(issues) })
         } catch (e: Exception) {
             resultContainer.add("Error caught. JQL correct?")

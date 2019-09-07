@@ -23,8 +23,8 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.router.RouterLink
-import net.g24.possy.service.jira.JiraProject
 import net.g24.possy.service.jira.JiraService
+import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.ui.components.asComponent
 
 /**
@@ -40,10 +40,10 @@ class ProjectsView(val jiraService: JiraService) : VerticalLayout() {
         jiraService.projects.forEach { add(asLinkComponent(it)) }
     }
 
-    private fun asLinkComponent(project: JiraProject): Component {
+    private fun asLinkComponent(project: PossyProject): Component {
         return RouterLink(null, ProjectView::class.java, project.key)
                 .apply {
-                    jiraService.projectImages[project.key].asComponent(project.key)?.let { add(it) }
+                    project.avatar.asComponent(project.key)?.let { add(it) }
                     add(Span("${project.key} (${project.name})")
                             .apply { addClassName("jira-project-title") })
                     addClassName("jira-project")

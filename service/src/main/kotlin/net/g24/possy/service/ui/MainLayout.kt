@@ -37,7 +37,8 @@ import com.vaadin.flow.router.*
 import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
-import net.g24.possy.service.model.PrintRequest
+import net.g24.possy.service.extensions.accessIfAttached
+import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPrintRequestItem
 import org.springframework.beans.factory.annotation.Value
@@ -62,19 +63,6 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
     private val printQueueLayout = VerticalLayout()
     private val noIssuesParagraph = Paragraph("No Issues to print.")
     private var listenerDeregistration = Runnable {}
-    private val printQueueChangedListener = object : PrintRequestQueueService.Listener {
-        override fun itemAdded(request: PrintRequest) {
-            ui.ifPresent { it.access { this@MainLayout.itemAdded(request) } }
-        }
-
-        override fun itemConsumed(request: PrintRequest) {
-            ui.ifPresent { it.access { this@MainLayout.itemConsumed(request) } }
-        }
-
-        override fun itemRemoved(request: PrintRequest) {
-            ui.ifPresent { it.access { this@MainLayout.itemRemoved(request) } }
-        }
-    }
 
     init {
         initNavigationBar()
@@ -121,7 +109,19 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
         super.onAttach(attachEvent)
         matchThemeVariant()
         listenerDeregistration.run()
-        listenerDeregistration = printRequestQueueService.addListener(printQueueChangedListener)
+        listenerDeregistration = printRequestQueueService.addListener(object : PrintRequestQueueService.Listener {
+            override fun itemAdded(request: PossyIssue) {
+                accessIfAttached { this@MainLayout.itemAdded(request) }
+            }
+
+            override fun itemConsumed(request: PossyIssue) {
+                accessIfAttached { this@MainLayout.itemConsumed(request) }
+            }
+
+            override fun itemRemoved(request: PossyIssue) {
+                accessIfAttached { this@MainLayout.itemRemoved(request) }
+            }
+        })
     }
 
     override fun onDetach(detachEvent: DetachEvent?) {
@@ -174,22 +174,22 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
         printRequestQueueService.allItems().forEach { printQueueLayout.add(PossyPrintRequestItem(it)) }
     }
 
-    private fun itemAdded(request: PrintRequest) {
+    private fun itemAdded(request: PossyIssue) {
         matchQueueEntriesVisibility()
         printQueueLayout.add(PossyPrintRequestItem(request))
     }
 
-    private fun itemConsumed(request: PrintRequest) {
+    private fun itemConsumed(request: PossyIssue) {
         matchQueueEntriesVisibility()
         findMatchingComponent(request).ifPresent { c -> c.setConsumed(request.isConsumed) }
     }
 
-    private fun itemRemoved(request: PrintRequest) {
+    private fun itemRemoved(request: PossyIssue) {
         matchQueueEntriesVisibility()
         findMatchingComponent(request).ifPresent { c -> remove(c) }
     }
 
-    private fun findMatchingComponent(request: PrintRequest): Optional<PossyPrintRequestItem> {
+    private fun findMatchingComponent(request: PossyIssue): Optional<PossyPrintRequestItem> {
         return printQueueLayout.children
                 .filter { c -> c is PossyPrintRequestItem }
                 .map { c -> c as PossyPrintRequestItem }

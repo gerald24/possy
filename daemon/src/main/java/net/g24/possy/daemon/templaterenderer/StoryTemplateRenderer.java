@@ -38,8 +38,8 @@ public class StoryTemplateRenderer extends TemplateRenderer {
 
 	private void renderIssueFX(final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents,
 							   final RenderContext renderContext) throws IOException {
-		if (printRequest.hasIssue()) {
-			String[] parts = printRequest.getIssue().trim().split("-");
+		if (printRequest.hasKey()) {
+			String[] parts = printRequest.getKey().trim().split("-");
 			String text = parts.length == 2 ? parts[1] : parts[0];
 
 			FontContext headerFont = renderContext.getHeaderFont();

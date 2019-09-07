@@ -18,6 +18,7 @@ package net.g24.possy.service.ui
 
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.BeforeEvent
@@ -25,9 +26,10 @@ import com.vaadin.flow.router.HasUrlParameter
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import net.g24.possy.service.extensions.asFormatted
-import net.g24.possy.service.jira.JiraIssue
 import net.g24.possy.service.jira.JiraService
-import net.g24.possy.service.ui.components.PossyJiraIssue
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.model.PossyProject
+import net.g24.possy.service.ui.components.PossyIssueComponent
 import net.g24.possy.service.ui.components.asComponent
 import java.time.LocalDateTime
 
@@ -42,7 +44,7 @@ class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintR
     val updatedInfo = Span()
     val updateTriggerButton = Button("Update") { loadIssues() }
     val issuesContainer = VerticalLayout().apply { isMargin = false; isPadding = false }
-    var project: String? = null
+    var project: PossyProject? = null
 
 
     init {
@@ -54,12 +56,17 @@ class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintR
     }
 
     override fun setParameter(event: BeforeEvent, parameter: String) {
-        project = parameter
+        project = jiraService.projects.firstOrNull { it.key.equals(parameter, ignoreCase = true) }
+        if (project == null) {
+            removeAll()
+            add(Paragraph("Unknown project $parameter!"))
+            return
+        }
         projectHeader.apply {
             removeAll()
-            jiraService.projectImages[project!!].asComponent(project!!)?.let { add(it) }
-            add(Span("Project $project").apply { addClassName("jira-project-title") })
-            add(updatedInfo, updateTriggerButton)
+            project!!.avatar.asComponent(project!!.key)?.let { add(it) }
+            add(Span("${project!!.key} (${project!!.name})").apply { addClassName("jira-project-title") })
+            add(updateTriggerButton, updatedInfo)
         }
         loadIssues()
     }
@@ -67,17 +74,18 @@ class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintR
     private fun loadIssues() {
         project ?: return
         try {
-            updateIssues(jiraService.loadRecentIssues(project!!))
+            updateIssues(jiraService.loadRecentIssues(project!!.key))
         } catch (e: Exception) {
+            e.printStackTrace()
             showError(e.toString())
         }
     }
 
-    private fun updateIssues(recentIssues: List<JiraIssue>) {
+    private fun updateIssues(recentIssues: List<PossyIssue>) {
         issuesContainer.removeAll()
         project ?: return
 
-        recentIssues.forEach { issuesContainer.add(PossyJiraIssue(it) { issue -> printRequestCreation.confirm(issue) }) }
+        recentIssues.forEach { issuesContainer.add(PossyIssueComponent(it) { issue -> printRequestCreation.confirm(issue) }) }
         updatedInfo.text = "Loaded: ${LocalDateTime.now().asFormatted()}"
     }
 

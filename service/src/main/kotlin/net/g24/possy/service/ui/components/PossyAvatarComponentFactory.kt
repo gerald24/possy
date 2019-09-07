@@ -21,10 +21,10 @@ import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
-import net.g24.possy.service.jira.JiraProjectAvatar
+import net.g24.possy.service.model.PossyAvatar
 import java.io.ByteArrayInputStream
 
-fun JiraProjectAvatar?.asComponent(projectKey: String): Component? {
+fun PossyAvatar?.asComponent(projectKey: String): Component? {
     if (this == null)
         return null
     if (contentType == "png") {

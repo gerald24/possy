@@ -31,7 +31,7 @@ public class PrintRequest {
 
     private UUID id;
     private PrintTemplate template;
-    private String issue;
+    private String key;
     private String weight;
     private String tag;
     private byte[] content;
@@ -45,12 +45,12 @@ public class PrintRequest {
         return template;
     }
 
-    public String getIssue() {
-        return issue;
+    public String getKey() {
+        return key;
     }
 
-    public boolean hasIssue() {
-        return issue != null && issue.length() > 0;
+    public boolean hasKey() {
+        return key != null && key.length() > 0;
     }
 
     public String getWeight() {
@@ -85,7 +85,7 @@ public class PrintRequest {
         return String.format("%s (%s) %s [%s]",
                              id,
                              template,
-                             issue == null || issue.isEmpty() ? "<no issue>" : issue,
+                             key == null || key.isEmpty() ? "<no issue>" : key,
                              mimetype == null ? "text" : mimetype);
     }
 }

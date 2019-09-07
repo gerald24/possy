@@ -18,7 +18,10 @@ package net.g24.possy.service.jira
 
 
 import net.g24.possy.service.configuration.JiraConfiguration
-import org.apache.commons.lang3.StringUtils
+import net.g24.possy.service.model.PossyAvatar
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.model.PossyProject
+import net.g24.possy.service.model.PrintTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.*
@@ -27,78 +30,49 @@ import org.springframework.web.client.RestTemplate
 import java.io.UnsupportedEncodingException
 import java.util.*
 
-// TODO find better solution for custom fields (e.g. story, storypoints)
-
 /**
  * @author: Gerald Leeb
  */
 @Component
-class JiraService @Autowired constructor(jiraConfiguration: JiraConfiguration) {
+class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguration) {
 
     private val restTemplate: RestTemplate = RestTemplate()
     private val httpHeaders = createHeadersWithAuthentication(jiraConfiguration.username!!, jiraConfiguration.password!!)
-    private val jiraBaseURL: String = StringUtils.removeEnd(jiraConfiguration.url, "/")
+    private val jiraBaseURL: String = jiraConfiguration.url!!.removeSuffix("/")
 
     companion object {
         private val GET_PROJECTS = "%s/project"
-        private val STORY_POINTS_CUSTOM_FIELD = "customfield_10102"
-        private val EPOS_POINTS_CUSTOM_FIELD = "customfield_10105"
         private val GET_ISSUES = "%s/search?fields=%s&jql=%s&maxResults=%d"
-        private val RESULT_FIELDS = "issuetype,key,summary,$STORY_POINTS_CUSTOM_FIELD,$EPOS_POINTS_CUSTOM_FIELD"
-        private val RECENT_ISSUES_FOR_PROJECT_JQL = "project=%s+AND+(created>=-1w+OR+updated>=-1w)+ORDER+BY+updated+DESC"
-        private val ENCODING = "UTF-8"
     }
 
-    val projects: List<JiraProject> by lazy {
-        restTemplate.exchange(
-                String.format(GET_PROJECTS, jiraBaseURL),
-                HttpMethod.GET,
-                HttpEntity<List<JiraProject>>(httpHeaders),
-                object : ParameterizedTypeReference<List<JiraProject>>() {})
-                .body
-                .sortedBy { it.key }
-    }
-
-    val projectImages: Map<String, JiraProjectAvatar?> by lazy {
-        projects
-                .map { it.key to projectImage(it.avatarUrls.`48x48`) }
-                .toMap()
-    }
-
-    private fun projectImage(url: String): JiraProjectAvatar? {
-        val result = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                HttpEntity<ByteArray>(httpHeaders),
-                ByteArray::class.java)
-        val contentType = result.headers[HttpHeaders.CONTENT_TYPE]?.get(0) ?: ""
-        if (result.statusCode == HttpStatus.OK) {
-            if (contentType.startsWith("image/png")) {
-                return JiraProjectAvatar("png", result.body)
-            }
-            if (contentType.startsWith("image/svg+xml;charset=UTF-8")) {
-                return JiraProjectAvatar("svg", result.body)
-            }
+    val projects: List<PossyProject> by lazy {
+        jiraProjects.map {
+            PossyProject(it.key, it.name, projectAvatar(it.avatarUrls.`48x48`))
         }
-        return null
     }
 
-
-    fun findIssues(project: String, jql: String): List<JiraIssue> {
-        return findIssuesForJql("project = $project AND $jql")
+    fun findIssues(project: String, jql: String): List<PossyIssue> {
+        if (jql.isNullOrBlank()) {
+            return emptyList()
+        }
+        var query = jql.trim()
+        if (query.matches("\\d+".toRegex())) {
+            query = "key=$project-$query"
+        }
+        return findIssuesForJql("project=$project AND $query")
     }
 
     private fun findIssuesForJql(jql: String) =
-            extractIssues(getIssues(jql, 50))
+            extractAndConvertIssues(getIssues(jql, 50))
 
 
     fun loadRecentIssues(project: String) =
-            extractIssues(getIssues(String.format(RECENT_ISSUES_FOR_PROJECT_JQL, project), 20))
+            extractAndConvertIssues(getIssues(String.format(jiraConfiguration.jql.projectsRecentIssues!!, project), 20))
 
 
     private fun getIssues(jql: String, maxResults: Int): ResponseEntity<JqlIssueResult> {
         return restTemplate.exchange(
-                getUrlForJql(RESULT_FIELDS, jql, maxResults),
+                getUrlForJql(jiraConfiguration.jql.fields!!.joinToString(","), jql, maxResults),
                 HttpMethod.GET,
                 HttpEntity<JqlIssueResult>(httpHeaders),
                 JqlIssueResult::class.java)
@@ -108,8 +82,14 @@ class JiraService @Autowired constructor(jiraConfiguration: JiraConfiguration) {
             String.format(GET_ISSUES, jiraBaseURL, fields, jql, maxResults)
 
 
-    private fun extractIssues(response: ResponseEntity<JqlIssueResult>) =
-            if (response.statusCode != HttpStatus.OK) emptyList() else response.body!!.issues
+    private fun extractAndConvertIssues(response: ResponseEntity<JqlIssueResult>): List<PossyIssue> {
+        if (response.statusCode != HttpStatus.OK)
+            return emptyList()
+
+        val jiraIssues = response.body!!.issues
+        val references = mutableMapOf<String, Map<String, Any?>?>()
+        return jiraIssues.map { asPrintRequest(it, references) }
+    }
 
 
     private fun createHeadersWithAuthentication(username: String, password: String) =
@@ -119,9 +99,106 @@ class JiraService @Autowired constructor(jiraConfiguration: JiraConfiguration) {
 
     private fun getBase64Credentials(username: String, password: String) =
             try {
-                String(Base64.getEncoder().encode("$username:$password".toByteArray(charset(ENCODING))))
+                String(Base64.getEncoder().encode("$username:$password".toByteArray()))
             } catch (e: UnsupportedEncodingException) {
                 throw RuntimeException(e)
             }
+
+    private fun asPrintRequest(issue: JiraIssue, references: MutableMap<String, Map<String, Any?>?>): PossyIssue {
+        val referenceResolver: ReferenceResolver = object : ReferenceResolver {
+            override fun resolve(key: String): Map<String, Any?>? {
+                if (references.contains(key)) {
+                    return references[key]
+                }
+                val result = getIssues("key=$key", 1)
+                if (result.statusCode != HttpStatus.OK)
+                    return null
+
+                val jiraIssue = result.body!!.issues.firstOrNull() ?: return null
+                references[key] = jiraIssue.allValues()
+                return references[key]
+            }
+        }
+        var weightValue = field(issue, jiraConfiguration.mapping.weight!!, referenceResolver)
+        var weight = if (weightValue is Double) {
+            (weightValue as Double).toInt().toString()
+        } else {
+            weightValue?.toString()
+        }
+
+        return PossyIssue(
+                getTemplate(field(issue, jiraConfiguration.mapping.templateField!!, referenceResolver) as String),
+                issue.key,
+                weight,
+                field(issue, jiraConfiguration.mapping.tag!!, referenceResolver)?.toString(),
+                field(issue, jiraConfiguration.mapping.content!!, referenceResolver) as String)
+    }
+
+    private fun getTemplate(value: String): PrintTemplate {
+        if (jiraConfiguration.mapping.bug!!.contains(value)) {
+            return PrintTemplate.BUG
+        }
+        if (jiraConfiguration.mapping.story!!.contains(value)) {
+            return PrintTemplate.STORY
+        }
+        return PrintTemplate.TASK
+    }
+
+    private interface ReferenceResolver {
+        fun resolve(key: String): Map<String, Any?>?
+    }
+
+    private fun field(issue: JiraIssue, path: String, referenceResolver: ReferenceResolver): Any? {
+        return resolve(issue.allValues(), path.split(".").toMutableList(), referenceResolver)
+    }
+
+    private fun resolve(values: Map<String, Any?>?, components: MutableList<String>, referenceResolver: ReferenceResolver): Any? {
+        try {
+            if (values == null) {
+                return null
+            }
+            var pathComponent = components.first()
+            val isReference = pathComponent.endsWith("*")
+            var valuesOrNull = values[pathComponent.removeSuffix("*")] ?: return null
+            if (valuesOrNull is String && !valuesOrNull.isNullOrBlank() && isReference) {
+                valuesOrNull = referenceResolver.resolve(valuesOrNull) ?: return null
+            }
+            return if (components.size > 1 && valuesOrNull is Map<*, *>) {
+                resolve(valuesOrNull as Map<String, Any>, components.apply { removeAt(0) }, referenceResolver)
+            } else {
+                valuesOrNull
+            }
+        } catch (e: Exception) {
+            throw RuntimeException("error resolve $components for $values")
+        }
+    }
+
+    private val jiraProjects: List<JiraProject> by lazy {
+        restTemplate.exchange(
+                String.format(GET_PROJECTS, jiraBaseURL),
+                HttpMethod.GET,
+                HttpEntity<List<JiraProject>>(httpHeaders),
+                object : ParameterizedTypeReference<List<JiraProject>>() {})
+                .body
+                .sortedBy { it.key }
+    }
+
+    private fun projectAvatar(url: String): PossyAvatar? {
+        val result = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                HttpEntity<ByteArray>(httpHeaders),
+                ByteArray::class.java)
+        val contentType = result.headers[HttpHeaders.CONTENT_TYPE]?.get(0) ?: ""
+        if (result.statusCode == HttpStatus.OK) {
+            if (contentType.startsWith("image/png")) {
+                return PossyAvatar("png", result.body)
+            }
+            if (contentType.startsWith("image/svg+xml;charset=UTF-8")) {
+                return PossyAvatar("svg", result.body)
+            }
+        }
+        return null
+    }
 
 }

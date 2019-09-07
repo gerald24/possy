@@ -14,33 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.model;
-
-import java.util.stream.Stream;
-
-// TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
+package net.g24.possy.service.model
 
 /**
  * @author: Gerald Leeb
  */
-public enum PrintTemplate {
-    BUG("Pink"),
-    TASK("White"),
-    STORY("White"),
-    IMAGE("White"),
-    FREEFORM("Yellow");
+data class PossyAvatar(val contentType: String, val content: ByteArray)
 
-    private final String printer;
-
-    PrintTemplate(final String printer) {
-        this.printer = printer;
-    }
-
-    public String getPrinter() {
-        return printer;
-    }
-
-    public static PrintTemplate forValue(final String template) {
-        return Stream.of(values()).filter(value -> value.name().equalsIgnoreCase(template)).findFirst().orElse(BUG);
-    }
-}
+/**
+ * @author: Gerald Leeb
+ */
+data class PossyProject(val key: String, val name: String, val avatar: PossyAvatar?)

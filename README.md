@@ -12,6 +12,14 @@ Possy is split into 2 parts:
 - possy-daemon
 - possy-service
 
+### possy-daemon
+
+The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to one or more connected POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
+
+### possy-service
+
+The service is a Vaadin frontend, which creates print requests either by retrieving content from Jira or get manually entered issues.
+
 ## Issuetypes
 
 Possy knows 4 different types of issues:
@@ -34,13 +42,9 @@ The Planner helps to batch print Freeform issues - Usecase: physical scrum and k
 
 ![Planner-Screenshot](resources/Planner-Screenshot.png)
 
-# Possy-Components
+# Configuration 
 
 ## possy-daemon [![Heroku possy-daemon](https://heroku-badge.herokuapp.com/?app=possy-daemon)](https://possy-daemon.herokuapp.com/)
-
-The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to one or more connected POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
-
-### Configuration
 
 1. Edit or create profile, see `application.yml` in `daemon/src/main/resources`
 1. Build app with Maven `mvn clean verify`
@@ -48,10 +52,6 @@ The daemon part connects to a possy-service and fetches print requests (simply t
 1. Open `http://localhost:8081/` in browser
 
 ## possy-service [![Heroku possy-service](https://heroku-badge.herokuapp.com/?app=possy-service)](https://possy-service.herokuapp.com/)
-
-The service is a Vaadin frontend, which creates print requests either by retrieving content from Jira or get manually entered issues.
-
-### Configuration
 
 1. Edit or create profile, see `application.yml` in `daemon/src/main/resources`
 1. Build app with Maven `mvn clean verify`

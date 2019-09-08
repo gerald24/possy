@@ -20,9 +20,6 @@ package net.g24.possy.service.extensions
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UIDetachedException
 
-/**
- * @author: Gerald Leeb
- */
 fun Component.accessIfAttached(action: () -> Unit) {
     ui.ifPresent {
         try {

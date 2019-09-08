@@ -33,17 +33,15 @@ import net.g24.possy.service.ui.components.PossyIssueComponent
 import net.g24.possy.service.ui.components.asComponent
 import java.time.LocalDateTime
 
-/**
- * @author: Gerald Leeb
- */
 @Route("project", layout = MainLayout::class)
 @PageTitle("Possy Project")
-class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
+class ProjectView(private val jiraService: JiraService, private val printRequestCreation: PrintRequestCreation)
+    : VerticalLayout(), HasUrlParameter<String> {
 
-    val projectHeader = Div().apply { addClassName("jira-project-header") }
-    val updatedInfo = Span()
-    val updateTriggerButton = Button("Update") { loadIssues() }
-    val issuesContainer = VerticalLayout().apply { isMargin = false; isPadding = false }
+    private val projectHeader = Div().apply { addClassName("jira-project-header") }
+    private val updatedInfo = Span()
+    private val updateTriggerButton = Button("Update") { loadIssues() }
+    private val issuesContainer = VerticalLayout().apply { isMargin = false; isPadding = false }
     var project: PossyProject? = null
 
 

@@ -30,9 +30,6 @@ import net.g24.possy.service.jira.JiraService
 import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.ui.components.asComponent
 
-/**
- * @author: Gerald Leeb
- */
 @Route("", layout = MainLayout::class)
 @RouteAlias("projects", layout = MainLayout::class)
 @PageTitle("Possy Projects")

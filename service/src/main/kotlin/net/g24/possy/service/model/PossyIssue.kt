@@ -18,10 +18,6 @@ package net.g24.possy.service.model
 
 import java.util.*
 
-
-/**
- * @author: Gerald Leeb
- */
 class PossyIssue(val template: PrintTemplate, val key: String?, val weight: String?, val tag: String?, private val mimetype: String, val content: ByteArray) {
     val id = UUID.randomUUID()
     var isConsumed: Boolean = false

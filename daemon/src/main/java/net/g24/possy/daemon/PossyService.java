@@ -16,11 +16,6 @@
  */
 package net.g24.possy.daemon;
 
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-
 import net.g24.possy.daemon.configuration.CupsProperties;
 import net.g24.possy.daemon.configuration.PossyProperties;
 import org.cups4j.CupsClient;
@@ -31,9 +26,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @author: Gerald Leeb
- */
+import javax.annotation.PostConstruct;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 public class PossyService {
 

@@ -21,8 +21,5 @@ import java.time.format.DateTimeFormatter
 
 private val TIME_DATE_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss")
 
-/**
- * @author: Gerald Leeb
- */
 fun LocalDateTime.asFormatted() =
     TIME_DATE_FORMATTER.format(this)

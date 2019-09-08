@@ -23,13 +23,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-/**
- * @author Gerald Leeb
- * @author Alex Gassner
- */
 @RestController
 @RequestMapping("/api/print")
-class ApiService(@Autowired private val queue: PrintRequestQueueService) {
+class PrintApiService(@Autowired private val queue: PrintRequestQueueService) {
 
     @GetMapping
     fun nextRequest(): ResponseEntity<List<PossyIssue>> = ResponseEntity.ok(queue.nextAllItems().toList())

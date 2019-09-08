@@ -23,9 +23,6 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
 import net.g24.possy.service.model.PossyIssue
 
-/**
- * @author: Gerald Leeb
- */
 @Tag("possy-issue")
 @JsModule("./src/possy-issue.js")
 class PossyIssueComponent(val possyIssue: PossyIssue, val clickHandler: (possyIssue: PossyIssue) -> Unit) : PolymerTemplate<PossyIssueComponent.PossyJiraIssueModel>() {

@@ -22,9 +22,6 @@ import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
-/**
- * @author: Gerald Leeb
- */
 @Service
 class PrintRequestQueueService {
 

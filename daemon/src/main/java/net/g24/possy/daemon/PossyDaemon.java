@@ -26,10 +26,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
-/**
- * @author Gerald Leeb
- * @author Alex Gassner
- */
 @Component
 public class PossyDaemon {
 

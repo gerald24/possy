@@ -29,12 +29,9 @@ import com.vaadin.flow.router.*
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 
-/**
- * @author: Gerald Leeb
- */
 @Route("manually", layout = MainLayout::class)
 @PageTitle("Possy Manually")
-class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
+class ManuallyView(private val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
     private val ctrlOrMeta: KeyModifier = KeyModifier.valueOf("CONTROL")
     private val printTemplateSelector = ComboBox<PrintTemplate>()
     private val printButton = Button("Print", VaadinIcon.PRINT.create()) { queueIssue() }

@@ -28,9 +28,6 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * @author: Gerald Leeb
- */
 @Component
 public class PdfGenerator {
 

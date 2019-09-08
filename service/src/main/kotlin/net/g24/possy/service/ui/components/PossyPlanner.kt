@@ -26,9 +26,6 @@ import elemental.json.JsonArray
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 
-/**
- * @author: Gerald Leeb
- */
 @Tag("possy-planner")
 @NpmPackage("sortablejs", version = "^1.10.0-rc3")
 @JsModule("./src/possy-planner.js")

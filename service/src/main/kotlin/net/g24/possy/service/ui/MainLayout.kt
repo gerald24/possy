@@ -41,10 +41,6 @@ import net.g24.possy.service.ui.components.PossyPrintRequestItem
 import org.springframework.beans.factory.annotation.Value
 import java.util.*
 
-/**
- * @author Gerald Leeb
- * @author Alex Gassner
- */
 @CssImport("./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
 @ParentLayout(PwaRootLayout::class)
 class MainLayout(@Value("\${spring.application.name}") val appName: String, private val printRequestQueueService: PrintRequestQueueService)

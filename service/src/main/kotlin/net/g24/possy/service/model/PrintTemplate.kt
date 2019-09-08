@@ -16,9 +16,6 @@
  */
 package net.g24.possy.service.model
 
-/**
- * @author: Gerald Leeb
- */
 enum class PrintTemplate private constructor(val printer: String) {
     BUG("Pink"),
     TASK("White"),

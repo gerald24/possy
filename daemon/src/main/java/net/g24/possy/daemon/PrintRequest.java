@@ -16,14 +16,11 @@
  */
 package net.g24.possy.daemon;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-/**
- * @author: Gerald Leeb
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PrintRequest {
 

@@ -25,15 +25,12 @@ import net.g24.possy.service.model.PrintTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.*
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.io.UnsupportedEncodingException
 import java.util.*
 
-/**
- * @author: Gerald Leeb
- */
-@Component
+@Service
 class JiraService @Autowired constructor(
         private val jiraConfigurationProperties: JiraConfigurationProperties,
         private val resettableLazyManager: ResettableLazyManager) {

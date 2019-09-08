@@ -29,9 +29,6 @@ import com.vaadin.flow.router.Route
 
 // TODO https://github.com/gerald24/possy/issues/4 implement me
 
-/**
- * @author: Gerald Leeb
- */
 @Route("image", layout = MainLayout::class)
 @PageTitle("Possy Image")
 class ImagePrintView() : VerticalLayout() {

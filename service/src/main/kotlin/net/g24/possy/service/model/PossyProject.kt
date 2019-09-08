@@ -16,12 +16,6 @@
  */
 package net.g24.possy.service.model
 
-/**
- * @author: Gerald Leeb
- */
 data class PossyAvatar(val contentType: String, val content: ByteArray)
 
-/**
- * @author: Gerald Leeb
- */
 data class PossyProject(val key: String, val name: String, val avatar: PossyAvatar?)

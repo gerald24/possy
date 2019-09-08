@@ -23,9 +23,6 @@ import net.g24.possy.service.service.PrintRequestQueueService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-/**
- * @author: Gerald Leeb
- */
 @Component
 class PrintRequestCreation(@Autowired private val printRequestQueueService: PrintRequestQueueService) {
 

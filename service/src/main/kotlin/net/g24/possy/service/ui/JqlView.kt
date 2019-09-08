@@ -32,10 +32,6 @@ import net.g24.possy.service.jira.JiraService
 import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.ui.components.PossyIssueComponent
 
-
-/**
- * @author: Gerald Leeb
- */
 @Route("jql", layout = MainLayout::class)
 @PageTitle("Possy JQL")
 class JqlView(val jiraService: JiraService, val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {

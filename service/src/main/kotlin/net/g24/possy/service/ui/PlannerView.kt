@@ -24,9 +24,6 @@ import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPlanner
 
-/**
- * @author: Gerald Leeb
- */
 @Route("planner", layout = MainLayout::class)
 @PageTitle("Possy Planner")
 class PlannerView(private val printRequestQueueService: PrintRequestQueueService) : VerticalLayout() {

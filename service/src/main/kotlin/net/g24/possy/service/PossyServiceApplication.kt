@@ -29,10 +29,6 @@ import javax.servlet.ServletResponse
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServletResponse
 
-
-/**
- * @author: Gerald Leeb
- */
 @SpringBootApplication
 @EnableConfigurationProperties
 class PossyServiceApplication : SpringBootServletInitializer()
@@ -46,9 +42,6 @@ fun main(args: Array<String>) {
     runApplication<PossyServiceApplication>(*args)
 }
 
-/**
- * @author: Gerald Leeb
- */
 @WebServlet(urlPatterns = ["/*"], asyncSupported = true)
 class PossyServlet : VaadinServlet() {
 

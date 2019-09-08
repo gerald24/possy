@@ -16,9 +16,6 @@
  */
 package net.g24.possy.daemon;
 
-/**
- * @author: Gerald Leeb
- */
 public enum PrintPaper {
     WHITE,
     PINK,

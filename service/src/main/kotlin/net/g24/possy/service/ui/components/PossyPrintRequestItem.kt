@@ -22,9 +22,6 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
 import net.g24.possy.service.model.PossyIssue
 
-/**
- * @author: Gerald Leeb
- */
 @Tag("possy-print-request-item")
 @JsModule("./src/possy-print-request-item.js")
 class PossyPrintRequestItem(printRequest: PossyIssue) : PolymerTemplate<PossyPrintRequestItem.PossyPrintRequestItemModel>() {

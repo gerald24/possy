@@ -16,8 +16,6 @@
  */
 package net.g24.possy.daemon.resttemplate;
 
-import java.net.URI;
-
 import org.apache.http.HttpHost;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -28,9 +26,8 @@ import org.apache.http.protocol.HttpContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
-/**
- * @author: Gerald Leeb
- */
+import java.net.URI;
+
 public class HttpComponentsClientHttpRequestFactoryBasicAuth extends HttpComponentsClientHttpRequestFactory {
 
     private HttpHost host;

@@ -23,7 +23,7 @@ import com.vaadin.flow.component.dependency.NpmPackage
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
 import elemental.json.JsonArray
-import net.g24.possy.service.model.PrintRequest
+import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 
 /**
@@ -32,12 +32,12 @@ import net.g24.possy.service.model.PrintTemplate
 @Tag("possy-planner")
 @NpmPackage("sortablejs", version = "^1.10.0-rc3")
 @JsModule("./src/possy-planner.js")
-class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit) : PolymerTemplate<TemplateModel>() {
+class PossyPlanner(val clickHandler: (printRequests: List<PossyIssue>) -> Unit) : PolymerTemplate<TemplateModel>() {
 
 
     @ClientCallable
     private fun print(json: JsonArray) {
-        val printRequests = mutableListOf<PrintRequest>()
+        val printRequests = mutableListOf<PossyIssue>()
         for (i in 1..json.length()) {
             val story = json.getObject(i - 1)
             var storyDetail = story.getString("detail")
@@ -54,7 +54,7 @@ class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit
                 if (!taskDetail.isNullOrBlank()) {
                     if (!headerPrinted) {
                         printRequests.add(
-                                PrintRequest(
+                                PossyIssue(
                                         PrintTemplate.FREEFORM,
                                         storyDetail,
                                         null, null, "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
@@ -62,7 +62,7 @@ class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit
                         )
                         headerPrinted = true
                     }
-                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, null, null, storyDetail, taskDetail))
+                    printRequests.add(PossyIssue(PrintTemplate.FREEFORM, null, null, storyDetail, taskDetail))
                 }
             }
         }

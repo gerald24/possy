@@ -18,33 +18,34 @@ package net.g24.possy.service.ui
 
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.notification.Notification
-import net.g24.possy.service.jira.JiraIssue
-import net.g24.possy.service.model.PrintRequest
-import net.g24.possy.service.api.PrintRequestQueueService
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.service.PrintRequestQueueService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 /**
  * @author: Gerald Leeb
  */
 @Component
-class PrintRequestCreation(val printRequestQueueService: PrintRequestQueueService) {
-    fun confirm(issue: JiraIssue) {
+class PrintRequestCreation(@Autowired private val printRequestQueueService: PrintRequestQueueService) {
+
+    fun confirm(issue: PossyIssue) {
         val dialog = ConfirmDialog(
-            "Confirm Print",
-            "Print issue ${issue.key}?",
-            "Print", {
-                printUnconfirmed(issue.asPrintRequest())
-            },
-            "Cancel", {})
+                "Confirm Print",
+                "Print issue ${issue.key}?",
+                "Print", {
+            printUnconfirmed(issue)
+        },
+                "Cancel", {})
         dialog.open()
     }
 
-    fun printAll(issues: List<JiraIssue>) {
-        issues.forEach { printRequestQueueService.addItem(it.asPrintRequest()) }
+    fun printAll(issues: List<PossyIssue>) {
+        issues.forEach { printRequestQueueService.addItem(it) }
         showNotification()
     }
 
-    fun printUnconfirmed(printRequest: PrintRequest) {
+    fun printUnconfirmed(printRequest: PossyIssue) {
         printRequestQueueService.addItem(printRequest)
         showNotification()
     }
@@ -52,5 +53,6 @@ class PrintRequestCreation(val printRequestQueueService: PrintRequestQueueServic
     private fun showNotification() {
         Notification.show("added to print queued", 600, Notification.Position.MIDDLE)
     }
+
 
 }

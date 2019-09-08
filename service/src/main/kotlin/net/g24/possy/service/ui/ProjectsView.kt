@@ -16,13 +16,19 @@
  */
 package net.g24.possy.service.ui
 
-import com.vaadin.flow.component.html.Anchor
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
+import com.vaadin.flow.router.RouterLink
+import net.g24.possy.service.extensions.ResettableLazyManager
 import net.g24.possy.service.jira.JiraService
+import net.g24.possy.service.model.PossyProject
+import net.g24.possy.service.ui.components.asComponent
 
 /**
  * @author: Gerald Leeb
@@ -30,12 +36,42 @@ import net.g24.possy.service.jira.JiraService
 @Route("", layout = MainLayout::class)
 @RouteAlias("projects", layout = MainLayout::class)
 @PageTitle("Possy Projects")
-class ProjectsView(val jiraService: JiraService) : VerticalLayout() {
+class ProjectsView(val jiraService: JiraService, val resettableLazyManager: ResettableLazyManager) : VerticalLayout() {
+
+    val resetAndLoadButton = Button("Reset") { resetAndLoad() }
+
 
     init {
         addClassName("possy-projects")
-        jiraService.projects
-            .sorted()
-            .forEach { add(Anchor("/project/$it", Span(it)).apply { addClassName("jira-project") }) }
+        load()
     }
+
+    private fun load() {
+        removeAll()
+        val projects = jiraService.projects
+        if (projects == null) {
+            add(Paragraph("Error loading projects!"))
+        } else {
+            projects.forEach { add(asLinkComponent(it)) }
+        }
+        add(resetAndLoadButton)
+    }
+
+    private fun resetAndLoad() {
+        resettableLazyManager.reset()
+        load()
+    }
+
+    private fun asLinkComponent(project: PossyProject): Component {
+        return RouterLink(null, ProjectView::class.java, project.key)
+                .apply {
+                    project.avatar.asComponent(project.key)?.let { add(it) }
+                    add(Span("${project.key} (${project.name})")
+                            .apply { addClassName("jira-project-title") })
+                    addClassName("jira-project")
+                }
+
+    }
+
+
 }

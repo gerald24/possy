@@ -10,11 +10,11 @@ ADD target/*.jar /app.jar
 EXPOSE 8080
 EXPOSE 5005
 
-ENTRYPOINT [
-	"java",
-	"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
-	"-Djava.security.egd=file:/dev/./urandom",
-	"-Dvaadin.productionMode=true",
-	"-jar",
-	"/app.jar"
+ENTRYPOINT [ \
+	"java", \
+	"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", \
+	"-Djava.security.egd=file:/dev/./urandom", \
+	"-Dvaadin.productionMode=true", \
+	"-jar", \
+	"/app.jar" \
 ]

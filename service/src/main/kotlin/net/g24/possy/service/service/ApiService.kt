@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
+package net.g24.possy.service.service
 
-package net.g24.possy.service.api
-
-import net.g24.possy.service.model.PrintRequest
+import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -30,17 +29,17 @@ import java.util.*
  */
 @RestController
 @RequestMapping("/api/print")
-class ApiController(@Autowired private val queue: PrintRequestQueueService) {
+class ApiService(@Autowired private val queue: PrintRequestQueueService) {
 
     @GetMapping
-    fun nextRequest(): ResponseEntity<List<PrintRequest>> = ResponseEntity.ok(queue.nextAllItems().toList())
+    fun nextRequest(): ResponseEntity<List<PossyIssue>> = ResponseEntity.ok(queue.nextAllItems().toList())
 
     @PostMapping
     fun createRequest(
             @RequestParam("template") template: String,
             @RequestParam("issue") issue: String,
-            @RequestParam("content") content: String): ResponseEntity<PrintRequest> =
-            ResponseEntity.ok(queue.addItem(PrintRequest(PrintTemplate.forValue(template), issue, null, null, content)))
+            @RequestParam("content") content: String): ResponseEntity<PossyIssue> =
+            ResponseEntity.ok(queue.addItem(PossyIssue(PrintTemplate.forValue(template), issue, null, null, content)))
 
     @DeleteMapping("{id}")
     fun removeRequest(@PathVariable("id") id: String): ResponseEntity<Any> =

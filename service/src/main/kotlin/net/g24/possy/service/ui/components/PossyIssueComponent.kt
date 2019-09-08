@@ -21,14 +21,14 @@ import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.polymertemplate.EventHandler
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
-import net.g24.possy.service.jira.JiraIssue
+import net.g24.possy.service.model.PossyIssue
 
 /**
  * @author: Gerald Leeb
  */
-@Tag("possy-jira-issue")
-@JsModule("./src/possy-jira-issue.js")
-class PossyJiraIssue(val jiraIssue: JiraIssue, val clickHandler: (jiraIssue: JiraIssue) -> Unit) : PolymerTemplate<PossyJiraIssue.PossyJiraIssueModel>() {
+@Tag("possy-issue")
+@JsModule("./src/possy-issue.js")
+class PossyIssueComponent(val possyIssue: PossyIssue, val clickHandler: (possyIssue: PossyIssue) -> Unit) : PolymerTemplate<PossyIssueComponent.PossyJiraIssueModel>() {
 
     interface PossyJiraIssueModel : TemplateModel {
         fun setKey(key: String)
@@ -37,14 +37,14 @@ class PossyJiraIssue(val jiraIssue: JiraIssue, val clickHandler: (jiraIssue: Jir
     }
 
     init {
-        setId(jiraIssue.key)
-        model.setKey(jiraIssue.key)
-        model.setSummary(jiraIssue.summary)
-        model.setType(jiraIssue.issueTypeName)
+        setId(possyIssue.key)
+        model.setKey(possyIssue.key?:"")
+        model.setSummary(possyIssue.contentAsString)
+        model.setType(possyIssue.template.name)
     }
 
     @EventHandler
     private fun handleClick() {
-        clickHandler.invoke(jiraIssue)
+        clickHandler.invoke(possyIssue)
     }
 }

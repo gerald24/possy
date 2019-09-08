@@ -8,12 +8,12 @@ ENV LANGUAGE en_US.UTF-8
 ADD target/*.jar /app.jar
 
 EXPOSE 8081
-EXPOSE 5005
+EXPOSE 5006
 
-ENTRYPOINT [
-	"java",
-	"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
-	"-Djava.security.egd=file:/dev/./urandom",
-	"-jar",
-	"/app.jar"
+ENTRYPOINT [ \
+	"java", \
+	"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006", \
+	"-Djava.security.egd=file:/dev/./urandom", \
+	"-jar", \
+	"/app.jar" \
 ]

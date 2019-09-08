@@ -20,8 +20,8 @@ import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import net.g24.possy.service.model.PrintRequest
-import net.g24.possy.service.api.PrintRequestQueueService
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPlanner
 
 /**
@@ -29,16 +29,16 @@ import net.g24.possy.service.ui.components.PossyPlanner
  */
 @Route("planner", layout = MainLayout::class)
 @PageTitle("Possy Planner")
-class PlannerView(val printRequestQueueService: PrintRequestQueueService) : VerticalLayout() {
+class PlannerView(private val printRequestQueueService: PrintRequestQueueService) : VerticalLayout() {
 
-    val possyPlanner = PossyPlanner() { addPrintRequests(it) }
+    private val possyPlanner = PossyPlanner() { addPrintRequests(it) }
 
     init {
         addClassName("possy-jql")
         add(possyPlanner)
     }
 
-    private fun addPrintRequests(requests: List<PrintRequest>) {
+    private fun addPrintRequests(requests: List<PossyIssue>) {
         requests.forEach { printRequestQueueService.addItem(it) }
         Notification.show("added to print queued", 600, Notification.Position.MIDDLE)
     }

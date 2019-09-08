@@ -14,24 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.jira;
-
-import java.util.List;
-
-// TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
+package net.g24.possy.service.model
 
 /**
  * @author: Gerald Leeb
  */
-public class JqlResult {
+enum class PrintTemplate private constructor(val printer: String) {
+    BUG("Pink"),
+    TASK("White"),
+    STORY("White"),
+    IMAGE("White"),
+    FREEFORM("Yellow");
 
-    private List<JiraIssue> issues;
 
-    public List<JiraIssue> getIssues() {
-        return issues;
-    }
+    companion object {
 
-    public void setIssues(final List<JiraIssue> issues) {
-        this.issues = issues;
+        fun forValue(template: String): PrintTemplate {
+            return values().firstOrNull { it.name.equals(template, ignoreCase = true) }?:BUG
+        }
+
     }
 }
+

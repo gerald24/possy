@@ -40,8 +40,8 @@ class JiraService @Autowired constructor(
     private val jiraBaseURL: String = jiraConfigurationProperties.url!!.removeSuffix("/")
 
     companion object {
-        private const val GET_PROJECTS = "%s/project"
-        private const val GET_ISSUES = "%s/search?fields=%s&jql=%s&maxResults=%d"
+        private const val GET_PROJECTS = "%s/rest/api/2/project"
+        private const val GET_ISSUES = "%s/rest/api/2/search?fields=%s&jql=%s&maxResults=%d"
     }
 
     val projects: List<PossyProject>? by resettableLazy(resettableLazyManager) {

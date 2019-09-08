@@ -39,7 +39,9 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
     private val printTemplateSelector = ComboBox<PrintTemplate>()
     private val printButton = Button("Print", VaadinIcon.PRINT.create()) { queueIssue() }
     private val header = TextField()
+    private val weight = TextField()
     private val content = TextArea()
+    private val tag = TextField()
 
     init {
         setSizeFull()
@@ -47,14 +49,19 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
 
         initProjectTemplateSelector()
         initHeader()
+        initWeight()
         initContent()
+        initTag()
 
         add(
                 HorizontalLayout().apply {
                     add(printTemplateSelector, printButton)
                     isSpacing = true
                 },
-                header
+                HorizontalLayout().apply {
+                    addAndExpand(header)
+                    add(weight, tag)
+                }
         )
         addAndExpand(content)
 
@@ -98,12 +105,12 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
 
     private fun initHeader() {
         header.width = "100%"
-        header.placeholder = "Header"
-        header.valueChangeMode = ValueChangeMode.LAZY
-        header.isClearButtonVisible = true
-        header.addValueChangeListener { updateAppearance() }
-        header.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { header.value = "" })
-        header.addKeyPressListener(Key.ENTER, ComponentEventListener<KeyPressEvent> { queueIssue() }, ctrlOrMeta)
+        initField(header, "Header")
+    }
+
+
+    private fun initWeight() {
+        initField(weight, "Weight")
     }
 
     private fun initContent() {
@@ -112,13 +119,29 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
         content.valueChangeMode = ValueChangeMode.LAZY
         content.isClearButtonVisible = true
         content.addValueChangeListener { updateAppearance() }
-        content.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { header.value = "" })
+        content.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { content.value = "" })
         content.addKeyPressListener(Key.ENTER, ComponentEventListener<KeyPressEvent> { queueIssue() }, ctrlOrMeta)
+    }
+
+    private fun initTag() {
+        initField(tag, "Tag")
+    }
+
+
+    private fun initField(field: TextField, placeholder: String) {
+        field.placeholder = placeholder
+        field.valueChangeMode = ValueChangeMode.LAZY
+        field.isClearButtonVisible = true
+        field.addValueChangeListener { updateAppearance() }
+        field.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { field.value = "" })
+        field.addKeyPressListener(Key.ENTER, ComponentEventListener<KeyPressEvent> { queueIssue() }, ctrlOrMeta)
     }
 
 
     private fun updateAppearance() {
-        header.isVisible = printTemplateSelector.value != PrintTemplate.FREEFORM
+        header.isVisible = hasHeader()
+        weight.isVisible = hasWeight()
+        tag.isVisible = hasTag()
         printButton.isEnabled = (!header.isVisible || header.isVisible && header.value.isNotBlank()) && content.value.isNotBlank()
     }
 
@@ -129,15 +152,25 @@ class ManuallyView(val printRequestCreation: PrintRequestCreation) : VerticalLay
         printRequestCreation.printUnconfirmed(
                 PossyIssue(
                         printTemplateSelector.value,
-                        if (printTemplateSelector.value == PrintTemplate.FREEFORM) "" else header.value,
-                        null, null,
+                        if (!hasHeader()) "" else header.value,
+                        if (!hasWeight()) null else weight.value,
+                        if (!hasTag()) null else tag.value,
                         content.value
                 )
         )
         header.value = ""
+        weight.value = ""
         content.value = ""
+        tag.value = ""
+
         updateFocus()
     }
+
+    private fun hasTag() = printTemplateSelector.value == PrintTemplate.STORY || printTemplateSelector.value == PrintTemplate.FREEFORM
+
+    private fun hasWeight() = printTemplateSelector.value == PrintTemplate.STORY
+
+    private fun hasHeader() = printTemplateSelector.value != PrintTemplate.FREEFORM
 
     private fun updateFocus() {
         if (printTemplateSelector.value == PrintTemplate.FREEFORM) {

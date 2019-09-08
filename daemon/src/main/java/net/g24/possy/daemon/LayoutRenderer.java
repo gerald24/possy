@@ -16,21 +16,13 @@
  */
 package net.g24.possy.daemon;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import java.io.IOException;
 
-/**
- * @author: Gerald Leeb
- */
-@SpringBootApplication
-@EnableScheduling
-@EnableConfigurationProperties
-public class PossyDaemonApplication {
+import net.g24.possy.daemon.templaterenderer.RenderContext;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
-    }
+public interface LayoutRenderer {
 
+    void render(PrintRequest printRequest, PDDocument doc, PDPageContentStream contents, RenderContext renderContext) throws IOException;
 }

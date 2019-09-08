@@ -14,23 +14,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon.templaterenderer;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.EnableScheduling;
+class Cursor {
 
-/**
- * @author: Gerald Leeb
- */
-@SpringBootApplication
-@EnableScheduling
-@EnableConfigurationProperties
-public class PossyDaemonApplication {
+    float x;
+    float y;
 
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
+    Cursor(final float x, final float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    void down(final float offset) {
+        y = y - offset;
     }
 
 }

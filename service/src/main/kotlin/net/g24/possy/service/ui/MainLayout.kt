@@ -24,7 +24,7 @@ import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.applayout.DrawerToggle
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.html.H2
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -34,23 +34,27 @@ import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.TabVariant
 import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.router.*
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
 import net.g24.possy.service.model.PrintRequest
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPrintRequestItem
+import org.springframework.beans.factory.annotation.Value
 import java.util.*
 
 /**
- * @author: Gerald Leeb
+ * @author Gerald Leeb
+ * @author Alex Gassner
  */
 @Push
 @CssImport.Container(
-    CssImport(value = "frontend://styles/shared-styles.css"),
-    CssImport(value = "frontend://styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
+        CssImport(value = "./styles/shared-styles.css"),
+        CssImport(value = "./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
 )
 @Theme(value = Lumo::class)
-class MainLayout(val printRequestQueueService: PrintRequestQueueService) : AppLayout(), RouterLayout, AfterNavigationObserver {
+@PWA(name = "Possy", shortName = "Possy")
+class MainLayout(@Value("\${spring.application.name}") val appName: String, val printRequestQueueService: PrintRequestQueueService) : AppLayout(), RouterLayout, AfterNavigationObserver {
     private var dark = false
     private val themeToggleButton = Button("Switch to") { toggleThemeVariant() }
     private val tabs = Tabs()
@@ -81,10 +85,9 @@ class MainLayout(val printRequestQueueService: PrintRequestQueueService) : AppLa
         val segments = event.location.segments
         val path = if (segments.isNullOrEmpty()) "" else segments[0]
         tabs.selectedTab = RouteConfiguration.forSessionScope().getRoute(path)
-            .map { navEntries[it] }
-            .orElse(null)
+                .map { navEntries[it] }
+                .orElse(null)
     }
-
 
     private fun initNavigationBar() {
         val branding = initBranding()
@@ -96,8 +99,8 @@ class MainLayout(val printRequestQueueService: PrintRequestQueueService) : AppLa
         addToNavbar(DrawerToggle())
     }
 
-    private fun initBranding(): H1 {
-        val appName = H1("Possy")
+    private fun initBranding(): H2 {
+        val appName = H2(appName)
         appName.addClassName("app-name")
         appName.element.style.set("margin", "0")
         appName.element.style.set("padding-left", "0.25em")
@@ -188,10 +191,10 @@ class MainLayout(val printRequestQueueService: PrintRequestQueueService) : AppLa
 
     private fun findMatchingComponent(request: PrintRequest): Optional<PossyPrintRequestItem> {
         return printQueueLayout.children
-            .filter { c -> c is PossyPrintRequestItem }
-            .map { c -> c as PossyPrintRequestItem }
-            .filter { c -> c.id.isPresent && c.id.get() == request.id.toString() }
-            .findFirst()
+                .filter { c -> c is PossyPrintRequestItem }
+                .map { c -> c as PossyPrintRequestItem }
+                .filter { c -> c.id.isPresent && c.id.get() == request.id.toString() }
+                .findFirst()
     }
 
     private fun toggleThemeVariant() {

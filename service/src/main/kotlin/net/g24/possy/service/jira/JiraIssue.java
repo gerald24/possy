@@ -20,7 +20,7 @@ import net.g24.possy.service.model.PrintRequest;
 import net.g24.possy.service.model.PrintTemplate;
 
 // TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
-// TODO find better solution for custom fields (e.g. story)
+// TODO find better solution for custom fields (e.g. story, epos)
 
 /**
  * @author: Gerald Leeb
@@ -49,10 +49,11 @@ public class JiraIssue {
     public PrintTemplate getTemplate() {
         String id = getIssueTypeId();
 
-        if ("1".equals(id)) {
+        // TODO https://github.com/gerald24/possy/issues/3
+        if ("1".equals(id) || "10200".equals(id) || "10800".equals(id) || "11105".equals(id)) {
             return PrintTemplate.BUG;
         }
-        if ("10101".equals(id)) {
+        if ("10101".equals(id) || "10201".equals(id)) {
             return PrintTemplate.STORY;
         }
 
@@ -72,15 +73,15 @@ public class JiraIssue {
     }
 
     public String getStoryPoints() {
-        return fields != null && fields.getCustomfield_10102() != null ? fields.getCustomfield_10102().intValue() + " SP" : null;
+        return fields != null && fields.getCustomfield_10102() != null ? "" + fields.getCustomfield_10102().intValue() : null;
+    }
+
+    public String getEposPoints() {
+        return fields != null && fields.getCustomfield_10105() != null ? fields.getCustomfield_10105() : null;
     }
 
     public PrintRequest asPrintRequest() {
         String header = getKey();
-        String sp = getStoryPoints();
-        if (sp != null) {
-            header = header + " (" + sp + ")";
-        }
-        return new PrintRequest(getTemplate(), header, getSummary());
+        return new PrintRequest(getTemplate(), header, getStoryPoints(), getEposPoints(), getSummary());
     }
 }

@@ -28,6 +28,7 @@ public class JiraFields {
      * story points
      */
     private Double customfield_10102;
+    private String customfield_10105;
     private JiraIssueType issuetype;
 
     public String getSummary() {
@@ -40,6 +41,10 @@ public class JiraFields {
 
     public Double getCustomfield_10102() {
         return customfield_10102;
+    }
+
+    public String getCustomfield_10105() {
+        return customfield_10105;
     }
 
     public void setCustomfield_10102(final Double customfield_10102) {

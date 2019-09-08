@@ -1,4 +1,4 @@
-/target/
+target
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -17,14 +17,19 @@
 *.ipr
 
 ### NetBeans ###
-/nbproject/private/
-/build/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-/src/main/resources/Comic Sans MS.ttf
-/src/main/resources/Arial Black.ttf
-/src/main/resources/application-prod.properties
+nbproject/private
+build
+nbbuild
+dist
+nbdist
+.nb-gradle
 
-/package.json
+### Vaadin ###
+webpack.generated.js
+package-lock.json
+node
+node_modules
+
+### Configs ###
+application-prod.yml
+application-dev.yml

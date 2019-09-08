@@ -19,6 +19,7 @@ package net.g24.possy.service.ui.components
 import com.vaadin.flow.component.ClientCallable
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.dependency.JsModule
+import com.vaadin.flow.component.dependency.NpmPackage
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate
 import com.vaadin.flow.templatemodel.TemplateModel
 import elemental.json.JsonArray
@@ -29,6 +30,7 @@ import net.g24.possy.service.model.PrintTemplate
  * @author: Gerald Leeb
  */
 @Tag("possy-planner")
+@NpmPackage("sortablejs", version = "^1.10.0-rc3")
 @JsModule("./src/possy-planner.js")
 class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit) : PolymerTemplate<TemplateModel>() {
 
@@ -55,12 +57,12 @@ class PossyPlanner(val clickHandler: (printRequests: List<PrintRequest>) -> Unit
                                 PrintRequest(
                                         PrintTemplate.FREEFORM,
                                         storyDetail,
-                                        "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
+                                        null, null, "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
                                 )
                         )
                         headerPrinted = true
                     }
-                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, "", taskDetail))
+                    printRequests.add(PrintRequest(PrintTemplate.FREEFORM, null, null, storyDetail, taskDetail))
                 }
             }
         }

@@ -28,7 +28,7 @@ import net.g24.possy.service.ui.components.PossyPlanner
  * @author: Gerald Leeb
  */
 @Route("planner", layout = MainLayout::class)
-@PageTitle("Possy P2")
+@PageTitle("Possy Planner")
 class PlannerView(val printRequestQueueService: PrintRequestQueueService) : VerticalLayout() {
 
     val possyPlanner = PossyPlanner() { addPrintRequests(it) }

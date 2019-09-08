@@ -16,10 +16,6 @@
  */
 package net.g24.possy.daemon.templaterenderer;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 import net.g24.possy.daemon.LayoutRenderer;
 import net.g24.possy.daemon.PrintRequest;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -28,6 +24,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.text.Position;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public abstract class TemplateRenderer implements LayoutRenderer {
 
@@ -50,10 +50,10 @@ public abstract class TemplateRenderer implements LayoutRenderer {
     protected void renderIssue(
             final PrintRequest printRequest, final PDDocument doc, final PDPageContentStream contents, final RenderContext renderContext)
             throws IOException {
-        if (printRequest.hasIssue()) {
+        if (printRequest.hasKey()) {
             FontContext headerFont = renderContext.getHeaderFont();
             renderContext.getCursor().down(headerFont.getSize());
-            showTextAt(contents, printRequest.getIssue(), renderContext.getCursor(), headerFont.getFont(doc), headerFont.getSize());
+            showTextAt(contents, printRequest.getKey(), renderContext.getCursor(), headerFont.getFont(doc), headerFont.getSize());
             renderContext.getCursor().down(headerFont.getLineHeight() - headerFont.getSize());
         }
     }

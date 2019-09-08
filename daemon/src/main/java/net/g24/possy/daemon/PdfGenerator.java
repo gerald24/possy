@@ -16,16 +16,8 @@
  */
 package net.g24.possy.daemon;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import net.g24.possy.daemon.configuration.PossyProperties;
-import net.g24.possy.daemon.templaterenderer.DefaultTemplateRenderer;
-import net.g24.possy.daemon.templaterenderer.FontContext;
-import net.g24.possy.daemon.templaterenderer.FreeformTemplateRenderer;
-import net.g24.possy.daemon.templaterenderer.RenderContext;
-import net.g24.possy.daemon.templaterenderer.StoryTemplateRenderer;
-import net.g24.possy.daemon.templaterenderer.TaskTemplateRenderer;
+import net.g24.possy.daemon.templaterenderer.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -33,7 +25,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-// TODO https://github.com/gerald24/possy/issues/3
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * @author: Gerald Leeb

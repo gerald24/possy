@@ -15,54 +15,82 @@
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
 @media (max-width: 586px) {
-  .hide-on-mobile {
-    display: none;
-  }
+	.hide-on-mobile {
+		display: none;
+	}
 }
 
 .print-queue-layout {
-  border: 1px solid #444;
-  background: hsl(214, 35%, 19%);
-  overflow-y: auto;
+	border: 1px solid #444;
+	background: hsl(214, 35%, 19%);
+	overflow-y: auto;
 }
 
 body[theme~="light"] .print-queue-layout {
-  background: hsl(214, 35%, 90%);
+	background: hsl(214, 35%, 90%);
 }
 
 .print-queue-view {
-  background: hsl(214, 35%, 17%);
+	background: hsl(214, 35%, 17%);
 }
 
 body[theme~="light"] .print-queue-view {
-  background: hsl(214, 35%, 90%);
+	background: hsl(214, 35%, 90%);
 }
 
 possy-print-request-item {
-  background: #444;
+	background: #444;
 }
 
 body[theme~="light"] possy-print-request-item {
-  background: #eee;
+	background: #eee;
 }
+
 
 .jira-project {
-  border: 1px solid gray;
-  border-radius: 2px;
-  padding: 4px 8px 4px 8px;
-  width: 300px;
-  font-size: large;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+	display: flex;
+	align-items: center;
+	border: 1px solid gray;
+	border-radius: 2px;
+	padding: 4px 8px 4px 8px;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
+.jira-project .jira-project-avatar {
+	width: 48px;
+	height: 48px;
+}
+
+.jira-project .jira-project-title {
+	font-size: large;
+	margin-left: 8px;
+}
+
+.jira-project-header {
+	display: flex;
+	align-items: center;
+}
+
+.jira-project-header .jira-project-avatar {
+	width: 48px;
+	height: 48px;
+}
+
+.jira-project-header .jira-project-title {
+	font-size: xx-large;
+}
+
+.jira-project-header * {
+	margin-left: 8px;
+}
 
 .story-container {
-  overflow-y: auto;
+	overflow-y: auto;
 }
 
 .task-container {
-  border: 1px solid gray;
-  border-radius: 2px;
+	border: 1px solid gray;
+	border-radius: 2px;
 }

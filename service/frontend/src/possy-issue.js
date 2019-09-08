@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-// TODO https://github.com/gerald24/possy/issues/3 (see styling issues e.g. Incident, Story, etc.)
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
-class PossyJiraIssue extends PolymerElement {
+class PossyIssue extends PolymerElement {
 
-    static get template() {
-        return html`
+	static get template() {
+		return html`
             <style>
                 :host {
                  display: block;
@@ -49,29 +48,25 @@ class PossyJiraIssue extends PolymerElement {
                     color: #222;
                 }
 
-                .jira-issue.Epos {
+                .jira-issue.FREEFORM {
                     border: 4px solid #333;
                     background: #ccc;
                     color: black;
                 }
 
-                .jira-issue.Story,
-                .jira-issue.Changerequest {
+                .jira-issue.STORY {
                     border: 4px solid #0D71B4;
                     background: #C3DCEC;
                     color: black;
                 }
 
-                .jira-issue.Aufgabe {
+                .jira-issue.TASK {
                     border: 4px solid #85920D;
                     background: #E1E4C3;
                     color: black;
                 }
 
-                .jira-issue.Incident,
-                .jira-issue.Request,
-                .jira-issue.Servicerequest,
-                .jira-issue.Fehler {
+                .jira-issue.BUG {
                     border: 4px solid #950E4F;
                     background: #E5C3D3;
                     color: black;
@@ -82,18 +77,18 @@ class PossyJiraIssue extends PolymerElement {
                 <span class="jira-issue-summary">[[summary]]</span>
                 <span class="jira-issue-type">[[type]]</span>
             </div>`;
-    }
+	}
 
-    static get is() {
-        return 'possy-jira-issue';
-    }
+	static get is() {
+		return 'possy-issue';
+	}
 
-    handleClick() {
-        // handler implemented server-side
-    }
+	handleClick() {
+		// handler implemented server-side
+	}
 }
 
-customElements.define(PossyJiraIssue.is, PossyJiraIssue);
+customElements.define(PossyIssue.is, PossyIssue);
 
-export {PossyJiraIssue}
+export {PossyIssue}
 

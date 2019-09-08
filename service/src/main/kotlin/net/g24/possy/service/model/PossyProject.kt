@@ -14,33 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.jira;
-
-// TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
-
+package net.g24.possy.service.model
 
 /**
  * @author: Gerald Leeb
  */
-public class JiraIssueType {
+data class PossyAvatar(val contentType: String, val content: ByteArray)
 
-    private String id;
-
-    private String name;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-}
+/**
+ * @author: Gerald Leeb
+ */
+data class PossyProject(val key: String, val name: String, val avatar: PossyAvatar?)

@@ -14,24 +14,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.jira;
+package net.g24.possy.service.jira
 
-import java.util.List;
+data class AvatarUrls(val `48x48`: String, val `32x32`: String, val `24x24`: String, val `16x16`: String)
 
-// TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
+data class JiraProject(val key: String, val name: String, val avatarUrls: AvatarUrls)
 
-/**
- * @author: Gerald Leeb
- */
-public class JqlResult {
-
-    private List<JiraIssue> issues;
-
-    public List<JiraIssue> getIssues() {
-        return issues;
-    }
-
-    public void setIssues(final List<JiraIssue> issues) {
-        this.issues = issues;
+data class JiraIssue(val key: String, var fields: Map<String, Any> = mutableMapOf()) {
+    fun allValues(): Map<String, Any?>? {
+        val values = fields.toMutableMap()
+        values["key"] = key
+        return values.toMap()
     }
 }
+
+data class JqlIssueResult(val issues: List<JiraIssue>)
+

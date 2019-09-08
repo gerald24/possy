@@ -16,8 +16,6 @@
  */
 package net.g24.possy.daemon;
 
-// TODO https://github.com/gerald24/possy/issues/3
-
 /**
  * @author: Gerald Leeb
  */

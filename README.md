@@ -15,7 +15,7 @@ Possy was created based on [Boris's](https://github.com/boris779) idea to print 
 
 ### possy-daemon
 
-The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to one or more connected POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
+The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to a specific POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
 
 ### possy-service
 
@@ -31,7 +31,7 @@ Possy knows 4 different types of issues:
 
 ## Printers
 
-The issuetypes are mapped to 3 different printer which might use different colors:
+An issuetype is mapped to a specific printer (currently up to 3 different printer):
 - Stories -> white
 - Tasks -> white
 - Bugs -> pink

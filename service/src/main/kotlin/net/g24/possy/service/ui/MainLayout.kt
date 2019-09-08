@@ -179,7 +179,7 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, priv
 
     private fun itemConsumed(request: PossyIssue) {
         matchQueueEntriesVisibility()
-        findMatchingComponent(request).ifPresent { c -> c.setConsumed(request.isConsumed) }
+        findMatchingComponent(request).ifPresent { c -> c.setConsumed(request.consumed) }
     }
 
     private fun itemRemoved(request: PossyIssue) {

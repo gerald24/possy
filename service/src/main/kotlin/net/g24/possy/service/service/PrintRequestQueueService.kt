@@ -56,7 +56,7 @@ class PrintRequestQueueService {
     fun nextAllItems(): Collection<PossyIssue> {
         val items = allItems()
         items.forEach { item ->
-            item.markAsConsumed()
+            item.consumed = true
             listeners.forEach { listener -> listener.itemConsumed(item) }
         }
         return items

@@ -55,7 +55,13 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
                 "/frontend-es5/**",
                 "/frontend-es6/**",
                 "/VAADIN/**",
-                "/vaadinServlet/PUSH*"
+                "/vaadinServlet/PUSH*",
+
+                // swagger
+                "/webjars/**",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/v2/api-docs"
         )
     }
 

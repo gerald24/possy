@@ -16,6 +16,9 @@
  */
 package net.g24.possy.service.service
 
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,19 +28,26 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/print")
+@Api("Print Queue", tags = ["Print Queue"], description = "Pick up, create and delete print requests")
 class PrintApiService(@Autowired private val queue: PrintRequestQueueService) {
 
     @GetMapping
+    @ApiOperation("Get all print requests from print queue")
     fun nextRequest(): ResponseEntity<List<PossyIssue>> = ResponseEntity.ok(queue.nextAllItems().toList())
 
     @PostMapping
+    @ApiOperation("Adds a new print request to the print queue")
     fun createRequest(
-            @RequestParam("template") template: String,
-            @RequestParam("issue") issue: String,
-            @RequestParam("content") content: String): ResponseEntity<PossyIssue> =
-            ResponseEntity.ok(queue.addItem(PossyIssue(PrintTemplate.forValue(template), issue, null, null, content)))
+            @RequestParam("template") @ApiParam("The content template") template: PrintTemplate,
+            @RequestParam("issue") @ApiParam("Usually the key/identifier (e.g. JIRA-123) of an issue") issue: String,
+            @RequestParam("content") @ApiParam("Plain text content") content: String): ResponseEntity<PossyIssue> =
+            ResponseEntity.ok(queue.addItem(PossyIssue(template, issue, null, null, content)))
 
     @DeleteMapping("{id}")
-    fun removeRequest(@PathVariable("id") id: String): ResponseEntity<Any> =
-            if (queue.removeItem(UUID.fromString(id))) ResponseEntity.ok().build() else ResponseEntity.notFound().build()
+    @ApiOperation("Removes a specific print request from print queue")
+    fun removeRequest(
+            @PathVariable("id")
+            @ApiParam("The ID/identifier of the print request to remove")
+            id: String
+    ): ResponseEntity<Any> = if (queue.removeItem(UUID.fromString(id))) ResponseEntity.ok().build() else ResponseEntity.notFound().build()
 }

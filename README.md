@@ -42,6 +42,7 @@ An issuetype is mapped to a specific printer (currently up to 3 different printe
 * [Installation Guide](docs/INSTALLATION.md)
 * [Configuration Guide](docs/CONFIGURATION.md)
 * [Docker](docs/DOCKER.md)
+* [Possy Service REST API documentation](http://possy-service.herokuapp.com/swagger-ui.html)
 
 ## Contributing
 You want to contribute? Great! Thanks for being awesome!

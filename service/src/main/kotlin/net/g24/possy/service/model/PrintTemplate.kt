@@ -16,20 +16,10 @@
  */
 package net.g24.possy.service.model
 
-enum class PrintTemplate private constructor(val printer: String) {
+enum class PrintTemplate(val printer: String) {
     BUG("Pink"),
     TASK("White"),
     STORY("White"),
     IMAGE("White"),
-    FREEFORM("Yellow");
-
-
-    companion object {
-
-        fun forValue(template: String): PrintTemplate {
-            return values().firstOrNull { it.name.equals(template, ignoreCase = true) }?:BUG
-        }
-
-    }
+    FREEFORM("Yellow")
 }
-

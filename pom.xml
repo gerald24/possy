@@ -19,11 +19,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<sonar.coverage.jacoco.xmlReportPaths>
-			${project.basedir}/service/target/site/jacoco/jacoco.xml,
-			${project.basedir}/daemon/target/site/jacoco/jacoco.xml,
-		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 </project>

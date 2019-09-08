@@ -75,7 +75,7 @@ class SecurityConfigurationTest {
     fun `redirect to login page when unauthenticated`() {
         val response = RestTemplate().getForEntity("$baseUrl/projects", String::class.java)
         assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals("$baseUrl/login", response.headers.location!!.toString())
+        assertThat(response.body).contains("Login")
     }
 
     @Test

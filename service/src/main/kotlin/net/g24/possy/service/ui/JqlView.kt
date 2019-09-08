@@ -22,12 +22,14 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
 import net.g24.possy.service.jira.JiraService
+import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.ui.components.PossyIssueComponent
 
 
@@ -40,22 +42,31 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
     private val projectSelector = ComboBox<String>()
     private val searchField = TextField()
     private val resultContainer = VerticalLayout()
+    private val projects: List<PossyProject>?
 
     init {
         addClassName("possy-jql")
 
-        initProjectSelector()
-        initSearchField()
-        initResultContainer()
+        projects = jiraService.projects
+        if (projects == null) {
+            add(Paragraph("Error loading projects!"))
+        } else {
+            initProjectSelector(projects.map { it.key })
+            initSearchField()
+            initResultContainer()
 
-        add(projectSelector, searchField)
-        addAndExpand(resultContainer)
+            add(projectSelector, searchField)
+            addAndExpand(resultContainer)
+        }
     }
 
     override fun setParameter(event: BeforeEvent, @OptionalParameter parameter: String?) {
+        if (projects == null) {
+            return
+        }
         parameter?.let {
             val project = parameter.trim().toLowerCase()
-            jiraService.projects.find { it.key.toLowerCase() == project }?.let { projectSelector.value = it.key }
+            projects.find { it.key.toLowerCase() == project }?.let { projectSelector.value = it.key }
             event.location.queryParameters.parameters["jql"]?.let { searchField.value = it.firstOrNull() ?: "" }
         }
     }
@@ -65,10 +76,9 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
         pushCurrentUrlState()
     }
 
-    private fun initProjectSelector() {
-        val items = jiraService.projects.map { it.key }
-        projectSelector.setItems(items)
-        projectSelector.value = items.firstOrNull()
+    private fun initProjectSelector(projectKeys: List<String>) {
+        projectSelector.setItems(projectKeys)
+        projectSelector.value = projectKeys.firstOrNull()
         projectSelector.isAllowCustomValue = false
         projectSelector.isRequired = true
         projectSelector.addValueChangeListener {

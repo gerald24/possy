@@ -56,7 +56,14 @@ class ProjectView(val jiraService: JiraService, val printRequestCreation: PrintR
     }
 
     override fun setParameter(event: BeforeEvent, parameter: String) {
-        project = jiraService.projects.firstOrNull { it.key.equals(parameter, ignoreCase = true) }
+        val projects = jiraService.projects
+        if (projects == null) {
+            removeAll()
+            add(Paragraph("Error loading projects!"))
+            return
+        }
+
+        project = projects.firstOrNull { it.key.equals(parameter, ignoreCase = true) }
         if (project == null) {
             removeAll()
             add(Paragraph("Unknown project $parameter!"))

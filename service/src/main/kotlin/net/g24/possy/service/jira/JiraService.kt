@@ -18,6 +18,8 @@ package net.g24.possy.service.jira
 
 
 import net.g24.possy.service.configuration.JiraConfiguration
+import net.g24.possy.service.extensions.ResettableLazyManager
+import net.g24.possy.service.extensions.resettableLazy
 import net.g24.possy.service.model.PossyAvatar
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PossyProject
@@ -34,7 +36,7 @@ import java.util.*
  * @author: Gerald Leeb
  */
 @Component
-class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguration) {
+class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguration, val resettableLazyManager: ResettableLazyManager) {
 
     private val restTemplate: RestTemplate = RestTemplate()
     private val httpHeaders = createHeadersWithAuthentication(jiraConfiguration.username!!, jiraConfiguration.password!!)
@@ -45,8 +47,8 @@ class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguratio
         private val GET_ISSUES = "%s/search?fields=%s&jql=%s&maxResults=%d"
     }
 
-    val projects: List<PossyProject> by lazy {
-        jiraProjects.map {
+    val projects: List<PossyProject>? by resettableLazy(resettableLazyManager) {
+        jiraProjects?.map {
             PossyProject(it.key, it.name, projectAvatar(it.avatarUrls.`48x48`))
         }
     }
@@ -173,14 +175,18 @@ class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguratio
         }
     }
 
-    private val jiraProjects: List<JiraProject> by lazy {
-        restTemplate.exchange(
-                String.format(GET_PROJECTS, jiraBaseURL),
-                HttpMethod.GET,
-                HttpEntity<List<JiraProject>>(httpHeaders),
-                object : ParameterizedTypeReference<List<JiraProject>>() {})
-                .body
-                .sortedBy { it.key }
+    private val jiraProjects: List<JiraProject>? by resettableLazy(resettableLazyManager) {
+        try {
+            restTemplate.exchange(
+                    String.format(GET_PROJECTS, jiraBaseURL),
+                    HttpMethod.GET,
+                    HttpEntity<List<JiraProject>>(httpHeaders),
+                    object : ParameterizedTypeReference<List<JiraProject>>() {})
+                    .body
+                    .sortedBy { it.key }
+        } catch(e : Exception) {
+            null
+        }
     }
 
     private fun projectAvatar(url: String): PossyAvatar? {

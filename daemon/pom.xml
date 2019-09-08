@@ -23,6 +23,12 @@
 		<cups4j.version>0.7.1</cups4j.version>
 		<pdfbox.version>2.0.16</pdfbox.version>
 		<pdfbox2-layout.version>1.0.0</pdfbox2-layout.version>
+
+		<sonar.coverage.exclusions>
+			**/net/g24/possy/daemon/configuration/**/*.java,
+			**/net/g24/possy/daemon/resttemplate/**/*.java,
+			**/net/g24/possy/daemon/PossyDaemonApplication.java
+		</sonar.coverage.exclusions>
 	</properties>
 
 	<repositories>

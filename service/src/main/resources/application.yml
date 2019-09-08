@@ -3,12 +3,14 @@ logging:
     org.atmosphere: warn
 
 jira:
-  url: https://jira.changeme.at/rest/api/2/
-  browse:
-    url: https://jira.changeme.at/browse/
+  url: https://jira.changeme.at/
   username: changeme
   password: changeme
   projects: PRJ1,PRJ2,PRJ3
+
+possy:
+  # important: change the key in production to any other complex value
+  encryption-key: "cqWjqb5Fn3a8aVZwekCXEkjZW9gW77K6"
 
 server:
   compression:

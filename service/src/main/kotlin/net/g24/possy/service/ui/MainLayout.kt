@@ -29,16 +29,13 @@ import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.TabVariant
 import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.router.*
-import com.vaadin.flow.server.PWA
-import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
+import net.g24.possy.service.api.PrintRequestQueueService
 import net.g24.possy.service.model.PrintRequest
-import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPrintRequestItem
 import org.springframework.beans.factory.annotation.Value
 import java.util.*
@@ -47,16 +44,12 @@ import java.util.*
  * @author Gerald Leeb
  * @author Alex Gassner
  */
-@Push
-@CssImport.Container(
-        CssImport(value = "./styles/shared-styles.css"),
-        CssImport(value = "./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
-)
-@Theme(value = Lumo::class)
-@PWA(name = "Possy", shortName = "Possy")
+@CssImport("./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
+@ParentLayout(PwaRootLayout::class)
 class MainLayout(@Value("\${spring.application.name}") val appName: String, val printRequestQueueService: PrintRequestQueueService) : AppLayout(), RouterLayout, AfterNavigationObserver {
     private var dark = false
-    private val themeToggleButton = Button("Switch to") { toggleThemeVariant() }
+    private val themeToggleButton = Button("Switch to") { toggleThemeVariant() }.apply { setWidthFull() }
+    private val logoutButton = Button("Logout", VaadinIcon.SIGN_OUT.create()) { UI.getCurrent().page.setLocation("/logout") }.apply { setWidthFull() }
     private val tabs = Tabs()
     private val navEntries = mutableMapOf<Class<out Component>, Tab>()
     private val printQueueLayout = VerticalLayout()
@@ -151,6 +144,7 @@ class MainLayout(@Value("\${spring.application.name}") val appName: String, val 
 
         val layout = VerticalLayout()
         layout.addClassName("print-queue-view")
+        layout.add(logoutButton)
         layout.add(themeToggleButton)
         layout.add(H3("Queue:"))
         layout.add(noIssuesParagraph);

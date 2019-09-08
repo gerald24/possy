@@ -16,8 +16,6 @@
  */
 package net.g24.possy.daemon;
 
-import java.util.Arrays;
-
 import net.g24.possy.daemon.configuration.PossyProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +24,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
 /**
- * @author: Gerald Leeb
+ * @author Gerald Leeb
+ * @author Alex Gassner
  */
 @Component
 public class PossyDaemon {
 
-    private static final String GET_URL = "%s/printitem/next";
-    private static final String DELETE_URL = "%s/printitem/%s";
+    private static final String GET_URL = "%s/api/print";
+    private static final String DELETE_URL = "%s/api/print/%s";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final String url;
     private final RestTemplate restTemplate;

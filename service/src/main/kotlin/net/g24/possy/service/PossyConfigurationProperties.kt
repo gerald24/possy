@@ -14,22 +14,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+package net.g24.possy.service
 
-/**
- * @author Gerald Leeb
- * @author Alex Gassner
- */
-@SpringBootApplication
-@EnableScheduling
-public class PossyDaemonApplication {
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
+import org.springframework.validation.annotation.Validated
 
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
-    }
+@Configuration
+@ConfigurationProperties(prefix = "possy")
+@Validated
+class PossyConfigurationProperties {
 
+    lateinit var encryptionKey: String
 }

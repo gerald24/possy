@@ -21,7 +21,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import net.g24.possy.service.model.PrintRequest
-import net.g24.possy.service.service.PrintRequestQueueService
+import net.g24.possy.service.api.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPlanner
 
 /**

@@ -25,6 +25,7 @@ nbdist
 .nb-gradle
 
 ### Vaadin ###
+/package.json
 webpack.generated.js
 package-lock.json
 node

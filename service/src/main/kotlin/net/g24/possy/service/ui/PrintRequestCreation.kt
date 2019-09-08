@@ -20,7 +20,7 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.notification.Notification
 import net.g24.possy.service.jira.JiraIssue
 import net.g24.possy.service.model.PrintRequest
-import net.g24.possy.service.service.PrintRequestQueueService
+import net.g24.possy.service.api.PrintRequestQueueService
 import org.springframework.stereotype.Component
 
 /**

@@ -17,10 +17,10 @@
 package net.g24.possy.daemon.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "possy")
 @Validated
 public class PossyProperties {

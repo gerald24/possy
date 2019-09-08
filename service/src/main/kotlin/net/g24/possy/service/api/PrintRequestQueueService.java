@@ -14,20 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.service.service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import org.springframework.stereotype.Service;
+package net.g24.possy.service.api;
 
 import net.g24.possy.service.model.PrintRequest;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 // TODO (https://github.com/gerald24/possy/issues/5) convert to kotlin
 

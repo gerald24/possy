@@ -1,0 +1,31 @@
+/*
+ * This file is part of possy.
+ *
+ * possy is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * possy is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with possy. If not, see <http://www.gnu.org/licenses/>.
+ */
+:host(.drag-movable.TASK) [part="input-field"] {
+    background: #f7f2bc;
+    color: black;
+    border: 1px solid #ada984;
+}
+:host(.drag-movable.STORY) [part="input-field"] {
+    background: #f4f4f4;
+    color: black;
+    border: 1px solid #777;
+}
+:host(.drag-movable) [part="label"] {
+    text-indent: 24px;
+}
+
+

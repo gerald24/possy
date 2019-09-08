@@ -51,7 +51,8 @@ import java.util.*
 @Push
 @CssImport.Container(
         CssImport(value = "./styles/shared-styles.css"),
-        CssImport(value = "./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout")
+        CssImport(value = "./styles/vaadin-app-layout-drawer-right.css", themeFor = "vaadin-app-layout"),
+        CssImport(value = "./styles/vaadin-text-area-drag-movable.css", themeFor = "vaadin-text-area")
 )
 @Theme(value = Lumo::class)
 @PWA(name = "Possy", shortName = "Possy")

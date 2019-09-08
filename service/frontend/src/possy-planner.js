@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {setPassiveTouchGestures} from '@polymer/polymer/lib/utils/settings';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings';
 import '@vaadin/vaadin-text-field/vaadin-text-area.js';
 import '@vaadin/vaadin-icons/vaadin-icons.js';
 import '@vaadin/vaadin-button/vaadin-button.js';
@@ -58,17 +58,8 @@ class PossyTask extends PolymerElement {
           width: 160px;
           height: 160px;
         }
-        #content::part(label) {
-           text-indent: 24px;
-        }
-        #content::part(input-field) {
-          background: #f7f2bc;
-          color: black;
-          border: 1px solid #ada984;          
-        }
       </style>
-
-      <vaadin-text-area id="content" label="Task" maxlength="300" on-change="_dataChanged"></vaadin-text-area>
+      <vaadin-text-area id="content" class="drag-movable TASK" label="Task" maxlength="300" on-change="_dataChanged"></vaadin-text-area>
       <iron-icon id="close" icon="vaadin:close-circle" on-click="confirmRemoveMe"></iron-icon>
       <iron-icon id="move" class="task-move-handle" icon="vaadin:arrows-long-h"></iron-icon>
       <vaadin-confirm-dialog id="remove-dialog" cancel header="Confirm delete" confirm-text="Delete Task" confirm-theme="error primary">
@@ -108,11 +99,11 @@ class PossyTask extends PolymerElement {
     }
 
     _dataChanged() {
-        this.dispatchEvent(new CustomEvent('task-changed', {detail: this}));
+        this.dispatchEvent(new CustomEvent('task-changed', { detail: this }));
     }
 
     _removeMe() {
-        this.dispatchEvent(new CustomEvent('remove-task', {detail: this}));
+        this.dispatchEvent(new CustomEvent('remove-task', { detail: this }));
     }
 }
 
@@ -150,14 +141,6 @@ class PossyStory extends PolymerElement {
           width: 160px;
           height: 160px;
         }
-        #content::part(label) {
-           text-indent: 24px;
-        }
-        #content::part(input-field) {
-          background: #f4f4f4;
-          color: black;
-          border: 1px solid #777;
-        }
         #task-container {
           display: inline-block;
           padding: 0 0 0 10px;
@@ -167,7 +150,7 @@ class PossyStory extends PolymerElement {
         }
       </style>
 
-      <vaadin-text-area id="content" label="Story" maxlength="300" on-change="_dataChanged"></vaadin-text-area>
+      <vaadin-text-area id="content" class="drag-movable STORY" label="Story" maxlength="300" on-change="_dataChanged"></vaadin-text-area>
       <iron-icon id="close" icon="vaadin:close-circle" on-click="confirmRemoveMe"></iron-icon>
       <iron-icon id="move" class="story-move-handle" icon="vaadin:arrows-long-v"></iron-icon>
       <div id="task-container" class="list-group"></div>
@@ -238,11 +221,11 @@ class PossyStory extends PolymerElement {
     }
 
     _dataChanged() {
-        this.dispatchEvent(new CustomEvent('story-changed', {detail: this}));
+        this.dispatchEvent(new CustomEvent('story-changed', { detail: this }));
     }
 
     _removeMe() {
-        this.dispatchEvent(new CustomEvent('remove-story', {detail: this}));
+        this.dispatchEvent(new CustomEvent('remove-story', { detail: this }));
     }
 
 }
@@ -262,12 +245,6 @@ class PossyPlanner extends PolymerElement {
           padding: 0 10px 8px 10px;
           margin: 10px 0 10px 0;
         }
-        .browser-hint {
-           font-size: smaller;
-           font-style: italic;
-           color: var(--lumo-contrast-90pct);
-           margin-left: 5px;
-        }
         .db-hint {
            font-size: smaller;
            font-style: italic;
@@ -275,7 +252,6 @@ class PossyPlanner extends PolymerElement {
            margin-left: 5px;
         }        
       </style>
-      <p class="browser-hint">Please use Chrome until styling issues will be solved for Firefox and Safari.</p>
       <div id="story-container" class="list-group"></div>
       <vaadin-button class="add-story" on-click="addStory">Add Story</vaadin-button>
       <vaadin-button class="print" on-click="confirmPrint">Print</vaadin-button>

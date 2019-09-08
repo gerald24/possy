@@ -40,10 +40,8 @@ jobs:
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - mvn clean verify -DskipTests -Pprod
-        - sh -c 'cd service'
         - docker build -t ${DOCKER_USERNAME}/possy-service:latest service
         - docker push ${DOCKER_USERNAME}/possy-service:latest
-        - sh -c 'cd ../daemon'
         - docker build -t ${DOCKER_USERNAME}/possy-daemon:latest daemon
         - docker push ${DOCKER_USERNAME}/possy-daemon:latest
 

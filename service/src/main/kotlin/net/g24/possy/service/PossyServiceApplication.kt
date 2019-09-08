@@ -18,7 +18,6 @@ package net.g24.possy.service
 
 import com.vaadin.flow.server.VaadinServlet
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import java.io.IOException
@@ -30,7 +29,6 @@ import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServletResponse
 
 @SpringBootApplication
-@EnableConfigurationProperties
 class PossyServiceApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {

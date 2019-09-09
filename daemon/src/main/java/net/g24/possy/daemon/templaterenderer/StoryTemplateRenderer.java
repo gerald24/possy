@@ -44,7 +44,7 @@ public class StoryTemplateRenderer extends TemplateRenderer {
 
 			FontContext headerFont = renderContext.getHeaderFont();
 
-			contents.setNonStrokingColor(220, 220, 220);
+			contents.setNonStrokingColor(200, 200, 200);
 			showTextAt(
 					contents,
 					text,

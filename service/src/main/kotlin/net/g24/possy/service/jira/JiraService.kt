@@ -151,7 +151,12 @@ class JiraService @Autowired constructor(val jiraConfiguration: JiraConfiguratio
     }
 
     private fun field(issue: JiraIssue, path: String, referenceResolver: ReferenceResolver): Any? {
-        return resolve(issue.allValues(), path.split(".").toMutableList(), referenceResolver)
+        return path.split("|")
+                .stream()
+                .map{ p -> resolve(issue.allValues(), p.split(".").toMutableList(), referenceResolver)}
+                .filter { it != null }
+                .findFirst()
+                .orElse(null)
     }
 
     private fun resolve(values: Map<String, Any?>?, components: MutableList<String>, referenceResolver: ReferenceResolver): Any? {

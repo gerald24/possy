@@ -14,10 +14,11 @@ jira:
       - key
       - summary
       - customfield_10102 # story points
+      - customfield_13017 # T-Shirt Size
       - customfield_10105 # epos reference
   mapping:
     content: summary
-    weight: customfield_10102
+    weight: customfield_10102|customfield_13017.value # | = separator for fields, use first non null value
     tag: customfield_10105*.summary # * means pointer to another issue
     template-field: issuetype.id
     bug:
@@ -28,6 +29,7 @@ jira:
     story:
       - 10101
       - 10201
+      - 10500
 
 server:
   compression:

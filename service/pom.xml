@@ -11,7 +11,7 @@
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>service</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -341,4 +341,8 @@
 			</build>
 		</profile>
 	</profiles>
+
+  <scm>
+    <tag>v1.0.2</tag>
+  </scm>
 </project>

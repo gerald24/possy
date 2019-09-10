@@ -11,7 +11,7 @@ Possy was created based on [Boris's](https://github.com/boris779) idea to print 
 - possy-daemon (print job)
 - possy-service (print requests and [Planner](docs/PLANNER.md))
 - [CUPS](https://www.cups.org) (print platform) - see also [Installation Guide](docs/INSTALLATION.md) for setup
-- providers lika [Jira](https://www.atlassian.com/software/jira), GitHub, etc. (currently only [Jira](https://www.atlassian.com/software/jira) supported)
+- providers like [Jira](https://www.atlassian.com/software/jira), GitHub, etc. (currently only [Jira](https://www.atlassian.com/software/jira) supported)
 
 ### possy-daemon
 
@@ -51,3 +51,9 @@ before you start coding. Pull requests are always welcome!
 ### Code & Style
 In short, we provide an `.editorconfig` file.
 For more information please have a look at https://editorconfig.org/.
+
+## How to create a release
+
+1. Clone the repository with git
+1. Execute `mvn release:prepare release:clean`
+1. ...

@@ -56,4 +56,15 @@ For more information please have a look at https://editorconfig.org/.
 
 1. Clone the repository with git
 1. Execute `mvn release:prepare release:clean`
-1. ...
+1. Preparing a release goes through the following release phases:
+   1. Check that there are no uncommitted changes in the sources
+   1. Check that there are no SNAPSHOT dependencies
+   1. Change the version in the POMs from x-SNAPSHOT to a new version (you will be prompted for the versions to use)
+   1. Transform the SCM information in the POM to include the final destination of the tag
+   1. Run the project tests against the modified POMs to confirm everything is in working order
+   1. Commit the modified POMs
+   1. Tag the code in the SCM with a version name (this will be prompted for)
+   1. Bump the version in the POMs to a new value y-SNAPSHOT (these values will also be prompted for)
+   1. Commit the modified POMs
+1. If everything was successful a Docker image with the provided version tag (e.g. v1.0.0) will get built automatically now
+1. Optional: Go to GitHub releases and provide a changelog

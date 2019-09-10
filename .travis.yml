@@ -32,7 +32,7 @@ jobs:
       script: mvn clean verify sonar:sonar -Pcoverage
 
     - stage: deploy-docker
-      if: branch = master AND fork = false AND type = push
+      if: (branch = master OR (tag =~ ^v)) AND fork = false AND type = push
       env:
         - DOCKER_USERNAME=ajgassner
         # DOCKER_PASSWORD

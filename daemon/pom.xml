@@ -11,7 +11,7 @@
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>daemon</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -133,8 +133,4 @@
 			</build>
 		</profile>
 	</profiles>
-
-  <scm>
-    <tag>v1.0.2</tag>
-  </scm>
 </project>

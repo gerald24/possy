@@ -17,9 +17,10 @@
 
 package net.g24.possy.service.security
 
+import net.g24.possy.service.PossyConfigurationProperties
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,7 +37,6 @@ import org.springframework.web.client.RestTemplate
 import java.util.*
 import javax.annotation.PostConstruct
 
-
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SecurityConfigurationTest {
@@ -47,6 +47,9 @@ class SecurityConfigurationTest {
     @Autowired
     private lateinit var securityProperties: SecurityProperties
 
+    @Autowired
+    private lateinit var possyConfigurationProperties: PossyConfigurationProperties
+
     private lateinit var baseUrl: String
 
     @PostConstruct
@@ -56,17 +59,14 @@ class SecurityConfigurationTest {
 
     @Test
     fun `api not public`() {
-        try {
+        assertThatExceptionOfType(HttpClientErrorException::class.java).isThrownBy {
             RestTemplate().getForEntity("$baseUrl/api/print", String::class.java)
-            fail("should not succeed")
-        } catch (e: HttpClientErrorException) {
-            assertEquals(HttpStatus.UNAUTHORIZED, e.statusCode)
-        }
+        }.withMessageContaining(HttpStatus.UNAUTHORIZED.value().toString())
     }
 
     @Test
     fun `api secured with basic auth app user`() {
-        val request = HttpEntity<String>(basicAuthHttpHeader(securityProperties.user.name, securityProperties.user.password));
+        val request = HttpEntity<String>(basicAuthHttpHeader(securityProperties.user.name, securityProperties.user.password))
         val response = RestTemplate().exchange("$baseUrl/api/print", HttpMethod.GET, request, String::class.java)
         assertEquals(HttpStatus.OK, response.statusCode)
     }
@@ -79,8 +79,13 @@ class SecurityConfigurationTest {
     }
 
     @Test
-    fun `successful login`() {
+    fun `successful login with app user`() {
         login(securityProperties.user.name, securityProperties.user.password)
+    }
+
+    @Test
+    fun `successful login with admin user`() {
+        login(possyConfigurationProperties.admin.username!!, possyConfigurationProperties.admin.password!!)
     }
 
     @Test
@@ -90,9 +95,40 @@ class SecurityConfigurationTest {
 
     @Test
     fun `actuator public endpoints`() {
-        arrayOf("health", "info").forEach {
-            val response = RestTemplate().getForEntity("$baseUrl/actuator/$it", String::class.java)
-            assertEquals(HttpStatus.OK, response.statusCode)
+        var response = RestTemplate().getForEntity("$baseUrl/actuator/info", String::class.java)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        response = RestTemplate().getForEntity("$baseUrl/actuator/health", String::class.java)
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertThat(response.body).doesNotContain("diskSpace")
+    }
+
+    @Test
+    fun `actuator internal endpoints`() {
+        val request = HttpEntity<String>(basicAuthHttpHeader(possyConfigurationProperties.admin.username!!, possyConfigurationProperties.admin.password!!))
+        val response = RestTemplate().exchange("$baseUrl/actuator/beans", HttpMethod.GET, request, String::class.java)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        assertThatExceptionOfType(HttpClientErrorException::class.java).isThrownBy {
+            RestTemplate().getForEntity("$baseUrl/actuator/beans", String::class.java)
+        }.withMessageContaining(HttpStatus.UNAUTHORIZED.value().toString())
+    }
+
+    @Test
+    fun `actuator public endpoints extended health data when authorized`() {
+        val request = HttpEntity<String>(basicAuthHttpHeader(possyConfigurationProperties.admin.username!!, possyConfigurationProperties.admin.password!!))
+        val response = RestTemplate().exchange("$baseUrl/actuator/health", HttpMethod.GET, request, String::class.java)
+        assertThat(response.body).contains("diskSpace")
+    }
+
+    @Test
+    fun `actuator shutdown and restart endpoints disabled`() {
+        arrayOf("shutdown", "restart").forEach {
+            val request = HttpEntity<String>(basicAuthHttpHeader(
+                    possyConfigurationProperties.admin.username!!, possyConfigurationProperties.admin.password!!))
+            val response = RestTemplate().exchange(
+                    "$baseUrl/actuator/$it", HttpMethod.POST, request, String::class.java)
+            assertThat(response.headers.location!!.toString()).isEqualTo("$baseUrl/login")
         }
     }
 

@@ -31,8 +31,22 @@ jira:
       - 10500
 
 possy:
-  # important: change the key in production to any other complex value
-  encryption-key: "cqWjqb5Fn3a8aVZwekCXEkjZW9gW77K6"
+  encryption-key: "cqWjqb5Fn3a8aVZwekCXEkjZW9gW77K6" # important: change the key in production to any other complex value
+  remember-me-validity-seconds: 31104000 # one year
+  admin:
+    username: admin
+    password: admin
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: shutdown, restart
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: ACTUATOR
 
 server:
   compression:

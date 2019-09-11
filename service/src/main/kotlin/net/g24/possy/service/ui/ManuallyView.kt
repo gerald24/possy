@@ -113,7 +113,7 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation) : Ver
     private fun initContent() {
         content.setSizeFull()
         content.placeholder = "Content (press Print-Button or CTRL-ENTER to print)"
-        content.valueChangeMode = ValueChangeMode.LAZY
+        content.valueChangeMode = ValueChangeMode.EAGER
         content.isClearButtonVisible = true
         content.addValueChangeListener { updateAppearance() }
         content.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { content.value = "" })
@@ -127,7 +127,7 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation) : Ver
 
     private fun initField(field: TextField, placeholder: String) {
         field.placeholder = placeholder
-        field.valueChangeMode = ValueChangeMode.LAZY
+        field.valueChangeMode = ValueChangeMode.EAGER
         field.isClearButtonVisible = true
         field.addValueChangeListener { updateAppearance() }
         field.addKeyPressListener(Key.ESCAPE, ComponentEventListener<KeyPressEvent> { field.value = "" })

@@ -40,7 +40,7 @@ class PossyPrintRequestItem(printRequest: PossyIssue) : PolymerTemplate<PossyPri
         model.setContent(printRequest.contentAsString)
         model.setTemplate(printRequest.template.toString())
         model.setTemplateName(printRequest.template.name)
-        setConsumed(printRequest.isConsumed)
+        setConsumed(printRequest.consumed)
     }
 
     fun setConsumed(consumed: Boolean) {

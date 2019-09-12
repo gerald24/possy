@@ -16,25 +16,46 @@
  */
 package net.g24.possy.service.model
 
+import io.swagger.annotations.ApiModel
+import io.swagger.annotations.ApiModelProperty
 import java.util.*
 
-class PossyIssue(val template: PrintTemplate, val key: String?, val weight: String?, val tag: String?, private val mimetype: String, val content: ByteArray) {
+@ApiModel(description = "Model for print requests")
+class PossyIssue(
+        @ApiModelProperty(notes = "Template for layout")
+        val template: PrintTemplate,
+
+        @ApiModelProperty("Usually the key/identifier (e.g. JIRA-123) of an issue")
+        val key: String?,
+
+        @ApiModelProperty("E.g. story points")
+        val weight: String?,
+
+        @ApiModelProperty("E.g. author or other meta info")
+        val tag: String?,
+
+        private val mimetype: String,
+
+        @ApiModelProperty("E.g. text, images etc.")
+        val content: ByteArray
+) {
+
+    @ApiModelProperty(notes = "Unique ID for a print request")
     val id = UUID.randomUUID()
-    var isConsumed: Boolean = false
-        private set
+
+    @ApiModelProperty("Is the print request already consumed by any client?")
+    var consumed: Boolean = false
 
     val isValid: Boolean
+        @ApiModelProperty(hidden = true)
         get() = (template === PrintTemplate.FREEFORM || !key.isNullOrBlank()) && content.isNotEmpty()
 
     val contentAsString: String
+        @ApiModelProperty(hidden = true)
         get() = if (template === PrintTemplate.IMAGE) "" else String(content)
 
     constructor(
             template: PrintTemplate, issue: String?, weight: String?, tag: String?, content: String) : this(template, issue, weight, tag, "text/plain", content.toByteArray()) {
-    }
-
-    fun markAsConsumed() {
-        isConsumed = true
     }
 
     override fun toString(): String {

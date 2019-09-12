@@ -16,42 +16,13 @@
  */
 package net.g24.possy.service
 
-import com.vaadin.flow.server.VaadinServlet
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import java.io.IOException
-import java.util.*
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServletResponse
 
 @SpringBootApplication
-class PossyServiceApplication : SpringBootServletInitializer()
+class PossyServiceApplication
 
 fun main(args: Array<String>) {
     System.setProperty("spring.devtools.restart.enabled", "false")
-
-    TimeZone.setDefault(TimeZone.getTimeZone("Europe/Vienna"))
-    Locale.setDefault(Locale("de", "AT"))
-
     runApplication<PossyServiceApplication>(*args)
-}
-
-@WebServlet(urlPatterns = ["/*"], asyncSupported = true)
-class PossyServlet : VaadinServlet() {
-
-    @Throws(ServletException::class, IOException::class)
-    override fun service(req: ServletRequest, res: ServletResponse) {
-        setAccessControlHeaders(res as HttpServletResponse)
-        super.service(req, res)
-    }
-
-    private fun setAccessControlHeaders(resp: HttpServletResponse) {
-        resp.setHeader("Access-Control-Allow-Methods", "*")
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type")
-        resp.setHeader("Access-Control-Allow-Credentials", "true")
-    }
 }

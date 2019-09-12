@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>service</artifactId>
-	<version>0.0.0-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -23,6 +22,14 @@
 		<kotlin.version>1.3.50</kotlin.version>
 		<vaadin.version>14.0.3</vaadin.version>
 		<swagger.version>2.9.2</swagger.version>
+
+    <sonar.coverage.exclusions>
+			**/net/g24/possy/service/PossyServiceApplication.kt,
+			**/net/g24/possy/service/Logger.kt,
+			**/net/g24/possy/service/security/**/*.kt,
+			**/net/g24/possy/service/ui/**/*.kt,
+			**/net/g24/possy/service/**/*Configuration*.kt
+		</sonar.coverage.exclusions>
 	</properties>
 
 	<repositories>
@@ -266,6 +273,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
 			<plugin>
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
@@ -281,6 +289,11 @@
 						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dvaadin.productionMode=true -jar target/*.jar</web>
 					</processTypes>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -320,6 +333,33 @@
 							<execution>
 								<goals>
 									<goal>build-frontend</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.4</version>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<goals>
+									<goal>report</goal>
 								</goals>
 							</execution>
 						</executions>

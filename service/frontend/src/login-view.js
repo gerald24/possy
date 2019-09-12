@@ -88,6 +88,13 @@ class LoginView extends PolymerElement {
                 .loading {
                     display: none;
                 }
+
+				.version-info {
+					color: var(--lumo-secondary-text-color);
+					font-size: var(--lumo-font-size-xxs);
+					margin-top: var(--lumo-space-m);
+					text-align: center;
+                }
             </style>
             
             <iron-form id="loginForm" allow-redirect>
@@ -121,6 +128,7 @@ class LoginView extends PolymerElement {
                         	Login failed - please check your credentials
                         </div>
                         <div id="logout" class="logged-out">You are now signed out.</div>
+                        <div class="version-info">[[appVersionInfo]]</div>
                     </div>
                 </form>
             </iron-form>`;

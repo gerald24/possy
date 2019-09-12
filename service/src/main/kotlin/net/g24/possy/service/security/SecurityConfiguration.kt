@@ -18,7 +18,6 @@
 package net.g24.possy.service.security
 
 import net.g24.possy.service.PossyConfigurationProperties
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.context.annotation.Bean
@@ -26,7 +25,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -38,11 +36,15 @@ import org.springframework.security.web.util.matcher.RequestMatcher
 
 @EnableWebSecurity
 @Configuration
-internal class SecurityConfiguration(private val securityProperties: SecurityProperties, auth: AuthenticationManagerBuilder) {
+internal class SecurityConfiguration(
+        securityProperties: SecurityProperties,
+        possyConfigurationProperties: PossyConfigurationProperties,
+        auth: AuthenticationManagerBuilder
+) {
 
     companion object {
-        const val AUTHORITY_ACCESS_ACTUATOR = "AUTHORITY_ACCESS_ACTUATOR"
-        const val AUTHORITY_ACCESS_APPLICATION = "AUTHORITY_ACCESS_APPLICATION"
+        const val ROLE_ACTUATOR = "ROLE_ACTUATOR"
+        const val ROLE_APPLICATION = "ROLE_APPLICATION"
 
         val PUBLIC_URLS = arrayOf(
                 "/error",
@@ -66,17 +68,14 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
     }
 
     init {
-        if (isActuatorAccessUserConfigured()) {
-            val user = securityProperties.user
-            val roles = user.roles
-            roles.add(AUTHORITY_ACCESS_ACTUATOR)
-            roles.add(AUTHORITY_ACCESS_APPLICATION)
-
-            auth.inMemoryAuthentication()
-                    .withUser(user.name)
-                    .password(user.password)
-                    .authorities(*roles.toTypedArray())
-        }
+        auth.inMemoryAuthentication()
+                .withUser(securityProperties.user.name)
+                .password(securityProperties.user.password)
+                .authorities(ROLE_APPLICATION)
+                .and()
+                .withUser(possyConfigurationProperties.admin.username)
+                .password(possyConfigurationProperties.admin.password)
+                .authorities(ROLE_ACTUATOR, ROLE_APPLICATION)
     }
 
     /**
@@ -97,10 +96,7 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
         return NoOpPasswordEncoder.getInstance()
     }
 
-    private fun isActuatorAccessUserConfigured(): Boolean {
-        return !securityProperties.user.isPasswordGenerated
-    }
-
+    /** rest api security config */
     @Configuration
     @Order(1)
     internal class ApiWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
@@ -113,37 +109,55 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
                     .antMatcher("/api/**")
                     .authorizeRequests()
                     .anyRequest()
-                    .hasAuthority(AUTHORITY_ACCESS_APPLICATION)
+                    .hasAuthority(ROLE_APPLICATION)
                     .and()
                     .httpBasic()
         }
     }
 
+    /** public actuator endpoints with optional extended data when authorized */
     @Configuration
     @Order(2)
-    internal class AcuatorWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
+    internal class AcuatorPublicWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
 
         override fun configure(http: HttpSecurity) {
-            http.requestMatcher(EndpointRequest.toAnyEndpoint())
+            http
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
+                    .requestMatcher(EndpointRequest.to("health", "info"))
                     .authorizeRequests()
                     .anyRequest()
-                    .hasAuthority(AUTHORITY_ACCESS_ACTUATOR)
+                    .permitAll()
                     .and()
                     .httpBasic()
         }
+    }
 
-        override fun configure(web: WebSecurity) {
-            web.ignoring().requestMatchers(EndpointRequest.to("health", "info"))
+    /** internal actuator endpoints for admin only */
+    @Configuration
+    @Order(3)
+    internal class AcuatorInternalWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
+
+        override fun configure(http: HttpSecurity) {
+            http
+                    .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .requestMatcher(EndpointRequest.toAnyEndpoint().excluding("health", "info"))
+                    .authorizeRequests()
+                    .anyRequest()
+                    .hasAuthority(ROLE_ACTUATOR)
+                    .and()
+                    .httpBasic()
         }
     }
 
+    /** form login for Vaadin */
     @Configuration
-    @Order(3)
+    @Order(4)
     internal class FormLoginWebSecurityConfigurationAdapter(
-            @Autowired private val possyConfigurationProperties: PossyConfigurationProperties
+            private val possyConfigurationProperties: PossyConfigurationProperties
     ) : WebSecurityConfigurerAdapter() {
 
         override fun configure(http: HttpSecurity) {
@@ -166,7 +180,7 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
                     .permitAll()
 
                     .antMatchers("/**") // all other routes
-                    .hasAuthority(AUTHORITY_ACCESS_APPLICATION)
+                    .hasAuthority(ROLE_APPLICATION)
 
                     .anyRequest()
                     .fullyAuthenticated()
@@ -180,7 +194,9 @@ internal class SecurityConfiguration(private val securityProperties: SecurityPro
                     // disable crsf for logoremberut, see https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#csrf-logout
                     .logoutRequestMatcher(AntPathRequestMatcher("/logout"))
 
-            http.rememberMe().key(possyConfigurationProperties.encryptionKey).tokenValiditySeconds(31104000) // one year
+            http.rememberMe()
+                    .key(possyConfigurationProperties.encryptionKey)
+                    .tokenValiditySeconds(possyConfigurationProperties.rememberMeValiditySeconds!!)
 
             http.sessionManagement().sessionFixation().newSession()
 

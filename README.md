@@ -11,7 +11,7 @@ Possy was created based on [Boris's](https://github.com/boris779) idea to print 
 - possy-daemon (print job)
 - possy-service (print requests and [Planner](docs/PLANNER.md))
 - [CUPS](https://www.cups.org) (print platform) - see also [Installation Guide](docs/INSTALLATION.md) for setup
-- providers lika [Jira](https://www.atlassian.com/software/jira), GitHub, etc. (currently only [Jira](https://www.atlassian.com/software/jira) supported)
+- providers like [Jira](https://www.atlassian.com/software/jira), GitHub, etc. (currently only [Jira](https://www.atlassian.com/software/jira) supported)
 
 ### possy-daemon
 
@@ -52,3 +52,28 @@ before you start coding. Pull requests are always welcome!
 ### Code & Style
 In short, we provide an `.editorconfig` file.
 For more information please have a look at https://editorconfig.org/.
+
+## How to create a release
+
+1. Clone the repository with git
+1. Execute `mvn release:prepare release:clean` \
+   Example prompt:
+   ```
+   [INFO] Checking dependencies and plugins for snapshots ...
+   What is the release version for "possy"? (net.g24.possy:reactor) 1.0.2: : 1.0.2
+   What is SCM release tag or label for "possy"? (net.g24.possy:reactor) v1.0.2-SNAPSHOT: : v1.0.2
+   What is the new development version for "possy"? (net.g24.possy:reactor) 1.0.3-SNAPSHOT: : 1.0.3-SNAPSHOT
+   ```
+   Preparing a release goes through the following release phases:
+   1. Check that there are no uncommitted changes in the sources
+   1. Check that there are no SNAPSHOT dependencies
+   1. Change the version in the POMs from x-SNAPSHOT to a new version (you will be prompted for the versions to use)
+   1. Transform the SCM information in the POM to include the final destination of the tag
+   1. Run the project tests against the modified POMs to confirm everything is in working order
+   1. Commit the modified POMs
+   1. Tag the code in the SCM with a version name (this will be prompted for)
+   1. Bump the version in the POMs to a new value y-SNAPSHOT (these values will also be prompted for)
+   1. Commit the modified POMs
+1. If everything was successful in step 2 a Docker image with the provided
+   version tag (e.g. v1.0.0) will get built automatically by CI/CD now
+1. Optional: Go to GitHub releases page and provide a changelog

@@ -27,22 +27,36 @@ import com.vaadin.flow.server.InitialPageSettings
 import com.vaadin.flow.server.PageConfigurator
 import com.vaadin.flow.templatemodel.TemplateModel
 import net.g24.possy.service.ui.PwaRootLayout
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.info.GitProperties
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Tag("login-view")
 @Route("login")
 @PageTitle("Possy Login")
 @JsModule("./src/login-view.js")
 @ParentLayout(PwaRootLayout::class)
-class LoginView(@Value("\${spring.application.name}") val appName: String)
-    : PolymerTemplate<LoginView.LoginViewModel>(), PageConfigurator {
+class LoginView(
+        @Value("\${spring.application.name}") appName: String,
+        @Autowired gitProperties: GitProperties
+) : PolymerTemplate<LoginView.LoginViewModel>(), PageConfigurator {
 
     init {
+        val combinedVersion = gitProperties.get("commit.id.describe");
+        val buildTime = gitProperties.getInstant("build.time")
+                .atZone(ZoneId.systemDefault())
+                .toOffsetDateTime()
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+
         model.setAppName(appName)
+        model.setAppVersionInfo("Version $combinedVersion, $buildTime")
     }
 
     interface LoginViewModel : TemplateModel {
         fun setAppName(appName: String)
+        fun setAppVersionInfo(appVersionInfo: String)
     }
 
     override fun configurePage(settings: InitialPageSettings) {

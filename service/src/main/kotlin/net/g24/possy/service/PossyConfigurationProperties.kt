@@ -24,7 +24,10 @@ import org.springframework.validation.annotation.Validated
 @Configuration
 @ConfigurationProperties(prefix = "possy")
 @Validated
-class PossyConfigurationProperties {
-
-    lateinit var encryptionKey: String
+class PossyConfigurationProperties(
+        var encryptionKey: String? = null,
+        var rememberMeValiditySeconds: Int? = null,
+        val admin: Admin = Admin()
+) {
+    class Admin(var username: String? = null, var password: String? = null)
 }

@@ -40,8 +40,8 @@ class JiraService @Autowired constructor(
     private val jiraBaseURL: String = jiraConfigurationProperties.url!!.removeSuffix("/")
 
     companion object {
-        private const val GET_PROJECTS = "%s/project"
-        private const val GET_ISSUES = "%s/search?fields=%s&jql=%s&maxResults=%d"
+        private const val GET_PROJECTS = "%s/rest/api/2/project"
+        private const val GET_ISSUES = "%s/rest/api/2/search?fields=%s&jql=%s&maxResults=%d"
     }
 
     val projects: List<PossyProject>? by resettableLazy(resettableLazyManager) {
@@ -148,7 +148,12 @@ class JiraService @Autowired constructor(
     }
 
     private fun field(issue: JiraIssue, path: String, referenceResolver: ReferenceResolver): Any? {
-        return resolve(issue.allValues(), path.split(".").toMutableList(), referenceResolver)
+        return path.split("|")
+                .stream()
+                .map{ p -> resolve(issue.allValues(), p.split(".").toMutableList(), referenceResolver)}
+                .filter { it != null }
+                .findFirst()
+                .orElse(null)
     }
 
     private fun resolve(values: Map<String, Any?>?, components: MutableList<String>, referenceResolver: ReferenceResolver): Any? {

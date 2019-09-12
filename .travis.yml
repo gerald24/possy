@@ -29,21 +29,23 @@ jobs:
 
     - stage: analyze
       if: fork = false
-      script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar
+      script: mvn clean verify sonar:sonar -Pcoverage
 
     - stage: deploy-docker
-      if: branch = master AND fork = false AND type = push
+      if: (branch = master OR (tag =~ ^v)) AND fork = false AND type = push
       env:
         - DOCKER_USERNAME=ajgassner
         # DOCKER_PASSWORD
         - secure: "4BrCzOE19dpcqLZ9Xowa6dWKn78dvQpY4ugHZdzxnEF8iru/n9LGP0PiKIgUcI0shv1F3ijmvzsDqoh8J0QlWU2AGaWC/R8MH58EhvKQSBDb/a9yLc3jKruW6IsAeOrAUmelm0nEew8kQJYuzaSKIPcBKlhXQG3duTjUR6t+KTDcPnVsd2sCDXfMShUlLwuPjBapXHPWCbSuI08Sdpct9hw/3Rldi8MygJoj6tUS10jKdVMw0LoohE7CEFYOSFUHyIWCKVL01ZxOyYQi9O5LZq+59hj5p9X6RyQerMNttA3sZuRs7g6f+I1oReY/wptWjHZ0RfhHFMcICVJnBn6Ji9+dZi0b2BRH650VSbNtzP/MKbtS/WGsB3+3xmlsqzB86L7VEf5oodFRRY0pPB7tYFcIUbBudW0l9XqntBBwUookKaCQItfYmovmAf4ItUDUh4QNyo+Tlibuc4FUJXHJx2FBoA2bP2EXum7Gr/9oxtES2hW60KNl20J7vnXaRJgnf6PfjMw2RIKO4oAeC4ep93QPQ6yMEUIVdOeeW2dbaqwB4Pa/hY6vjpSeISZlCWZRHybv4kb33PeaeQ/uFVNrsBTWu2kH5pDpxDmGLxZnIbtLSyTX7RlN4KeoCirblVDbyoGz9IUCKH5093P3hw6egiLnorejWU/19WLsuv9xksc="
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - if [ -n "$TRAVIS_TAG" ]; then DOCKER_TAG=$TRAVIS_TAG; else DOCKER_TAG=latest; fi
+        - echo "Docker Tag ${DOCKER_TAG}"
         - mvn clean verify -DskipTests -Pprod
-        - docker build -t ${DOCKER_USERNAME}/possy-service:latest service
-        - docker push ${DOCKER_USERNAME}/possy-service:latest
-        - docker build -t ${DOCKER_USERNAME}/possy-daemon:latest daemon
-        - docker push ${DOCKER_USERNAME}/possy-daemon:latest
+        - docker build -t ${DOCKER_USERNAME}/possy-service:${DOCKER_TAG} service
+        - docker push ${DOCKER_USERNAME}/possy-service:${DOCKER_TAG}
+        - docker build -t ${DOCKER_USERNAME}/possy-daemon:${DOCKER_TAG} daemon
+        - docker push ${DOCKER_USERNAME}/possy-daemon:${DOCKER_TAG}
 
     - stage: deploy-heroku
       if: branch = master AND fork = false AND type = push

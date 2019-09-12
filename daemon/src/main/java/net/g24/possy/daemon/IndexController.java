@@ -17,15 +17,37 @@
 
 package net.g24.possy.daemon;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 public class IndexController {
 
+	private GitProperties gitProperties;
+
+	@Autowired
+	public IndexController(GitProperties gitProperties) {
+		this.gitProperties = gitProperties;
+	}
+
 	@GetMapping("/")
 	public ResponseEntity<String> index() {
-		return ResponseEntity.ok("Hi, I'm possy daemon");
+		return ResponseEntity.ok("Hi! I'm possy daemon " + versionInfo());
+	}
+
+	private String versionInfo() {
+		var combinedVersion = gitProperties.get("commit.id.describe");
+		var buildTime = gitProperties.getInstant("build.time")
+				.atZone(ZoneId.systemDefault())
+				.toOffsetDateTime()
+				.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+		return combinedVersion + ", " + buildTime;
 	}
 }

@@ -103,7 +103,7 @@ public abstract class TemplateRenderer implements LayoutRenderer {
 
         float textWidth = getTextWidth(text, font, fontSize);
 
-        contents.setNonStrokingColor(180, 180, 180);
+        contents.setNonStrokingColor(100, 100, 100);
         float hBorder = 6.0f;
         float vBorder = (footerFont.getLineHeight() - footerFont.getSize()) / 2.0f;
         float baseline = fontSize / 6.0f; // how to calc baseline?

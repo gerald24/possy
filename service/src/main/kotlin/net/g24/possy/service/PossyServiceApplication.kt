@@ -16,11 +16,21 @@
  */
 package net.g24.possy.service
 
+import net.g24.possy.service.ui.PwaRootLayout
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import javax.annotation.PostConstruct
 
 @SpringBootApplication
-class PossyServiceApplication
+class PossyServiceApplication(@Value("\${spring.application.name}") private val appName: String) {
+
+    @PostConstruct
+    @Suppress("kotlin:S1144", "unused")
+    private fun init() { //NOSONAR
+        PwaAnnotationModifier.dynamicPwaAnnotation(PwaRootLayout::class.java, appName, appName)
+    }
+}
 
 fun main(args: Array<String>) {
     System.setProperty("spring.devtools.restart.enabled", "false")

@@ -17,22 +17,11 @@
 
 package net.g24.possy.service.ui
 
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.dom.Element
-import com.vaadin.flow.router.RouterLayout
-import com.vaadin.flow.server.PWA
-import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.lumo.Lumo
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
-@Push
-@PWA(name = "Possy", shortName = "Possy") // names will be replaced automatically with dynamic content, see PwaAnnotationModifier.java
-@Theme(Lumo::class)
-@CssImport("./styles/shared-styles.css")
-class PwaRootLayout : RouterLayout {
+@Component
+class PageTitleBuilder(@Value("\${spring.application.name}") private val appName: String) {
 
-    private val div = Div()
-
-    override fun getElement(): Element = div.element
+    fun build(title: String = "") = if (title.isBlank()) appName else "$title - $appName"
 }

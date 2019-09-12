@@ -33,8 +33,12 @@ import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.ui.components.PossyIssueComponent
 
 @Route("jql", layout = MainLayout::class)
-@PageTitle("Possy JQL")
-class JqlView(val jiraService: JiraService, val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
+class JqlView(
+        private val jiraService: JiraService,
+        private val printRequestCreation: PrintRequestCreation,
+        private val pageTitleBuilder: PageTitleBuilder
+) : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
+
     private val projectSelector = ComboBox<String>()
     private val searchField = TextField()
     private val resultContainer = VerticalLayout()
@@ -55,6 +59,8 @@ class JqlView(val jiraService: JiraService, val printRequestCreation: PrintReque
             addAndExpand(resultContainer)
         }
     }
+
+    override fun getPageTitle(): String = pageTitleBuilder.build("JQL")
 
     override fun setParameter(event: BeforeEvent, @OptionalParameter parameter: String?) {
         if (projects == null) {

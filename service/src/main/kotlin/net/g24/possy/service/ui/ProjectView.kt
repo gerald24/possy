@@ -22,8 +22,8 @@ import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.BeforeEvent
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.HasUrlParameter
-import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import net.g24.possy.service.extensions.asFormatted
 import net.g24.possy.service.jira.JiraService
@@ -33,17 +33,19 @@ import net.g24.possy.service.ui.components.PossyIssueComponent
 import net.g24.possy.service.ui.components.asComponent
 import java.time.LocalDateTime
 
-@Route("project", layout = MainLayout::class)
-@PageTitle("Possy Project")
-class ProjectView(private val jiraService: JiraService, private val printRequestCreation: PrintRequestCreation)
-    : VerticalLayout(), HasUrlParameter<String> {
+@Route("projects/project", layout = MainLayout::class)
+class ProjectView(
+        private val jiraService: JiraService,
+        private val printRequestCreation: PrintRequestCreation,
+        private val pageTitleBuilder: PageTitleBuilder
+) : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
 
     private val projectHeader = Div().apply { addClassName("jira-project-header") }
     private val updatedInfo = Span()
     private val updateTriggerButton = Button("Update") { loadIssues() }
     private val issuesContainer = VerticalLayout().apply { isMargin = false; isPadding = false }
-    var project: PossyProject? = null
 
+    var project: PossyProject? = null
 
     init {
         addClassName("possy-project")
@@ -52,6 +54,8 @@ class ProjectView(private val jiraService: JiraService, private val printRequest
         add(projectHeader)
         addAndExpand(issuesContainer)
     }
+
+    override fun getPageTitle(): String = pageTitleBuilder.build(project?.key ?: "Project")
 
     override fun setParameter(event: BeforeEvent, parameter: String) {
         val projects = jiraService.projects

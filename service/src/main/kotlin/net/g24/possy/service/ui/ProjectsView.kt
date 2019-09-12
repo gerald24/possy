@@ -21,7 +21,7 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.PageTitle
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.router.RouterLink
@@ -32,16 +32,20 @@ import net.g24.possy.service.ui.components.asComponent
 
 @Route("", layout = MainLayout::class)
 @RouteAlias("projects", layout = MainLayout::class)
-@PageTitle("Possy Projects")
-class ProjectsView(val jiraService: JiraService, val resettableLazyManager: ResettableLazyManager) : VerticalLayout() {
+class ProjectsView(
+        private val jiraService: JiraService,
+        private val resettableLazyManager: ResettableLazyManager,
+        private val pageTitleBuilder: PageTitleBuilder
+) : VerticalLayout(), HasDynamicTitle {
 
-    val resetAndLoadButton = Button("Reset") { resetAndLoad() }
-
+    private val resetAndLoadButton = Button("Reset") { resetAndLoad() }
 
     init {
         addClassName("possy-projects")
         load()
     }
+
+    override fun getPageTitle(): String = pageTitleBuilder.build("Projects")
 
     private fun load() {
         removeAll()

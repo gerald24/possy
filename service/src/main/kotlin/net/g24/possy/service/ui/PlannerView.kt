@@ -18,15 +18,15 @@ package net.g24.possy.service.ui
 
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.PageTitle
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.Route
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPlanner
 
 @Route("planner", layout = MainLayout::class)
-@PageTitle("Possy Planner")
-class PlannerView(private val printRequestQueueService: PrintRequestQueueService) : VerticalLayout() {
+class PlannerView(private val printRequestQueueService: PrintRequestQueueService, private val pageTitleBuilder: PageTitleBuilder)
+    : VerticalLayout(), HasDynamicTitle {
 
     private val possyPlanner = PossyPlanner() { addPrintRequests(it) }
 
@@ -34,6 +34,8 @@ class PlannerView(private val printRequestQueueService: PrintRequestQueueService
         addClassName("possy-jql")
         add(possyPlanner)
     }
+
+    override fun getPageTitle(): String = pageTitleBuilder.build("Planner")
 
     private fun addPrintRequests(requests: List<PossyIssue>) {
         requests.forEach { printRequestQueueService.addItem(it) }

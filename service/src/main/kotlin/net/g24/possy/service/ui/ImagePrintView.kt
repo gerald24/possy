@@ -24,14 +24,14 @@ import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MultiFileBuffer
-import com.vaadin.flow.router.PageTitle
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.Route
 
 // TODO https://github.com/gerald24/possy/issues/4 implement me
 
 @Route("image", layout = MainLayout::class)
-@PageTitle("Possy Image")
-class ImagePrintView() : VerticalLayout() {
+class ImagePrintView(private val pageTitleBuilder: PageTitleBuilder) : VerticalLayout(), HasDynamicTitle {
+
     private var buffer = MultiFileBuffer()
     private val upload = Upload(buffer)
     private val printButton = Button("Print", VaadinIcon.PRINT.create()) { queueImage() }
@@ -57,6 +57,7 @@ class ImagePrintView() : VerticalLayout() {
         add(upload, printButton)
     }
 
+    override fun getPageTitle(): String = pageTitleBuilder.build("Image")
 
     private fun queueImage() {
     }

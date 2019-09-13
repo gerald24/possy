@@ -30,8 +30,9 @@ import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
 
 @Route("manually", layout = MainLayout::class)
-@PageTitle("Possy Manually")
-class ManuallyView(private val printRequestCreation: PrintRequestCreation) : VerticalLayout(), HasUrlParameter<String> {
+class ManuallyView(private val printRequestCreation: PrintRequestCreation, private val pageTitleBuilder: PageTitleBuilder)
+    : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
+
     private val ctrlOrMeta: KeyModifier = KeyModifier.valueOf("CONTROL")
     private val printTemplateSelector = ComboBox<PrintTemplate>()
     private val printButton = Button("Print", VaadinIcon.PRINT.create()) { queueIssue() }
@@ -65,6 +66,8 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation) : Ver
         updateAppearance()
         updateFocus()
     }
+
+    override fun getPageTitle(): String = pageTitleBuilder.build("Manually")
 
     override fun setParameter(event: BeforeEvent, @OptionalParameter parameter: String?) {
         parameter?.let {

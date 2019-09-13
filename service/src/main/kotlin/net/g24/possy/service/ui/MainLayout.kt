@@ -46,8 +46,10 @@ import java.util.*
         CssImport(value = "./styles/vaadin-text-area-drag-movable.css", themeFor = "vaadin-text-area")
 )
 @ParentLayout(PwaRootLayout::class)
-class MainLayout(@Value("\${spring.application.name}") val appName: String, private val printRequestQueueService: PrintRequestQueueService)
-    : AppLayout(), RouterLayout, AfterNavigationObserver {
+class MainLayout(
+        @Value("\${spring.application.name}") private val appName: String,
+        private val printRequestQueueService: PrintRequestQueueService
+) : AppLayout(), RouterLayout, AfterNavigationObserver {
 
     private val themeToggleButton = Button("Switch to") { toggleThemeVariant() }
             .apply { setWidthFull() }

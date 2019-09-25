@@ -17,8 +17,8 @@ res=$(curl --user "$USER:$TOKEN" -X POST "https://api.github.com/repos/gerald24/
 echo "Create release result: $res"
 rel_id=$(echo "$res" | python -c 'import json,sys;print(json.load(sys.stdin)["id"])')
 
-daemon_file_name="daemon-${TAG:1}.jar"
-daemon_file="daemon/target/${daemon_file_name}"
+daemon_file_name="possy-daemon-${TAG:1}.jar"
+daemon_file="daemon/target/daemon-${TAG:1}.jar"
 
 curl \
   --user "$USER:$TOKEN" \
@@ -26,8 +26,8 @@ curl \
   --header "Content-Type: text/javascript" \
   --upload-file "$daemon_file"
 
-service_file_name="service-${TAG:1}.jar"
-service_file="service/target/${service_file_name}"
+service_file_name="possy-service-${TAG:1}.jar"
+service_file="service/target/service-${TAG:1}.jar"
 
 curl \
   --user "$USER:$TOKEN" \

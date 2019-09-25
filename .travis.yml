@@ -26,11 +26,11 @@ jobs:
   include:
     - stage: compile-test
       if: fork = true # skip this step for internal use to avoid compiling twice, analyze step step will compile too
-      script: ./mvnw -B clean verify
+      script: ./mvnw -B --no-transfer-progress clean verify
 
     - stage: analyze
       if: fork = false
-      script: ./mvnw -B clean verify sonar:sonar -Pcoverage
+      script: ./mvnw -B --no-transfer-progress clean verify sonar:sonar -Pcoverage
 
     - stage: release-github
       if: (tag =~ ^v) AND fork = false AND type = push
@@ -39,7 +39,7 @@ jobs:
         # GITHUB_TOKEN
         - secure: "+b/FPMSY1Ba4Gep+3HhPPmRCaDDmPkEXgNmvNhsvqxXdruCn58pGTNRUweWBr2BN02mL6idjT9kHoflqDpnkronPdfahrt3gz9r8TXM9KND0bOg1PiJMYrFfYDgtE6AfJMuiy7KLPrx6iH3nIVz42iWI+X77MNEWEWRQliS4/L+oP8rv7OKySI0J/UWoo1r9N4ElSn4i0whqX/XqCBbwi7uLesveannhABCfKxX+dHCAs6XAadpEujGJtJExBC6EGwtfO3yV59yBj8t53pOR9VV+FX8cogShvvmaNy54ZRRqc9sE0jbpdgacUoJUhv01zqRh7ar/eGYLXaS17HTI6h3P/6SscTS41MkBj5DbPpQiCy6X+PXfcd2qfy09vS0K0IzsUg2R10eqaZaGi190WHtQ47yiH3VMXcxicQqKLWFIxsk9sUjQ8dlG8XXWUsm7brOC1x/Di9qfo1+pn/RBbtGPZ/a5aK12EojSPRr1q2BET/K6lar3St3RSDa8f4sUq2auW1qCiJ8xosZ50peCdCW+3gP4D4Pgp7OaeCB+pfuGWtmE76jBl2M/pv1AGh1kj1WWBiJPaf/vqiuQrQEKhUW+bp79RP5liVDPd36YyU8ue75MFcLe8n7Fs5DEKHAM/f2z7DRd2wXnf+mtmVqyFNE0ye1hDSw1P9TAeEr3rWM="
       script:
-        - ./mvnw -B clean verify -DskipTests -Pprod
+        - ./mvnw -B --no-transfer-progress clean verify -DskipTests -Pprod
         - ./release-github.sh $GITHUB_USERNAME $GITHUB_TOKEN $TRAVIS_TAG
 
     - stage: deploy-docker
@@ -52,7 +52,7 @@ jobs:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - if [ -n "$TRAVIS_TAG" ]; then DOCKER_TAG=$TRAVIS_TAG; else DOCKER_TAG=latest; fi
         - echo "Docker Tag ${DOCKER_TAG}"
-        - ./mvnw -B clean verify -DskipTests -Pprod
+        - ./mvnw -B --no-transfer-progress clean verify -DskipTests -Pprod
         - docker build -t ${DOCKER_USERNAME}/possy-service:${DOCKER_TAG} service
         - docker push ${DOCKER_USERNAME}/possy-service:${DOCKER_TAG}
         - docker build -t ${DOCKER_USERNAME}/possy-daemon:${DOCKER_TAG} daemon
@@ -64,5 +64,5 @@ jobs:
         # HEROKU_API_KEY
         secure: "2hRmhn9iVLFpXIAncBWqydrxOVq33DIeGqLAWeGcmfeG7m/lAnEOvOXFtIh7darJLomfsUdt5ujEocyTvJGeJfve0X9BxPc1z4FKTLLBoGjXk35wShJ98guq5YiVFyh+EVFUInsSVTroMWvBytrgql34WbX9y3dVVGGsrVA0jukcSrxPmliVOggDDXAbCMsZvtAhax8cO0A86FDu0sHFvs1EHEjoAn3biHkXB4LViZVORZucR0F8mg66KygwI0nzdaDpiJS0S8xzjKIgTYSyuALsobI4SLKk7XD6d9CpS7jUQ55aZzxuuDRKCpJecjVX4ZLmVjACrtSnTJvnj9Ed+S4EZS5WRWgNLZXafGCW932/mbycNp2nxkZbIJooZbGHeXHOt+JUrlgA9HXgTrYAsaKGHFTOkihLLvt7YqjABY5UH4zStgeZ8z93Yi2qHHsTf1R/ZVx6g9+446zJmNJ5j8LDIyYBMobxkAA6U6c0OyQnIaiQUHnw4TNYqY4x8AeGt24p7jDb3PGc5dBnQL4KMoC74KJdLIftjWm5jkk7bZEOh29uwyUg6GyPnHNawfWHpRqB5U8HEa2TrrpS7RRGgxJkVF5Alvz3Ux66XfRiTFq1ZsNbV39CZ2m4/KP1JNbL8LGRrrX1gGyUS49P2MEPKwQf1KLjm6VHy2wnbwVUq/w="
       script:
-        - sh -c 'cd service && ./mvnw -B clean heroku:deploy -DskipTests -Pprod'
-        - sh -c 'cd daemon && ./mvnw -B clean heroku:deploy -DskipTests'
+        - sh -c 'cd service && ./mvnw -B --no-transfer-progress clean heroku:deploy -DskipTests -Pprod'
+        - sh -c 'cd daemon && ./mvnw -B --no-transfer-progress clean heroku:deploy -DskipTests'

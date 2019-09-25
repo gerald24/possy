@@ -4,7 +4,7 @@
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>reactor</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.5.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>possy</name>

@@ -1,10 +1,11 @@
-# possy [![Build Status](https://travis-ci.org/gerald24/possy.svg?branch=master)](https://travis-ci.org/gerald24/possy) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=coverage)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) ![daemon](docs/img//daemon-status.png) [![Heroku possy-daemon](https://heroku-badge.herokuapp.com/?app=possy-daemon)](https://possy-daemon.herokuapp.com/) ![service](docs/img//service-status.png) [![Heroku possy-service](https://heroku-badge.herokuapp.com/?app=possy-service)](https://possy-service.herokuapp.com/)
+# possy [![GitHub release (latest by date)](https://img.shields.io/github/v/release/gerald24/possy?label=latest%20release)](https://github.com/gerald24/possy/releases) [![Build Status](https://travis-ci.org/gerald24/possy.svg?branch=master)](https://travis-ci.org/gerald24/possy) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=coverage)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) [![possy-daemon on Heroku](https://img.shields.io/badge/possy--daemon-heroku-blue)](https://possy-daemon.herokuapp.com/) [![possy-service on Heroku](https://img.shields.io/badge/possy--service-heroku-blue)](https://possy-service.herokuapp.com/)
 
 Possy was created based on [Boris's](https://github.com/boris779) idea to print out tasks, bugs and other issues on POS Printer (e.g. Epson TM-T20II) instead of using Post-it®, or print it on regular paper and use the scissor. Possy is an addition for ***physical scrum and kanban boards***.
 
 ## Overview
 
 ![Overview](docs/img//Overview.png)
+
 
 ## Components
 
@@ -56,7 +57,7 @@ For more information please have a look at https://editorconfig.org/.
 ## How to create a release
 
 1. Clone the repository with git
-1. Execute `mvn release:prepare release:clean` \
+1. Execute `./mvnw release:prepare release:clean` \
    Example prompt:
    ```
    [INFO] Checking dependencies and plugins for snapshots ...

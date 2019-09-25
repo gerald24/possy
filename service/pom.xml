@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.7.RELEASE</version>
+		<version>2.1.8.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>service</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.5.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -20,10 +20,10 @@
 
 		<java.version>11</java.version>
 		<kotlin.version>1.3.50</kotlin.version>
-		<vaadin.version>14.0.3</vaadin.version>
+		<vaadin.version>14.0.5</vaadin.version>
 		<swagger.version>2.9.2</swagger.version>
 
-    <sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
 			**/net/g24/possy/service/PossyServiceApplication.kt,
 			**/net/g24/possy/service/PwaAnnotationModifier.kt,
 			**/net/g24/possy/service/Logger.kt,
@@ -325,8 +325,10 @@
 						<artifactId>spring-boot-maven-plugin</artifactId>
 						<configuration>
 							<jvmArguments>-Dvaadin.productionMode</jvmArguments>
+							<executable>true</executable>
 						</configuration>
 					</plugin>
+
 					<plugin>
 						<groupId>com.vaadin</groupId>
 						<artifactId>vaadin-maven-plugin</artifactId>

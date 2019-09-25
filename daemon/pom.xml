@@ -11,7 +11,7 @@
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>daemon</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.5.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -85,6 +85,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 
 			<plugin>

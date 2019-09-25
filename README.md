@@ -19,7 +19,7 @@ The daemon part connects to a possy-service and fetches print requests (simply t
 
 ### possy-service
 
-The service is a Vaadin frontend, which creates print requests either by retrieving content from Jira (or other Providers) or get manually entered issues.
+The service is a [Vaadin](https://vaadin.com/) frontend, which creates print requests either by retrieving content from Jira (or other providers) or get manually entered issues.
 
 ## Issuetypes
 
@@ -31,7 +31,7 @@ Possy knows 4 different types of issues:
 
 ## Printers
 
-An issuetype is mapped to a specific printer (currently up to 3 different printer):
+An issuetype is mapped to a specific printer (currently up to 3 different printers):
 - Stories -> white
 - Tasks -> white
 - Bugs -> pink

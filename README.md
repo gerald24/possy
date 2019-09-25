@@ -56,7 +56,7 @@ For more information please have a look at https://editorconfig.org/.
 ## How to create a release
 
 1. Clone the repository with git
-1. Execute `mvn release:prepare release:clean` \
+1. Execute `./mvnw release:prepare release:clean` \
    Example prompt:
    ```
    [INFO] Checking dependencies and plugins for snapshots ...

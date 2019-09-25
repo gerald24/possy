@@ -1,4 +1,6 @@
-# Configuration Guide for possy
+# Configuration & Development
+
+Requires JDK >= 11 to be installed on your machine.
 
 ## possy-daemon
 

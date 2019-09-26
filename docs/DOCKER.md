@@ -1,3 +1,0 @@
-# Docker
-
-*work in progress*

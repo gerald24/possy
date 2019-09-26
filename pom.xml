@@ -4,7 +4,7 @@
 
 	<groupId>net.g24.possy</groupId>
 	<artifactId>reactor</artifactId>
-	<version>1.5.4-SNAPSHOT</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>possy</name>
@@ -12,7 +12,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/gerald24/possy.git</connection>
 		<developerConnection>scm:git:https://github.com/gerald24/possy.git</developerConnection>
-	  	<tag>HEAD</tag>
+	  	<tag>v2.0.0</tag>
   	</scm>
 
 	<modules>

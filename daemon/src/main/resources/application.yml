@@ -1,5 +1,5 @@
 cups:
-  host: 10.10.0.2
+  host: localhost
   port: 631
   printers:
     white: printerNameWhite

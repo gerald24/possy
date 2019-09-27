@@ -90,39 +90,107 @@ The Epson TM-T20II is now connected to CUPS.
 
 ## Setup and configure possy services
 
-standalone jar, see raspberry
-docker preferred, easiest
-service does not need to reach daemon
+There are many ways to get possy up and running. Both possy-service and possy-daemon
+are simple Spring Boot JAR files with embedded Tomcat server. Let's refer to
+[Spring Docs - Running Apps](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-running-your-application.html)
+for details. For a guide on how to configure Spring Boot JARs see
+[Spring Docs - Externalized Config](https://docs.spring.io/spring-boot/docs/1.2.3.RELEASE/reference/html/boot-features-external-config.html).
 
+The preferred and easiest way to run possy is Docker. We provide Docker images for both possy-service and
+possy-daemon:
+
+- [possy-service on Dockerhub](https://cloud.docker.com/u/ajgassner/repository/docker/ajgassner/possy-service)
+- [possy-daemon on Dockerhub](https://cloud.docker.com/u/ajgassner/repository/docker/ajgassner/possy-daemon)
+
+In general you can find all available possy Spring configuration properties in the default configuration files:
+
+- [possy-service config](../service/src/main/resources/application.yml)
+- [possy-daemon config](../daemon/src/main/resources/application.yml)
 
 ### possy-daemon
 
 #### Docker
 
+Copy or create an `application.yml` file on the Docker host to provide a
+custom possy-daemon configuration.
+
+```
+sudo docker run \
+    --detach \
+    --restart always \
+    --publish 8081:8081 \
+    --name possy-daemon \
+    --log-opt max-size=50m \
+    --memory 1G \
+    --volume /path/to/your/application.yml:/config:ro \
+    ajgassner/possy-daemon:latest
+```
+
 #### Systemd service on Raspberry Pi
 
-Requires JDK >= 11 to be installed on your machine.
+Make sure JRE (Java) >= version 11 is installed on the Pi. Execute follwoing commands:
+
+```
+sudo apt-get install vim wget
+cd /home/pi
+
+wget https://github.com/gerald24/possy/releases/download/<<version>>/possy-daemon-<<version>>.jar
+mv possy-daemon-<<version>>.jar possy-daemon.jar
+touch possy-daemon.conf && echo "JAVA_OPTS=-Xmx512M" > possy-daemon.conf
+
+mkdir config
+vi config/application.yml # this file should contain your configuration
+```
+
+Following steps are taken from [Spring Docs - Installation as a systemd Service](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-systemd-service).
+
+Create a script named possy-daemon.service and place it in `/etc/systemd/system` directory.
+The following script offers an example:
+
+```
+[Unit]
+Description=possy-daemon
+After=syslog.target
+
+[Service]
+User=pi
+ExecStart=/home/pi/possy-daemon.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+```
+
+To flag the application to start automatically on system boot, use the following command:
+`sudo systemctl enable possy-daemon.service`
+
+Refer to `man systemctl` for more details.
 
 ### possy-service
 
+It's nearly the same procedure as with possy-daemon, but the config properties
+are different. You can run possy-service as standalone JAR or using Docker.
+
 #### Docker
 
+Example Docker run command without mapping a volume for `application.yml`,
+the configuration is made via Docker environment variables:
 
-
-
-
-
-## possy-daemon
-
-1. Edit or create profile, see `application.yml` in `daemon/src/main/resources`
-1. Build app with Maven `./mvnw clean verify`
-1. Run application using `./mvnw spring-boot:run` or directly running Application class from your IDE
-1. Open `http://localhost:8081/` in browser
-
-## possy-service
-
-1. Edit or create profile, see `application.yml` in `daemon/src/main/resources`
-1. Build app with Maven `./mvnw clean verify`
-1. Run application using `./mvnw spring-boot:run` or directly running Application class from your IDE
-1. Open `http://localhost:8080/` in browser
-1. Login with username `possy` and password `possy`
+```
+sudo docker run \
+    --detach \
+    --restart always \
+    --publish 8080:8080 \
+    --name possy-service \
+    --log-opt max-size=50m \
+    --memory 1G \
+    --env JIRA_URL="https://my-jira.domain.any/" \
+    --env JIRA_USERNAME="jira-user" \
+    --env JIRA_PASSWORD="jira-pw" \
+    --env SPRING_SECURITY_USER_NAME="possy-user" \
+    --env SPRING_SECURITY_USER_PASSWORD="possy-pw" \
+    --env POSSY_ENCRYPTION_KEY="CHANGE ME TO SOME SECURE VALUE!!!" \
+    --env POSSY_ADMIN_USERNAME="possy-admin" \
+    --env POSSY_ADMIN_PASSWORD="possy-admin-pw" \
+    ajgassner/possy-service:latest
+```

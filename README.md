@@ -31,6 +31,10 @@ Possy is intended to be used as addition for ***physical Scrum and Kanban boards
 
 The daemon part connects to a possy-service and fetches print requests (simply text or image content).
 For each print request a PDF will be generated and printed via CUPS to specific POS printers.
+
+The daemon might run in a different network than possy-service. The deamon needs to reach possy-service over network, but
+not vice versa.
+
 The daemon job might run on a [Pi](https://www.raspberrypi.org).
 
 ### possy-service
@@ -84,6 +88,12 @@ before you start coding. Pull requests are always welcome!
 
 In short, we provide an `.editorconfig` file.
 For more information please have a look at https://editorconfig.org/.
+
+### Building from source
+
+1. Build with Maven `./mvnw clean verify`
+1. Run application using `./mvnw spring-boot:run` or directly running Application class from your IDE
+1. To build with production profile execute `./mvnw clean verify -Pprod -DskipTests`
 
 ## How to create a release
 

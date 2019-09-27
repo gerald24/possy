@@ -1,28 +1,48 @@
-# possy [![GitHub release (latest by date)](https://img.shields.io/github/v/release/gerald24/possy?label=latest%20release)](https://github.com/gerald24/possy/releases) [![Build Status](https://travis-ci.org/gerald24/possy.svg?branch=master)](https://travis-ci.org/gerald24/possy) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=coverage)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor) [![possy-daemon on Heroku](https://img.shields.io/badge/possy--daemon-heroku-blue)](https://possy-daemon.herokuapp.com/) [![possy-service on Heroku](https://img.shields.io/badge/possy--service-heroku-blue)](https://possy-service.herokuapp.com/)
+# possy
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/gerald24/possy?label=latest%20release)](https://github.com/gerald24/possy/releases)
+[![Build Status](https://travis-ci.org/gerald24/possy.svg?branch=master)](https://travis-ci.org/gerald24/possy)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.g24.possy%3Areactor&metric=coverage)](https://sonarcloud.io/dashboard?id=net.g24.possy%3Areactor)
+[![possy-service on Heroku](https://img.shields.io/badge/possy--service-heroku-blue)](https://possy-service.herokuapp.com/)
+[![possy-daemon on Heroku](https://img.shields.io/badge/possy--daemon-heroku-blue)](https://possy-daemon.herokuapp.com/)
 
-Possy was created based on [Boris's](https://github.com/boris779) idea to print out tasks, bugs and other issues on POS Printer (e.g. Epson TM-T20II) instead of using Post-it®, or print it on regular paper and use the scissor. Possy is an addition for ***physical scrum and kanban boards***.
+Possy was created based on [Boris's](https://github.com/boris779) idea
+to print out tasks, bugs and other issues on POS printers (e.g. Epson TM-T20II)
+instead of using Post-it®, or print it on regular paper using the scissor.
+
+Possy is intended to be used as addition for ***physical Scrum and Kanban boards***.
 
 ## Overview
 
 ![Overview](docs/img//Overview.png)
 
-
 ## Components
 
-- possy-daemon (print job)
-- possy-service (print requests and [Planner](docs/PLANNER.md))
-- [CUPS](https://www.cups.org) (print platform) - see also [Installation Guide](docs/INSTALLATION.md) for setup
-- providers like [Jira](https://www.atlassian.com/software/jira), GitHub, etc. (currently only [Jira](https://www.atlassian.com/software/jira) supported)
+- possy-daemon
+   - creates printable media out of print requests and talks to connected printers
+- possy-service
+   - user interface to create print requests, contains [Planner](docs/PLANNER.md)
+- [CUPS](https://www.cups.org) (print platform)
+   - see [Installation & Configuration Guide](docs/INSTALLATION.md) for setup
+- Providers like [Jira](https://www.atlassian.com/software/jira), GitHub, etc.
+   - currently only [Jira](https://www.atlassian.com/software/jira) supported
 
 ### possy-daemon
 
-The daemon part connects to a possy-service and fetches print requests (simply text or image content). For each print request a PDF will be generated and printed via [CUPS](https://www.cups.org) to a specific POS Printer(s). The daemon job might run on a [Pi](https://www.raspberrypi.org).
+The daemon part connects to a possy-service and fetches print requests (simply text or image content).
+For each print request a PDF will be generated and printed via CUPS to specific POS printers.
+
+The daemon might run in a different network than possy-service. The deamon needs to reach possy-service over network, but
+not vice versa.
+
+The daemon job might run on a [Pi](https://www.raspberrypi.org).
 
 ### possy-service
 
-The service is a Vaadin frontend, which creates print requests either by retrieving content from Jira (or other Providers) or get manually entered issues.
+The service is a [Vaadin](https://vaadin.com/) frontend, which creates print requests either by retrieving
+content from different providers (e.g. Jira) or manually entered issues by users.
 
-## Issuetypes
+## Issue types
 
 Possy knows 4 different types of issues:
 - Stories
@@ -32,27 +52,48 @@ Possy knows 4 different types of issues:
 
 ## Printers
 
-An issuetype is mapped to a specific printer (currently up to 3 different printer):
+An issue type is mapped to a specific printer (currently up to 3 different printers possible):
 - Stories -> white
 - Tasks -> white
 - Bugs -> pink
 - Freeform -> yellow
 
-## Get Started
+## Demo
 
-* [Installation Guide](docs/INSTALLATION.md)
-* [Configuration Guide](docs/CONFIGURATION.md)
-* [Docker](docs/DOCKER.md)
-* [Possy Service REST API documentation](http://possy-service.herokuapp.com/swagger-ui.html)
+We provide a demo installation hosted on [Heroku](https://heroku.com/)
+without real physical connected printers to test the user interface of possy-service.
+Please note the application might need some time to load initially,
+because apps on Heroku's free tier are going to sleep after some time of inactivity. 
+
+- [possy-service](https://possy-service.herokuapp.com/)
+   - username: `possy-heroku`
+   - password: `possy-heroku`
+   - currently no providers are connected, will be possible when [Issue 35](https://github.com/gerald24/possy/issues/35) is done
+   - currently no preview of print requests is possible in the UI, see [Issue 31](https://github.com/gerald24/possy/issues/31)
+- [possy-daemon](https://possy-daemon.herokuapp.com/)
+   - just shows a very basic webpage with version information
+
+## Getting Started
+
+- [Installation & Configuration Guide](docs/INSTALLATION.md)
+- [possy-service REST API docs](http://possy-service.herokuapp.com/swagger-ui.html)
 
 ## Contributing
+
 You want to contribute? Great! Thanks for being awesome!
 Please see the project related [issues](https://github.com/gerald24/possy/issues)
 before you start coding. Pull requests are always welcome!
 
 ### Code & Style
+
 In short, we provide an `.editorconfig` file.
 For more information please have a look at https://editorconfig.org/.
+
+### Building from source
+
+1. Build with Maven `./mvnw clean verify`
+1. Run application using `./mvnw spring-boot:run` or directly running Application class from your IDE
+1. To build with production profile execute `./mvnw clean verify -Pprod -DskipTests`
 
 ## How to create a release
 

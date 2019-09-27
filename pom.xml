@@ -18,6 +18,7 @@
 	<modules>
 		<module>daemon</module>
 		<module>service</module>
+		<module>epson-tm-t20-cups-docker</module>
 	</modules>
 
 	<properties>

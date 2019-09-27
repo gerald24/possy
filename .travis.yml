@@ -57,6 +57,8 @@ jobs:
         - docker push ${DOCKER_USERNAME}/possy-service:${DOCKER_TAG}
         - docker build -t ${DOCKER_USERNAME}/possy-daemon:${DOCKER_TAG} daemon
         - docker push ${DOCKER_USERNAME}/possy-daemon:${DOCKER_TAG}
+        - docker build -t ${DOCKER_USERNAME}/epson-tm-t20-cups:${DOCKER_TAG} epson-tm-t20-cups-docker
+        - docker push ${DOCKER_USERNAME}/epson-tm-t20-cups:${DOCKER_TAG}
 
     - stage: deploy-heroku
       if: branch = master AND fork = false AND type = push

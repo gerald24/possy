@@ -28,7 +28,7 @@ import net.g24.possy.service.ui.components.PossyPlanner
 class PlannerView(private val printRequestQueueService: PrintRequestQueueService, private val pageTitleBuilder: PageTitleBuilder)
     : VerticalLayout(), HasDynamicTitle {
 
-    private val possyPlanner = PossyPlanner() { addPrintRequests(it) }
+    private val possyPlanner = PossyPlanner { addPrintRequests(it) }
 
     init {
         addClassName("possy-jql")
@@ -39,7 +39,7 @@ class PlannerView(private val printRequestQueueService: PrintRequestQueueService
 
     private fun addPrintRequests(requests: List<PossyIssue>) {
         requests.forEach { printRequestQueueService.addItem(it) }
-        Notification.show("added to print queued", 600, Notification.Position.MIDDLE)
+        Notification.show("Added to print queued", 600, Notification.Position.MIDDLE)
     }
 
 }

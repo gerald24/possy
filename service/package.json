@@ -2,6 +2,7 @@
   "name": "no-name",
   "license": "UNLICENSED",
   "dependencies": {
+    "sortablejs": "^1.10.0",
     "@polymer/iron-form": "^3.0.1",
     "@polymer/polymer": "3.2.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
@@ -16,5 +17,5 @@
     "webpack-merge": "4.2.1",
     "raw-loader": "3.0.0"
   },
-  "vaadinAppPackageHash": "87461a45d44bb4c035821f6957b80c417a37076ec9dfb45631eba8e0b3935119"
+  "vaadinAppPackageHash": "1c6b5df5af3a979205745ef734a2dcfc49641670920cf1acaaf6c14027956ab2"
 }

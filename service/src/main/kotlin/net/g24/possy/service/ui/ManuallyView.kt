@@ -149,7 +149,7 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
         if (!printButton.isEnabled) {
             return
         }
-        printRequestCreation.printUnconfirmed(
+        printRequestCreation.print(
                 PossyIssue(
                         printTemplateSelector.value,
                         if (!hasHeader()) "" else header.value,

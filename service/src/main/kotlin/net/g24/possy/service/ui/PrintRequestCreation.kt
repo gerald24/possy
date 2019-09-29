@@ -16,10 +16,13 @@
  */
 package net.g24.possy.service.ui
 
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.notification.Notification
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.service.PrintRequestQueueService
+import org.claspina.confirmdialog.ButtonOption
+import org.claspina.confirmdialog.ConfirmDialog
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -27,14 +30,15 @@ import org.springframework.stereotype.Component
 class PrintRequestCreation(@Autowired private val printRequestQueueService: PrintRequestQueueService) {
 
     fun confirm(issue: PossyIssue) {
-        val dialog = ConfirmDialog(
-                "Confirm Print",
-                "Print issue ${issue.key}?",
-                "Print", {
-            printUnconfirmed(issue)
-        },
-                "Cancel", {})
-        dialog.open()
+        ConfirmDialog
+                .create()
+                .withCaption("Confirm Print")
+                .withMessage(Span("Print issue ${issue.key}?"))
+                .withCancelButton(ButtonOption.icon(VaadinIcon.CLOSE), ButtonOption.caption("Cancel"))
+                .withOkButton(Runnable {
+                    print(issue)
+                }, ButtonOption.icon(VaadinIcon.PRINT), ButtonOption.focus(), ButtonOption.caption("Print"))
+                .open()
     }
 
     fun printAll(issues: List<PossyIssue>) {
@@ -42,7 +46,7 @@ class PrintRequestCreation(@Autowired private val printRequestQueueService: Prin
         showNotification()
     }
 
-    fun printUnconfirmed(printRequest: PossyIssue) {
+    fun print(printRequest: PossyIssue) {
         printRequestQueueService.addItem(printRequest)
         showNotification()
     }

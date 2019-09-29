@@ -103,7 +103,7 @@
 		<!-- UI -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin</artifactId>
+			<artifactId>vaadin-core</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>com.vaadin.webjar</groupId>
@@ -144,8 +144,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-confirm-dialog-flow</artifactId>
+			<groupId>org.claspina</groupId>
+			<artifactId>confirm-dialog</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 
 		<!-- testing -->

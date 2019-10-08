@@ -14,10 +14,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon.templaterenderer
 
-public enum PrintPaper {
-    WHITE,
-    PINK,
-    YELLOW
+import net.g24.possy.daemon.PrintRequest
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.PDPageContentStream
+
+class FreeformTemplateRenderer : TemplateRenderer() {
+
+    override fun render(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+        renderIssue(printRequest, doc, contents, renderContext)
+        renderContent(printRequest, doc, contents, renderContext)
+        drawLightRect(contents, renderContext.width, renderContext.height, renderContext.marginBorder)
+        renderTag(printRequest, doc, contents, renderContext)
+    }
+
 }

@@ -14,20 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer;
 
-class Cursor {
+package net.g24.possy.daemon
 
-    float x;
-    float y;
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-    Cursor(final float x, final float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    void down(final float offset) {
-        y = y - offset;
-    }
-
+inline fun <reified T> T.logger(): Logger {
+    return LoggerFactory.getLogger(T::class.java)
 }

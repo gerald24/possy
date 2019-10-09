@@ -14,15 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.scheduling.annotation.EnableScheduling
 
-import net.g24.possy.daemon.templaterenderer.RenderContext;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
+@SpringBootApplication
+@EnableScheduling
+class PossyDaemonApplication(objectMapper: ObjectMapper) {
 
-public interface LayoutRenderer {
+    init {
+        objectMapper.registerModule(KotlinModule())
+    }
+}
 
-    void render(PrintRequest printRequest, PDDocument doc, PDPageContentStream contents, RenderContext renderContext) throws IOException;
+fun main(args: Array<String>) {
+    runApplication<PossyDaemonApplication>(*args)
 }

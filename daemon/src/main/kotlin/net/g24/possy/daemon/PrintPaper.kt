@@ -14,18 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
-@SpringBootApplication
-@EnableScheduling
-public class PossyDaemonApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(PossyDaemonApplication.class, args);
-    }
-
+enum class PrintPaper {
+    WHITE,
+    PINK,
+    YELLOW
 }

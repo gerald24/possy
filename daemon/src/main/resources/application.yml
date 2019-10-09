@@ -15,15 +15,15 @@ possy:
     redirect_to_file: true
     fonts:
       header:
-        font: SourceSansPro-Black.ttf
+        font: classpath:SourceSansPro-Black.ttf
         size: 26
         line-height: 29
       content:
-        font: ShortStack-Regular.ttf
+        font: classpath:ShortStack-Regular.ttf
         size: 16
         line-height: 20
       footer:
-        font: SourceSansPro-Regular.ttf
+        font: classpath:SourceSansPro-Regular.ttf
         size: 12
         line-height: 20
     pages:

@@ -14,22 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon;
+package net.g24.possy.daemon
 
-public enum PrintTemplate {
+enum class PrintTemplate(val paper: PrintPaper) {
     BUG(PrintPaper.PINK),
     TASK(PrintPaper.WHITE),
     STORY(PrintPaper.WHITE),
     FREEFORM(PrintPaper.YELLOW),
-    IMAGE(PrintPaper.WHITE);
-
-    private final PrintPaper paper;
-
-    PrintTemplate(final PrintPaper paper) {
-        this.paper = paper;
-    }
-
-    public PrintPaper getPaper() {
-        return paper;
-    }
+    IMAGE(PrintPaper.WHITE)
 }

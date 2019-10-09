@@ -85,14 +85,14 @@ class PossyService(
         client.printers.forEach { printer ->
             logger().info("Printer: {}", printer)
 
-            logger().info(" Media supported:")
-            printer.mediaSupported.forEach { logger().info("  - {}", it) }
+            logger().debug(" Media supported:")
+            printer.mediaSupported.forEach { logger().debug("  - $it") }
 
-            logger().info(" Resolution supported:")
-            printer.resolutionSupported.forEach { logger().info("  - {}", it) }
+            logger().debug(" Resolution supported:")
+            printer.resolutionSupported.forEach { logger().debug("  - $it") }
 
-            logger().info(" Mime-Types supported:")
-            printer.mimeTypesSupported.forEach { logger().info("  - {}", it) }
+            logger().debug(" Mime-Types supported:")
+            printer.mimeTypesSupported.forEach { logger().debug("  - $it") }
         }
     }
 }

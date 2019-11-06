@@ -96,57 +96,26 @@ internal class SecurityConfiguration(
         return NoOpPasswordEncoder.getInstance()
     }
 
-    /** rest api security config */
+    /** rest api & actuator security config */
     @Configuration
     @Order(1)
-    internal class ApiWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
+    internal class ApiAndActuatorWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
 
         override fun configure(http: HttpSecurity) {
             http
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .antMatcher("/api/**")
+                    .requestMatchers()
+                    .antMatchers("/api/**")
+                    .requestMatchers(EndpointRequest.toAnyEndpoint())
+                    .and()
                     .authorizeRequests()
-                    .anyRequest()
+                    .antMatchers("/api/**")
                     .hasAuthority(ROLE_APPLICATION)
-                    .and()
-                    .httpBasic()
-        }
-    }
-
-    /** public actuator endpoints with optional extended data when authorized */
-    @Configuration
-    @Order(2)
-    internal class AcuatorPublicWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
-
-        override fun configure(http: HttpSecurity) {
-            http
-                    .csrf().disable()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .requestMatcher(EndpointRequest.to("health", "info"))
-                    .authorizeRequests()
-                    .anyRequest()
+                    .requestMatchers(EndpointRequest.to("health", "info"))
                     .permitAll()
-                    .and()
-                    .httpBasic()
-        }
-    }
-
-    /** internal actuator endpoints for admin only */
-    @Configuration
-    @Order(3)
-    internal class AcuatorInternalWebSecurityConfigurationAdapter : WebSecurityConfigurerAdapter() {
-
-        override fun configure(http: HttpSecurity) {
-            http
-                    .csrf().disable()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .requestMatcher(EndpointRequest.toAnyEndpoint().excluding("health", "info"))
-                    .authorizeRequests()
-                    .anyRequest()
+                    .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health", "info"))
                     .hasAuthority(ROLE_ACTUATOR)
                     .and()
                     .httpBasic()
@@ -155,7 +124,7 @@ internal class SecurityConfiguration(
 
     /** form login for Vaadin */
     @Configuration
-    @Order(4)
+    @Order(2)
     internal class FormLoginWebSecurityConfigurationAdapter(
             private val possyConfigurationProperties: PossyConfigurationProperties
     ) : WebSecurityConfigurerAdapter() {

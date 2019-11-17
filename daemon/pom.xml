@@ -27,6 +27,9 @@
 		<sonar.coverage.exclusions>
 			**/net/g24/possy/daemon/PossyDaemonApplication.kt,
 			**/net/g24/possy/daemon/Logger.kt,
+			**/net/g24/possy/daemon/PrintRequest.kt,
+			**/net/g24/possy/daemon/PossyDaemon.kt,
+			**/net/g24/possy/daemon/PossyService.kt,
 			**/net/g24/possy/daemon/**/*Configuration*.kt
 		</sonar.coverage.exclusions>
 	</properties>

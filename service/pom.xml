@@ -27,9 +27,11 @@
 			**/net/g24/possy/service/extensions/ResettableLazy.kt,
 			**/net/g24/possy/service/PossyServiceApplication.kt,
 			**/net/g24/possy/service/PwaAnnotationModifier.java,
+			**/net/g24/possy/service/extensions/ComponentExtensions.kt
 			**/net/g24/possy/service/Logger.kt,
 			**/net/g24/possy/service/security/**/*.kt,
 			**/net/g24/possy/service/ui/**/*.kt,
+			**/net/g24/possy/service/model/**/*.kt,
 			**/net/g24/possy/service/**/*Configuration*.kt
 		</sonar.coverage.exclusions>
 	</properties>

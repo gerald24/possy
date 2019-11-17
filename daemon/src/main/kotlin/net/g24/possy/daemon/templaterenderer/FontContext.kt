@@ -18,13 +18,13 @@ package net.g24.possy.daemon.templaterenderer
 
 import net.g24.possy.daemon.configuration.PossyProperties.PdfGenerator.Fonts.FontSpec
 import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont
-import org.apache.pdfbox.pdmodel.font.encoding.WinAnsiEncoding
+import org.apache.pdfbox.pdmodel.font.PDFont
+import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.springframework.core.io.ResourceLoader
 
 class FontContext(private val resourceLoader: ResourceLoader, private val fontSpec: FontSpec) {
 
-    private lateinit var font: PDTrueTypeFont
+    private lateinit var font: PDFont
 
     val size: Int
         get() = fontSpec.size
@@ -32,16 +32,16 @@ class FontContext(private val resourceLoader: ResourceLoader, private val fontSp
     val lineHeight: Int
         get() = fontSpec.lineHeight
 
-    fun applyFont(doc: PDDocument): PDTrueTypeFont {
+    fun applyFont(doc: PDDocument): PDFont {
         if (!::font.isInitialized) {
             font = addFont(doc, fontSpec.font!!)
         }
         return font
     }
 
-    private fun addFont(doc: PDDocument, name: String): PDTrueTypeFont {
+    private fun addFont(doc: PDDocument, name: String): PDFont {
         resourceLoader.getResource(name).inputStream.use {
-            return PDTrueTypeFont.load(doc, it, WinAnsiEncoding.INSTANCE)
+            return PDType0Font.load(doc, it)
         }
     }
 }

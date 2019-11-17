@@ -37,9 +37,10 @@ object SecurityUtils {
     val isUserLoggedIn: Boolean
         get() {
             val context = SecurityContextHolder.getContext()
-            return context.authentication != null && context.authentication !is AnonymousAuthenticationToken
+            return context.authentication != null
+                    && context.authentication !is AnonymousAuthenticationToken
+                    && context.authentication.isAuthenticated
         }
-
 
     internal fun isFrameworkInternalRequest(request: HttpServletRequest): Boolean {
         val parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER)

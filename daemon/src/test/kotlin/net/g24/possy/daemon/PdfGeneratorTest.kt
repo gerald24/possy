@@ -17,16 +17,17 @@
 
 package net.g24.possy.daemon
 
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
+import kotlin.random.Random
 
-@RunWith(SpringRunner::class)
 @SpringBootTest
+@ExtendWith(SpringExtension::class)
 class PdfGeneratorTest {
 
     @MockBean
@@ -40,13 +41,24 @@ class PdfGeneratorTest {
 
     @Test
     fun `special chars are printed without throwing an exception`() {
-        pdfGenerator.createPdf(PrintRequest(
-                id = UUID.randomUUID(),
-                template = PrintTemplate.BUG,
-                weight = "XL",
-                key = "KEY-1",
-                tag = "TAG-1",
-                content = "\u00AD".toByteArray(), // soft hypen
-                mimetype = "plain/text"))
+        PrintTemplate.values().forEach { printTemplate ->
+            pdfGenerator.createPdf(PrintRequest(
+                    id = UUID.randomUUID(),
+                    template = printTemplate,
+                    weight = "XL",
+                    key = "KEY-1",
+                    tag = "TAG-1",
+                    content = "${randomContent()}\u00AD".toByteArray(), // soft hypen
+                    mimetype = "plain/text"))
+        }
+    }
+
+    private fun randomContent() : String {
+        val allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
+        return (1..Random.nextInt(10, 15)) // words
+                .map { (1..Random.nextInt(5, 15)) // word
+                        .map { allowedChars.random() }
+                        .joinToString("") }
+                .joinToString(" ")
     }
 }

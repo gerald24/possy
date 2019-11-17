@@ -20,16 +20,16 @@ package net.g24.possy.service.security
 import net.g24.possy.service.PossyConfigurationProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.*
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.HttpClientErrorException
@@ -37,8 +37,8 @@ import org.springframework.web.client.RestTemplate
 import java.util.*
 import javax.annotation.PostConstruct
 
-@RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension::class)
 class SecurityConfigurationTest {
 
     @LocalServerPort

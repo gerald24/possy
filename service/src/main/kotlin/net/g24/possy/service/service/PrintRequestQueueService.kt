@@ -18,7 +18,6 @@ package net.g24.possy.service.service
 
 import net.g24.possy.service.model.PossyIssue
 import org.springframework.stereotype.Service
-
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -43,9 +42,7 @@ class PrintRequestQueueService {
     }
 
     fun addItem(item: PossyIssue?): PossyIssue {
-        if (item == null || !item.isValid) {
-            throw RuntimeException("invalid item")
-        }
+        require(item != null && item.isValid) { "invalid item" }
         queue.firstOrNull { item.contentEquals(it) }?.let { return it }
 
         queue.add(item)
@@ -77,4 +74,7 @@ class PrintRequestQueueService {
         return Collections.unmodifiableCollection(queue)
     }
 
+    fun clear() {
+        queue.clear()
+    }
 }

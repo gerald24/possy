@@ -40,14 +40,17 @@ class PrintApiService(@Autowired private val queue: PrintRequestQueueService) {
     fun createRequest(
             @RequestParam("template") @ApiParam("The content template") template: PrintTemplate,
             @RequestParam("issue") @ApiParam("Usually the key/identifier (e.g. JIRA-123) of an issue") issue: String,
-            @RequestParam("content") @ApiParam("Plain text content") content: String): ResponseEntity<PossyIssue> =
-            ResponseEntity.ok(queue.addItem(PossyIssue(template, issue, null, null, content)))
+            @RequestParam("content") @ApiParam("Plain text content") content: String): ResponseEntity<PossyIssue> = try {
+        ResponseEntity.ok(queue.addItem(PossyIssue(template, issue, null, null, content)))
+    } catch (e: IllegalArgumentException) {
+        ResponseEntity.badRequest().build()
+    }
 
     @DeleteMapping("{id}")
     @ApiOperation("Removes a specific print request from print queue")
     fun removeRequest(
             @PathVariable("id")
             @ApiParam("The ID/identifier of the print request to remove")
-            id: String
-    ): ResponseEntity<Any> = if (queue.removeItem(UUID.fromString(id))) ResponseEntity.ok().build() else ResponseEntity.notFound().build()
+            id: UUID
+    ): ResponseEntity<Any> = if (queue.removeItem(id)) ResponseEntity.ok().build() else ResponseEntity.notFound().build()
 }

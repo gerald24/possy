@@ -55,7 +55,7 @@ class JiraServiceTest {
 
         val issues = jiraService.loadRecentIssues("testproject")
         assertThat(issues).hasSize(1)
-        assertThat(issues[0].weight).isEqualTo("8")
+        assertThat(issues[0].weight).isEqualTo("L")
         assertThat(issues[0].key).isEqualTo("STORY-1")
         assertThat(issues[0].contentAsString).isEqualTo("Summary")
         assertThat(issues[0].template).isEqualTo(PrintTemplate.STORY)
@@ -75,7 +75,7 @@ class JiraServiceTest {
 
         val projects = jiraService.projects!!
         assertThat(projects).hasSize(1)
-        assertThat(projects[0].avatar).isEqualTo(PossyAvatar("png", "".toByteArray()))
+        assertThat(projects[0].avatar).isEqualToComparingFieldByField(PossyAvatar("png", "".toByteArray()))
         assertThat(projects[0].key).isEqualTo("PROJ")
         assertThat(projects[0].name).isEqualTo("Testproject")
     }

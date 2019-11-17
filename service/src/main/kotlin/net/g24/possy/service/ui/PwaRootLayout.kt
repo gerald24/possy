@@ -32,7 +32,7 @@ import com.vaadin.flow.theme.lumo.Lumo
 @CssImport("./styles/shared-styles.css")
 class PwaRootLayout : RouterLayout {
 
-    private val div = Div()
+    private val div = Div().apply { setSizeFull() }
 
     override fun getElement(): Element = div.element
 }

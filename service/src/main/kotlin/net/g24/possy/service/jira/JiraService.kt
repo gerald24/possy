@@ -22,27 +22,28 @@ import net.g24.possy.service.model.PossyAvatar
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.model.PrintTemplate
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.*
+import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import java.io.UnsupportedEncodingException
-import java.util.*
 
 @Service
-class JiraService @Autowired constructor(
+class JiraService(
         private val jiraConfigurationProperties: JiraConfigurationProperties,
-        private val resettableLazyManager: ResettableLazyManager) {
-
-    private val restTemplate: RestTemplate = RestTemplate()
-    private val httpHeaders = createHeadersWithAuthentication(jiraConfigurationProperties.username!!, jiraConfigurationProperties.password!!)
-    private val jiraBaseURL: String = jiraConfigurationProperties.url!!.removeSuffix("/")
+        restTemplateBuilder: RestTemplateBuilder,
+        resettableLazyManager: ResettableLazyManager) {
 
     companion object {
-        private const val GET_PROJECTS = "%s/rest/api/2/project"
-        private const val GET_ISSUES = "%s/rest/api/2/search?fields=%s&jql=%s&maxResults=%d"
+        private const val GET_PROJECTS = "/rest/api/2/project"
+        private const val GET_ISSUES = "/rest/api/2/search?fields=%s&jql=%s&maxResults=%d"
     }
+
+    private val restTemplate: RestTemplate = restTemplateBuilder
+            .rootUri(jiraConfigurationProperties.url!!.removeSuffix("/"))
+            .basicAuthentication(jiraConfigurationProperties.username!!, jiraConfigurationProperties.password!!)
+            .build()
 
     val projects: List<PossyProject>? by resettableLazy(resettableLazyManager) {
         jiraProjects?.map {
@@ -70,38 +71,22 @@ class JiraService @Autowired constructor(
 
 
     private fun getIssues(jql: String, maxResults: Int): ResponseEntity<JqlIssueResult> {
-        return restTemplate.exchange(
+        return restTemplate.getForEntity(
                 getUrlForJql(jiraConfigurationProperties.jql.fields!!.joinToString(","), jql, maxResults),
-                HttpMethod.GET,
-                HttpEntity<JqlIssueResult>(httpHeaders),
                 JqlIssueResult::class.java)
     }
 
-    private fun getUrlForJql(fields: String, jql: String, maxResults: Int) =
-            String.format(GET_ISSUES, jiraBaseURL, fields, jql, maxResults)
-
+    private fun getUrlForJql(fields: String, jql: String, maxResults: Int) = String.format(GET_ISSUES, fields, jql, maxResults)
 
     private fun extractAndConvertIssues(response: ResponseEntity<JqlIssueResult>): List<PossyIssue> {
-        if (response.statusCode != HttpStatus.OK)
+        if (response.statusCode != HttpStatus.OK) {
             return emptyList()
+        }
 
         val jiraIssues = response.body!!.issues
         val references = mutableMapOf<String, Map<String, Any?>?>()
         return jiraIssues.map { asPrintRequest(it, references) }
     }
-
-
-    private fun createHeadersWithAuthentication(username: String, password: String) =
-            HttpHeaders().apply {
-                add("Authorization", "Basic " + getBase64Credentials(username, password))
-            }
-
-    private fun getBase64Credentials(username: String, password: String) =
-            try {
-                String(Base64.getEncoder().encode("$username:$password".toByteArray()))
-            } catch (e: UnsupportedEncodingException) {
-                throw RuntimeException(e)
-            }
 
     private fun asPrintRequest(issue: JiraIssue, references: MutableMap<String, Map<String, Any?>?>): PossyIssue {
         val referenceResolver: ReferenceResolver = object : ReferenceResolver {
@@ -179,12 +164,8 @@ class JiraService @Autowired constructor(
 
     private val jiraProjects: List<JiraProject>? by resettableLazy(resettableLazyManager) {
         try {
-            restTemplate.exchange(
-                    String.format(GET_PROJECTS, jiraBaseURL),
-                    HttpMethod.GET,
-                    HttpEntity<List<JiraProject>>(httpHeaders),
-                    object : ParameterizedTypeReference<List<JiraProject>>() {})
-                    .body
+            restTemplate.getForEntity(GET_PROJECTS, Array<JiraProject>::class.java)
+                    .body!!
                     .sortedBy { it.key }
         } catch (e: Exception) {
             null
@@ -192,18 +173,14 @@ class JiraService @Autowired constructor(
     }
 
     private fun projectAvatar(url: String): PossyAvatar? {
-        val result = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                HttpEntity<ByteArray>(httpHeaders),
-                ByteArray::class.java)
+        val result = restTemplate.getForEntity(url, ByteArray::class.java)
         val contentType = result.headers[HttpHeaders.CONTENT_TYPE]?.get(0) ?: ""
         if (result.statusCode == HttpStatus.OK) {
             if (contentType.startsWith("image/png")) {
-                return PossyAvatar("png", result.body)
+                return PossyAvatar("png", result.body!!)
             }
             if (contentType.startsWith("image/svg+xml;charset=UTF-8")) {
-                return PossyAvatar("svg", result.body)
+                return PossyAvatar("svg", result.body!!)
             }
         }
         return null

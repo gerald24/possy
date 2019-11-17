@@ -17,14 +17,14 @@
 
 package net.g24.possy.daemon
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.GitProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -36,7 +36,7 @@ import java.time.Instant
 @ExtendWith(SpringExtension::class)
 class IndexControllerTest {
 
-    @MockBean
+    @MockkBean
     private lateinit var gitProperties: GitProperties
 
     @Autowired
@@ -44,8 +44,8 @@ class IndexControllerTest {
 
     @Test
     fun `index shows version info`() {
-        `when`(gitProperties.get("commit.id.describe")).thenReturn("1.0.0")
-        `when`(gitProperties.getInstant("build.time")).thenReturn(Instant.now())
+        every { gitProperties.get("commit.id.describe") } returns "1.0.0"
+        every { gitProperties.getInstant("build.time") } returns Instant.now()
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk)

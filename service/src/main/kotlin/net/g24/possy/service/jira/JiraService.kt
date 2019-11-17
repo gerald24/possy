@@ -22,7 +22,7 @@ import net.g24.possy.service.model.PossyAvatar
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PossyProject
 import net.g24.possy.service.model.PrintTemplate
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -32,18 +32,14 @@ import org.springframework.web.client.RestTemplate
 @Service
 class JiraService(
         private val jiraConfigurationProperties: JiraConfigurationProperties,
-        restTemplateBuilder: RestTemplateBuilder,
-        resettableLazyManager: ResettableLazyManager) {
+        @Qualifier("jiraRestTemplate") private val jiraRestTemplate: RestTemplate,
+        resettableLazyManager: ResettableLazyManager
+) {
 
     companion object {
         private const val GET_PROJECTS = "/rest/api/2/project"
         private const val GET_ISSUES = "/rest/api/2/search?fields=%s&jql=%s&maxResults=%d"
     }
-
-    private val restTemplate: RestTemplate = restTemplateBuilder
-            .rootUri(jiraConfigurationProperties.url!!.removeSuffix("/"))
-            .basicAuthentication(jiraConfigurationProperties.username!!, jiraConfigurationProperties.password!!)
-            .build()
 
     val projects: List<PossyProject>? by resettableLazy(resettableLazyManager) {
         jiraProjects?.map {
@@ -71,7 +67,7 @@ class JiraService(
 
 
     private fun getIssues(jql: String, maxResults: Int): ResponseEntity<JqlIssueResult> {
-        return restTemplate.getForEntity(
+        return jiraRestTemplate.getForEntity(
                 getUrlForJql(jiraConfigurationProperties.jql.fields!!.joinToString(","), jql, maxResults),
                 JqlIssueResult::class.java)
     }
@@ -164,7 +160,7 @@ class JiraService(
 
     private val jiraProjects: List<JiraProject>? by resettableLazy(resettableLazyManager) {
         try {
-            restTemplate.getForEntity(GET_PROJECTS, Array<JiraProject>::class.java)
+            jiraRestTemplate.getForEntity(GET_PROJECTS, Array<JiraProject>::class.java)
                     .body!!
                     .sortedBy { it.key }
         } catch (e: Exception) {
@@ -173,7 +169,7 @@ class JiraService(
     }
 
     private fun projectAvatar(url: String): PossyAvatar? {
-        val result = restTemplate.getForEntity(url, ByteArray::class.java)
+        val result = jiraRestTemplate.getForEntity(url, ByteArray::class.java)
         val contentType = result.headers[HttpHeaders.CONTENT_TYPE]?.get(0) ?: ""
         if (result.statusCode == HttpStatus.OK) {
             if (contentType.startsWith("image/png")) {

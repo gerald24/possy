@@ -14,19 +14,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.configuration
 
-import org.springframework.boot.context.properties.ConfigurationProperties
+package net.g24.possy.service
+
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.validation.annotation.Validated
+import org.springframework.core.task.AsyncTaskExecutor
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
+import org.springframework.web.context.annotation.ApplicationScope
 
 @Configuration
-@ConfigurationProperties(prefix = "possy")
-@Validated
-class PossyProperties(var isRedirectToFile: Boolean = false, val service: Service = Service()) {
+class AsyncTaskExecutorConfig {
 
-    class Service(
-            var url: String? = null,
-            var username: String? = null,
-            var password: String? = null)
+    @ApplicationScope
+    @Bean(name = ["uiTaskExecutor"])
+    fun uiTaskExecutor(): AsyncTaskExecutor {
+        val executor = ThreadPoolTaskExecutor()
+        executor.corePoolSize = 10
+        executor.maxPoolSize = 40
+        executor.setWaitForTasksToCompleteOnShutdown(false)
+        executor.threadNamePrefix = "UI-ASYNC"
+        executor.initialize()
+        return executor
+    }
 }

@@ -22,6 +22,9 @@
 		<kotlin.version>1.3.50</kotlin.version>
 		<vaadin.version>14.0.12</vaadin.version>
 		<swagger.version>2.9.2</swagger.version>
+		<pdfbox.version>2.0.16</pdfbox.version>
+		<pdfbox2-layout.version>1.0.0</pdfbox2-layout.version>
+		<rxkotlin.version>2.4.0</rxkotlin.version>
 
 		<sonar.coverage.exclusions>
 			**/net/g24/possy/service/extensions/ResettableLazy.kt,
@@ -43,6 +46,12 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+
+		<!-- for pdf generation -->
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 
@@ -150,6 +159,26 @@
 			<groupId>org.claspina</groupId>
 			<artifactId>confirm-dialog</artifactId>
 			<version>2.0.0</version>
+		</dependency>
+
+		<!-- PDf generation -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
+			<artifactId>pdfbox2-layout</artifactId>
+			<version>${pdfbox2-layout.version}</version>
+		</dependency>
+
+		<!-- reactive -->
+		<dependency>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxkotlin</artifactId>
+			<version>${rxkotlin.version}</version>
 		</dependency>
 
 		<!-- testing -->

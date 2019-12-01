@@ -14,25 +14,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer
+package net.g24.possy.service.rendering.templaterenderer
 
-import net.g24.possy.daemon.PrintRequest
+import net.g24.possy.service.model.PossyIssue
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 
-class DefaultTemplateRenderer : TemplateRenderer() {
+class TaskTemplateRenderer : TemplateRenderer() {
 
-    override fun render(
-            printRequest: PrintRequest,
-            doc: PDDocument,
-            contents: PDPageContentStream,
-            renderContext: RenderContext) {
-
-        renderIssue(printRequest, doc, contents, renderContext)
-        renderContent(printRequest, doc, contents, renderContext)
+    override fun render(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+        renderIssue(possyIssue, doc, contents, renderContext)
+        renderContent(possyIssue, doc, contents, renderContext)
         drawLightRect(contents, renderContext.width, renderContext.height, renderContext.marginBorder)
-        renderWeight(printRequest, doc, contents, renderContext)
-        renderTag(printRequest, doc, contents, renderContext)
+        renderTag(possyIssue, doc, contents, renderContext)
     }
 
 }

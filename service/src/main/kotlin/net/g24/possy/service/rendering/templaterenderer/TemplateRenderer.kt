@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer
 
-import net.g24.possy.daemon.LayoutRenderer
-import net.g24.possy.daemon.PrintRequest
+package net.g24.possy.service.rendering.templaterenderer
+
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.rendering.LayoutRenderer
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDFont
@@ -26,35 +27,35 @@ import rst.pdfbox.layout.text.Position
 
 abstract class TemplateRenderer : LayoutRenderer {
 
-    protected fun renderContent(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+    protected fun renderContent(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
         val contentFont = renderContext.contentFont
         renderContext.cursor = renderContext.cursor.down(contentFont.size.toFloat())
         drawMultiLineText(
                 contents,
-                printRequest.contentAsString,
+                possyIssue.content,
                 renderContext,
                 contentFont.applyFont(doc),
                 contentFont.size.toFloat(),
                 contentFont.lineHeight.toFloat())
     }
 
-    protected fun renderIssue(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
-        if (printRequest.key.isNullOrBlank()) {
+    protected fun renderIssue(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+        if (possyIssue.key.isNullOrBlank()) {
             return
         }
 
         val headerFont = renderContext.headerFont
         renderContext.cursor = renderContext.cursor.down(headerFont.size.toFloat())
-        showTextAt(contents, printRequest.key, renderContext.cursor, headerFont.applyFont(doc), headerFont.size.toFloat())
+        showTextAt(contents, possyIssue.key, renderContext.cursor, headerFont.applyFont(doc), headerFont.size.toFloat())
         renderContext.cursor = renderContext.cursor.down((headerFont.lineHeight - headerFont.size).toFloat())
     }
 
-    protected fun renderWeight(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
-        if (printRequest.weight.isNullOrBlank()) {
+    protected fun renderWeight(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+        if (possyIssue.weight.isNullOrBlank()) {
             return
         }
 
-        val text = printRequest.weight
+        val text = possyIssue.weight
 
         val headerFont = renderContext.headerFont
         val font = headerFont.applyFont(doc)
@@ -78,12 +79,12 @@ abstract class TemplateRenderer : LayoutRenderer {
         showTextAt(contents, text, Cursor(x + hBorder, y + vBorder + baseline), font, fontSize.toFloat())
     }
 
-    protected fun renderTag(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
-        if (printRequest.tag.isNullOrBlank()) {
+    protected fun renderTag(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext) {
+        if (possyIssue.tag.isNullOrBlank()) {
             return
         }
 
-        val text = printRequest.tag
+        val text = possyIssue.tag
         val footerFont = renderContext.footerFont
         val font = footerFont.applyFont(doc)
         val fontSize = footerFont.size

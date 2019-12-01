@@ -26,10 +26,7 @@ import java.nio.file.Files
 import java.util.*
 
 @Component
-class PossyService(
-        private val cupsProperties: CupsProperties,
-        private val possyProperties: PossyProperties,
-        private val pdfGenerator: PdfGenerator) {
+class PossyService(private val cupsProperties: CupsProperties, private val possyProperties: PossyProperties) {
 
     private var jobId = 0
     private val client: CupsClient = CupsClient(cupsProperties.host!!, cupsProperties.port)
@@ -39,46 +36,32 @@ class PossyService(
     }
 
     fun print(printRequest: PrintRequest) {
-        if (printRequest.template === PrintTemplate.IMAGE) {
-            printImage(printRequest.content, printRequest.mimetype)
-        } else {
-            printDocument(printRequest)
-        }
-    }
-
-    private fun printImage(content: ByteArray, mimetype: String?) {
-        // TODO implement (https://github.com/gerald24/possy/issues/4)
-    }
-
-    private fun printDocument(printRequest: PrintRequest) {
-        val out = pdfGenerator.createPdf(printRequest)
-
         val attribs = HashMap<String, String>()
-        attribs["document-format"] = "application/pdf"
+        attribs["document-format"] = printRequest.mimeType
 
-        if (possyProperties.pdfGenerator.isRedirectToFile) {
-            Files.write(Files.createTempFile("possy", ".pdf").toAbsolutePath(), out)
-        } else {
-            val cupsPrinter = findCupsPrinter(printRequest.template)
-            val pj = PrintJob.Builder(out)
-                    .jobName("Possy #" + ++jobId)
-                    .attributes(attribs)
-                    .userName("anonymous")
-                    .copies(1)
-                    .build()
-            cupsPrinter.print(pj)
+        if (possyProperties.isRedirectToFile) {
+            Files.write(Files.createTempFile("possy", ".pdf").toAbsolutePath(), printRequest.content)
+            return
         }
+
+        val cupsPrinter = findCupsPrinter(printRequest.printPaper)
+        val pj = PrintJob.Builder(printRequest.content)
+                .jobName("Possy #" + ++jobId)
+                .attributes(attribs)
+                .userName("anonymous")
+                .copies(1)
+                .build()
+        cupsPrinter.print(pj)
     }
 
-    private fun findCupsPrinter(template: PrintTemplate): CupsPrinter {
-        val printer = printerNameForTemplate(template)
+    private fun findCupsPrinter(printPaper: PrintPaper): CupsPrinter {
+        val printer = when (printPaper) {
+            PrintPaper.WHITE -> cupsProperties.printers.white!!
+            PrintPaper.PINK -> cupsProperties.printers.pink!!
+            PrintPaper.YELLOW -> cupsProperties.printers.yellow!!
+        }
+
         return client.printers.first { printer == it.name }
-    }
-
-    private fun printerNameForTemplate(template: PrintTemplate): String = when (template.paper) {
-        PrintPaper.WHITE -> cupsProperties.printers.white!!
-        PrintPaper.PINK -> cupsProperties.printers.pink!!
-        PrintPaper.YELLOW -> cupsProperties.printers.yellow!!
     }
 
     private fun listAllPrinters(client: CupsClient) {

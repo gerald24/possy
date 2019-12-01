@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon
+package net.g24.possy.service.rendering
 
-import net.g24.possy.daemon.templaterenderer.RenderContext
+import net.g24.possy.service.model.PossyIssue
+import net.g24.possy.service.rendering.templaterenderer.RenderContext
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 
 interface LayoutRenderer {
-    fun render(printRequest: PrintRequest, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext)
+    fun render(possyIssue: PossyIssue, doc: PDDocument, contents: PDPageContentStream, renderContext: RenderContext)
 }

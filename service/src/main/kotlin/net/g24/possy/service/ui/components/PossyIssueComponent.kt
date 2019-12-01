@@ -36,7 +36,7 @@ class PossyIssueComponent(val possyIssue: PossyIssue, val clickHandler: (possyIs
     init {
         setId(possyIssue.key)
         model.setKey(possyIssue.key?:"")
-        model.setSummary(possyIssue.contentAsString)
+        model.setSummary(possyIssue.content)
         model.setType(possyIssue.template.name)
     }
 

@@ -16,35 +16,28 @@
  */
 package net.g24.possy.service.service
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
-import net.g24.possy.service.model.PossyIssue
-import net.g24.possy.service.model.PrintTemplate
-import org.springframework.beans.factory.annotation.Autowired
+import io.swagger.annotations.*
+import net.g24.possy.service.model.PrintPaper
+import net.g24.possy.service.rendering.PdfGenerator
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
 @RequestMapping("/api/print")
-@Api("Print Queue", tags = ["Print Queue"], description = "Pick up, create and delete print requests")
-class PrintApiService(@Autowired private val queue: PrintRequestQueueService) {
+@Api("Print Queue", tags = ["Print Queue"], description = "Pick up and delete print requests")
+class PrintApiService(private val queue: PrintRequestQueueService, private val pdfGenerator: PdfGenerator) {
 
     @GetMapping
     @ApiOperation("Get all print requests from print queue")
-    fun nextRequest(): ResponseEntity<List<PossyIssue>> = ResponseEntity.ok(queue.nextAllItems().toList())
-
-    @PostMapping
-    @ApiOperation("Adds a new print request to the print queue")
-    fun createRequest(
-            @RequestParam("template") @ApiParam("The content template") template: PrintTemplate,
-            @RequestParam("issue") @ApiParam("Usually the key/identifier (e.g. JIRA-123) of an issue") issue: String,
-            @RequestParam("content") @ApiParam("Plain text content") content: String): ResponseEntity<PossyIssue> = try {
-        ResponseEntity.ok(queue.addItem(PossyIssue(template, issue, null, null, content)))
-    } catch (e: IllegalArgumentException) {
-        ResponseEntity.badRequest().build()
-    }
+    fun nextRequests(): ResponseEntity<List<PrintRequest>> =
+            ResponseEntity.ok(queue.nextAllItems().map { PrintRequest(
+                    id = it.id,
+                    printPaper = it.template.paper,
+                    content = pdfGenerator.createPdf(it),
+                    mimeType = MediaType.APPLICATION_PDF_VALUE
+            )})
 
     @DeleteMapping("{id}")
     @ApiOperation("Removes a specific print request from print queue")
@@ -54,3 +47,19 @@ class PrintApiService(@Autowired private val queue: PrintRequestQueueService) {
             id: UUID
     ): ResponseEntity<Any> = if (queue.removeItem(id)) ResponseEntity.ok().build() else ResponseEntity.notFound().build()
 }
+
+@ApiModel(description = "Model for print requests")
+class PrintRequest(
+
+        @ApiModelProperty(notes = "Identifier of the print request")
+        val id: UUID,
+
+        @ApiModelProperty(notes = "Paper type for choosing the correct printer")
+        val printPaper: PrintPaper,
+
+        @ApiModelProperty("The content to print, e.g. text, images etc.")
+        val content: ByteArray,
+
+        @ApiModelProperty("The content's type")
+        val mimeType: String
+)

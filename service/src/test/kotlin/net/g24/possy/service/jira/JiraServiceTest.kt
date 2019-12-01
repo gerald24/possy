@@ -57,7 +57,7 @@ class JiraServiceTest {
         assertThat(issues).hasSize(1)
         assertThat(issues[0].weight).isEqualTo("L")
         assertThat(issues[0].key).isEqualTo("STORY-1")
-        assertThat(issues[0].contentAsString).isEqualTo("Summary")
+        assertThat(issues[0].content).isEqualTo("Summary")
         assertThat(issues[0].template).isEqualTo(PrintTemplate.STORY)
     }
 

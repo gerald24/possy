@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer
+package net.g24.possy.service.rendering.templaterenderer
 
-import net.g24.possy.daemon.configuration.PossyProperties.PdfGenerator.Pages.PageSpec
+import net.g24.possy.service.PossyConfigurationProperties.PdfGenerator.Pages.PageSpec
 
 class RenderContext(pageSpec: PageSpec, val headerFont: FontContext, val contentFont: FontContext, val footerFont: FontContext) {
 

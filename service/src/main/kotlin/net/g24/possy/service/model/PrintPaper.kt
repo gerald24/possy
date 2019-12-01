@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer
+package net.g24.possy.service.model
 
-data class Cursor(val x: Float, val y: Float) {
-
-    fun down(offset: Float): Cursor = Cursor(x, y - offset)
+enum class PrintPaper {
+    WHITE,
+    PINK,
+    YELLOW
 }

@@ -27,7 +27,34 @@ import org.springframework.validation.annotation.Validated
 class PossyConfigurationProperties(
         var encryptionKey: String? = null,
         var rememberMeValiditySeconds: Int? = null,
-        val admin: Admin = Admin()
+        val admin: Admin = Admin(),
+        val pdfGenerator: PdfGenerator = PdfGenerator()
 ) {
     class Admin(var username: String? = null, var password: String? = null)
+
+    class PdfGenerator(val fonts: Fonts = Fonts(), val pages: Pages = Pages()) {
+
+        class Fonts(
+                val header: FontSpec = FontSpec(),
+                val content: FontSpec = FontSpec(),
+                val footer: FontSpec = FontSpec()) {
+
+            class FontSpec(
+                    var font: String? = null,
+                    var size: Int = 0,
+                    var lineHeight: Int = 0)
+        }
+
+        class Pages(
+                val story: PageSpec = PageSpec(),
+                val task: PageSpec = PageSpec(),
+                val freeform: PageSpec = PageSpec(),
+                val bug: PageSpec = PageSpec()) {
+
+            class PageSpec(var width: Float = 0.toFloat(),
+                           var height: Float = 0.toFloat(),
+                           var border: Float = 0.toFloat(),
+                           var margin: Float = 0.toFloat())
+        }
+    }
 }

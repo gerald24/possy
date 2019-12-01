@@ -16,10 +16,10 @@
  */
 package net.g24.possy.service.model
 
-enum class PrintTemplate(val printer: String) {
-    BUG("Pink"),
-    TASK("White"),
-    STORY("White"),
-    IMAGE("White"),
-    FREEFORM("Yellow")
+enum class PrintTemplate(val paper: PrintPaper) {
+    BUG(PrintPaper.PINK),
+    TASK(PrintPaper.WHITE),
+    STORY(PrintPaper.WHITE),
+    FREEFORM(PrintPaper.YELLOW),
+    //IMAGE(PrintPaper.WHITE)
 }

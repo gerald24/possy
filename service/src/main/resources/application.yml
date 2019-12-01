@@ -36,6 +36,41 @@ possy:
   admin:
     username: admin
     password: admin
+  pdf-generator:
+    fonts:
+      header:
+        font: classpath:fonts/SourceSansPro-Black.ttf
+        size: 26
+        line-height: 29
+      content:
+        font: classpath:fonts/ShortStack-Regular.ttf
+        size: 16
+        line-height: 20
+      footer:
+        font: classpath:fonts/SourceSansPro-Regular.ttf
+        size: 12
+        line-height: 20
+    pages:
+      story: # page height usually 72.0f but for TM88IV lower
+        width: 160.0
+        height: 64.0
+        border: 1.0
+        margin: 3.0
+      task: # page height usually 72.0f but for TM88IV lower
+        width: 64.0
+        height: 64.0
+        border: 1.0
+        margin: 3.0
+      freeform:
+        width: 72.0
+        height: 80.0
+        border: 1.0
+        margin: 3.0
+      bug:
+        width: 72.0
+        height: 80.0
+        border: 1.0
+        margin: 3.0
 
 management:
   endpoints:

@@ -19,7 +19,6 @@ package net.g24.possy.service.service
 
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -62,34 +61,12 @@ class PrintApiServiceTest {
                 .andExpect(status().isOk)
                 .andExpect(content().string("[]"))
 
-        addQueueItem()
+        val id = addQueueItem()
 
         mockMvc.perform(get("/api/print")
                 .with(httpBasic(securityProperties.user.name, securityProperties.user.password)))
                 .andExpect(status().isOk)
-                .andExpect(content().string(containsString("KEY-1")))
-    }
-
-    @Test
-    fun `invalid create request`() {
-        mockMvc.perform(post("/api/print")
-                .with(httpBasic(securityProperties.user.name, securityProperties.user.password))
-                .param("template", "BUG")
-                .param("issue", "")
-                .param("content", "test"))
-                .andExpect(status().isBadRequest)
-    }
-
-    @Test
-    fun `valid create request`() {
-        mockMvc.perform(post("/api/print")
-                .with(httpBasic(securityProperties.user.name, securityProperties.user.password))
-                .param("template", "BUG")
-                .param("issue", "KEY-1")
-                .param("content", "test"))
-                .andExpect(status().isOk)
-
-        assertThat(printRequestQueueService.allItems()).hasSize(1)
+                .andExpect(content().string(containsString(id.toString())))
     }
 
     @Test
@@ -123,8 +100,7 @@ class PrintApiServiceTest {
                 template = PrintTemplate.BUG,
                 key = "KEY-1",
                 weight = "XL",
-                mimetype = "plain/text",
-                content = "test".toByteArray(),
+                content = "test",
                 tag = "TAG-1"))
         return issue.id
     }

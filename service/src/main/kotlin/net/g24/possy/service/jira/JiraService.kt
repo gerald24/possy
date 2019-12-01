@@ -81,10 +81,10 @@ class JiraService(
 
         val jiraIssues = response.body!!.issues
         val references = mutableMapOf<String, Map<String, Any?>?>()
-        return jiraIssues.map { asPrintRequest(it, references) }
+        return jiraIssues.map { asPossyIssue(it, references) }
     }
 
-    private fun asPrintRequest(issue: JiraIssue, references: MutableMap<String, Map<String, Any?>?>): PossyIssue {
+    private fun asPossyIssue(issue: JiraIssue, references: MutableMap<String, Map<String, Any?>?>): PossyIssue {
         val referenceResolver: ReferenceResolver = object : ReferenceResolver {
             override fun resolve(key: String): Map<String, Any?>? {
                 if (references.contains(key)) {
@@ -107,11 +107,11 @@ class JiraService(
         }
 
         return PossyIssue(
-                getTemplate(field(issue, jiraConfigurationProperties.mapping.templateField!!, referenceResolver) as String),
-                issue.key,
-                weight,
-                field(issue, jiraConfigurationProperties.mapping.tag!!, referenceResolver)?.toString(),
-                field(issue, jiraConfigurationProperties.mapping.content!!, referenceResolver) as String)
+                template = getTemplate(field(issue, jiraConfigurationProperties.mapping.templateField!!, referenceResolver) as String),
+                key = issue.key,
+                weight = weight,
+                tag = field(issue, jiraConfigurationProperties.mapping.tag!!, referenceResolver)?.toString(),
+                content = (field(issue, jiraConfigurationProperties.mapping.content!!, referenceResolver) as String))
     }
 
     private fun getTemplate(value: String): PrintTemplate {
@@ -131,7 +131,7 @@ class JiraService(
     private fun field(issue: JiraIssue, path: String, referenceResolver: ReferenceResolver): Any? {
         return path.split("|")
                 .stream()
-                .map{ p -> resolve(issue.allValues(), p.split(".").toMutableList(), referenceResolver)}
+                .map { p -> resolve(issue.allValues(), p.split(".").toMutableList(), referenceResolver) }
                 .filter { it != null }
                 .findFirst()
                 .orElse(null)

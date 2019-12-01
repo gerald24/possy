@@ -19,6 +19,7 @@ package net.g24.possy.service.ui
 import com.vaadin.flow.component.*
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -26,12 +27,21 @@ import com.vaadin.flow.component.textfield.TextArea
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
+import com.vaadin.flow.server.InputStreamFactory
+import com.vaadin.flow.server.StreamResource
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
+import net.g24.possy.service.rendering.PdfGenerator
+import org.springframework.http.MediaType
+import java.io.ByteArrayInputStream
+
 
 @Route("manually", layout = MainLayout::class)
-class ManuallyView(private val printRequestCreation: PrintRequestCreation, private val pageTitleBuilder: PageTitleBuilder)
-    : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
+class ManuallyView(
+        private val printRequestCreation: PrintRequestCreation,
+        private val pageTitleBuilder: PageTitleBuilder,
+        private val pdfGenerator: PdfGenerator
+) : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
 
     private val ctrlOrMeta: KeyModifier = KeyModifier.valueOf("CONTROL")
     private val printTemplateSelector = ComboBox<PrintTemplate>()
@@ -40,6 +50,7 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
     private val weight = TextField()
     private val content = TextArea()
     private val tag = TextField()
+    private val preview = Image()
 
     init {
         setSizeFull()
@@ -49,6 +60,7 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
         initHeader()
         initWeight()
         initContent()
+        initPreview()
         initTag()
 
         add(
@@ -61,7 +73,11 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
                     add(weight, tag)
                 }
         )
-        addAndExpand(content)
+        addAndExpand(HorizontalLayout().apply {
+            setSizeFull()
+            add(content)
+            add(preview)
+        })
 
         updateAppearance()
         updateFocus()
@@ -82,13 +98,13 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
     }
 
     private fun initProjectTemplateSelector() {
-        val templates = PrintTemplate.values().sorted().stream().filter { it != PrintTemplate.IMAGE }
+        val templates = PrintTemplate.values().sorted()// TODO: .stream().filter { it != PrintTemplate.IMAGE }
         printTemplateSelector.width = "220px"
         printTemplateSelector.setItems(templates)
         printTemplateSelector.value = PrintTemplate.FREEFORM
         printTemplateSelector.isAllowCustomValue = false
         printTemplateSelector.isRequired = true
-        printTemplateSelector.itemLabelGenerator = ItemLabelGenerator<PrintTemplate> { "$it (${it.printer})" }
+        printTemplateSelector.itemLabelGenerator = ItemLabelGenerator<PrintTemplate> { "$it (${it.paper})" }
         printTemplateSelector.addValueChangeListener {
             pushCurrentUrlState()
             updateAppearance()
@@ -127,6 +143,10 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
         initField(tag, "Tag")
     }
 
+    private fun initPreview() {
+        preview.setSizeFull()
+        preview.style.set("border", "none")
+    }
 
     private fun initField(field: TextField, placeholder: String) {
         field.placeholder = placeholder
@@ -143,21 +163,20 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
         weight.isVisible = hasWeight()
         tag.isVisible = hasTag()
         printButton.isEnabled = (!header.isVisible || header.isVisible && header.value.isNotBlank()) && content.value.isNotBlank()
+
+
+        val image = pdfGenerator.createImage(createPossyIssue())
+
+        val resource = StreamResource("preview.png", InputStreamFactory { ByteArrayInputStream(image) })
+        resource.setContentType(MediaType.IMAGE_PNG_VALUE)
+        preview.element.setAttribute("src", resource)
     }
 
     private fun queueIssue() {
         if (!printButton.isEnabled) {
             return
         }
-        printRequestCreation.print(
-                PossyIssue(
-                        printTemplateSelector.value,
-                        if (!hasHeader()) "" else header.value,
-                        if (!hasWeight()) null else weight.value,
-                        if (!hasTag()) null else tag.value,
-                        content.value
-                )
-        )
+        printRequestCreation.print(createPossyIssue())
         header.value = ""
         weight.value = ""
         content.value = ""
@@ -179,4 +198,12 @@ class ManuallyView(private val printRequestCreation: PrintRequestCreation, priva
             header.focus()
         }
     }
+
+    private fun createPossyIssue() = PossyIssue(
+            template = printTemplateSelector.value,
+            key = if (!hasHeader()) "" else header.value,
+            weight = if (!hasWeight()) null else weight.value,
+            tag = if (!hasTag()) null else tag.value,
+            content = content.value
+    )
 }

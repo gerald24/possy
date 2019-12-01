@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with possy. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.g24.possy.daemon.templaterenderer
+package net.g24.possy.service.rendering.templaterenderer
 
-import net.g24.possy.daemon.configuration.PossyProperties.PdfGenerator.Fonts.FontSpec
+import net.g24.possy.service.PossyConfigurationProperties.PdfGenerator.Fonts.FontSpec
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.font.PDFont
 import org.apache.pdfbox.pdmodel.font.PDType0Font

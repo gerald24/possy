@@ -21,12 +21,9 @@ import java.util.*
 
 class PrintRequest(
         val id: UUID,
-        val template: PrintTemplate,
-        val key: String? = null,
-        val weight: String? = null,
-        val tag: String? = null,
+        val printPaper: PrintPaper,
         val content: ByteArray,
-        val mimetype: String? = null) {
+        val mimeType: String) {
 
     val contentAsString: String
         get() = content.toString(StandardCharsets.UTF_8)
@@ -47,6 +44,6 @@ class PrintRequest(
     }
 
     override fun toString(): String {
-        return "PrintRequest(id=$id, template=$template, key=$key, weight=$weight, tag=$tag, mimetype=$mimetype)"
+        return "PrintRequest(id=$id, printPaper=$printPaper, mimeType=$mimeType)"
     }
 }

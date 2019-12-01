@@ -49,14 +49,22 @@ class PossyPlanner(private val clickHandler: (printRequests: List<PossyIssue>) -
                     if (!headerPrinted) {
                         printRequests.add(
                                 PossyIssue(
-                                        PrintTemplate.FREEFORM,
-                                        storyDetail,
-                                        null, null, "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
+                                        template = PrintTemplate.FREEFORM,
+                                        key = storyDetail,
+                                        weight = null,
+                                        tag = null,
+                                        content = "*******************\n*******************\n\nS E P A R A T O R\n\n*******************\n*******************"
                                 )
                         )
                         headerPrinted = true
                     }
-                    printRequests.add(PossyIssue(PrintTemplate.FREEFORM, null, null, storyDetail, taskDetail))
+                    printRequests.add(PossyIssue(
+                            template = PrintTemplate.FREEFORM,
+                            weight = null,
+                            key = null,
+                            tag = storyDetail,
+                            content = taskDetail)
+                    )
                 }
             }
         }

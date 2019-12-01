@@ -16,56 +16,29 @@
  */
 package net.g24.possy.service.model
 
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
 import java.util.*
 
-@ApiModel(description = "Model for print requests")
 class PossyIssue(
-        @ApiModelProperty(notes = "Template for layout")
+        val id: UUID = UUID.randomUUID(),
         val template: PrintTemplate,
-
-        @ApiModelProperty("Usually the key/identifier (e.g. JIRA-123) of an issue")
         val key: String?,
-
-        @ApiModelProperty("E.g. story points")
         val weight: String?,
-
-        @ApiModelProperty("E.g. author or other meta info")
         val tag: String?,
-
-        private val mimetype: String,
-
-        @ApiModelProperty("E.g. text, images etc.")
-        val content: ByteArray
+        val content: String
 ) {
-
-    @ApiModelProperty(notes = "Unique ID for a print request")
-    val id = UUID.randomUUID()
-
-    @ApiModelProperty("Is the print request already consumed by any client?")
     var consumed: Boolean = false
 
     val isValid: Boolean
-        @ApiModelProperty(hidden = true)
         get() = (template === PrintTemplate.FREEFORM || !key.isNullOrBlank()) && content.isNotEmpty()
-
-    val contentAsString: String
-        @ApiModelProperty(hidden = true)
-        get() = if (template === PrintTemplate.IMAGE) "" else String(content)
-
-    constructor(
-            template: PrintTemplate, issue: String?, weight: String?, tag: String?, content: String) : this(template, issue, weight, tag, "text/plain", content.toByteArray()) {
-    }
 
     override fun toString(): String {
         return key ?: ""
     }
 
     fun contentEquals(other: PossyIssue): Boolean {
-        return this.template == other.template &&
-                this.template !== PrintTemplate.FREEFORM && this.key == other.key &&
-                this.mimetype == other.mimetype &&
-                this.content.contentEquals(other.content)
+        return template == other.template
+                && template != PrintTemplate.FREEFORM
+                && key == other.key
+                && content.contentEquals(other.content)
     }
 }

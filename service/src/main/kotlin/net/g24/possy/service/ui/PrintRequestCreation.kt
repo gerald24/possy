@@ -46,8 +46,8 @@ class PrintRequestCreation(@Autowired private val printRequestQueueService: Prin
         showNotification()
     }
 
-    fun print(printRequest: PossyIssue) {
-        printRequestQueueService.addItem(printRequest)
+    fun print(possyIssue: PossyIssue) {
+        printRequestQueueService.addItem(possyIssue)
         showNotification()
     }
 

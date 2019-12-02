@@ -181,6 +181,19 @@
 			<version>${rxkotlin.version}</version>
 		</dependency>
 
+		<!-- pdf -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
+			<artifactId>pdfbox2-layout</artifactId>
+			<version>${pdfbox2-layout.version}</version>
+		</dependency>
+
+
 		<!-- testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

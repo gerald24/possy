@@ -94,3 +94,15 @@ body[theme~="light"] possy-print-request-item {
 	border: 1px solid gray;
 	border-radius: 2px;
 }
+
+.papertype-yellow {
+	background-color: #f9ffbe;
+}
+
+.papertype-pink {
+	background-color: #ffc9f7;
+}
+
+.papertype-white {
+	background-color: white;
+}

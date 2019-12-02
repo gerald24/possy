@@ -66,6 +66,8 @@ class MainLayout(
     init {
         initNavigationBar()
         initDrawerWithPrintQueue()
+
+        element.setProperty("drawerOpened", false)
     }
 
     override fun afterNavigation(event: AfterNavigationEvent) {

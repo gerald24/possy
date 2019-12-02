@@ -41,7 +41,7 @@ import kotlin.reflect.KClass
 class UiAwareEventDebouncer(@Autowired @Qualifier("uiTaskExecutor") val taskExecutor: AsyncTaskExecutor) {
 
     companion object {
-        const val DEBOUNCE_TIME_IN_MILLIS: Long = 500L
+        const val BUFFER_TIMESPAN_IN_MILLIS: Long = 500L
     }
 
     interface Registration {
@@ -173,7 +173,7 @@ class UiAwareEventDebouncer(@Autowired @Qualifier("uiTaskExecutor") val taskExec
             } catch (e: UIDetachedException) {
                 // ignore exceptions (just UI updates)
             } catch (e: Exception) {
-                logger().error("unexpected exception while handling events $events bound to view $view")
+               // TODO  logger().error("unexpected exception while handling events $events bound to view $view")
             } finally {
                 SecurityContextHolder.setContext(origCtx)
             }

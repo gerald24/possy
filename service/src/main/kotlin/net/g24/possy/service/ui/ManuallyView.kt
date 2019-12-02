@@ -170,6 +170,8 @@ class ManuallyView(
         val resource = StreamResource("preview.png", InputStreamFactory { ByteArrayInputStream(image) })
         resource.setContentType(MediaType.IMAGE_PNG_VALUE)
         preview.element.setAttribute("src", resource)
+        preview.removeClassNames(*preview.classNames.filter { it.startsWith("papertype-") }.toTypedArray())
+        preview.addClassName("papertype-${printTemplateSelector.value.paper.name.toLowerCase()}")
     }
 
     private fun queueIssue() {

@@ -17,9 +17,9 @@
 package net.g24.possy.service.model
 
 enum class PrintTemplate(val paper: PrintPaper) {
+    FREEFORM(PrintPaper.YELLOW),
     BUG(PrintPaper.PINK),
     TASK(PrintPaper.WHITE),
-    STORY(PrintPaper.WHITE),
-    FREEFORM(PrintPaper.YELLOW),
+    STORY(PrintPaper.WHITE)
     //IMAGE(PrintPaper.WHITE)
 }

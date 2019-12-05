@@ -37,14 +37,14 @@ class PdfGenerator(private val possyProperties: PossyConfigurationProperties, pr
 
     fun createPdf(possyIssue: PossyIssue): ByteArray {
         ByteArrayOutputStream().use { stream ->
-            writeToStream(possyIssue, stream)
+            writeToStream(possyIssue, stream, true)
             return stream.toByteArray()
         }
     }
 
     fun createImage(possyIssue: PossyIssue): ByteArray {
         ByteArrayOutputStream().use { stream ->
-            writeToStream(possyIssue, stream)
+            writeToStream(possyIssue, stream, false)
             PDDocument.load(stream.toByteArray()).use { doc ->
                 val image = PDFRenderer(doc).renderImage(0, 2.0f, ImageType.ARGB)
                 // make white area transparten?
@@ -56,12 +56,12 @@ class PdfGenerator(private val possyProperties: PossyConfigurationProperties, pr
         }
     }
 
-    private fun writeToStream(possyIssue: PossyIssue, stream: ByteArrayOutputStream) {
+    private fun writeToStream(possyIssue: PossyIssue, stream: ByteArrayOutputStream, rotateIfNeeded: Boolean) {
         when (possyIssue.template) {
-            PrintTemplate.STORY -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.story, StoryTemplateRenderer())
-            PrintTemplate.TASK -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.task, TaskTemplateRenderer())
-            PrintTemplate.FREEFORM -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.freeform, FreeformTemplateRenderer())
-            PrintTemplate.BUG -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.bug, DefaultTemplateRenderer())
+            PrintTemplate.STORY -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.story, StoryTemplateRenderer(), rotateIfNeeded)
+            PrintTemplate.TASK -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.task, TaskTemplateRenderer(), rotateIfNeeded)
+            PrintTemplate.FREEFORM -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.freeform, FreeformTemplateRenderer(), rotateIfNeeded)
+            PrintTemplate.BUG -> generatePdf(possyIssue, stream, possyProperties.pdfGenerator.pages.bug, DefaultTemplateRenderer(), rotateIfNeeded)
             //PrintTemplate.IMAGE ->  // TODO
         }
     }
@@ -70,7 +70,8 @@ class PdfGenerator(private val possyProperties: PossyConfigurationProperties, pr
             possyIssue: PossyIssue,
             stream: ByteArrayOutputStream,
             pageSpec: PageSpec,
-            layoutRenderer: LayoutRenderer) {
+            layoutRenderer: LayoutRenderer,
+            rotateIfNeeded: Boolean) {
         PDDocument().use { doc ->
             val renderContext = RenderContext(
                     pageSpec,
@@ -79,7 +80,7 @@ class PdfGenerator(private val possyProperties: PossyConfigurationProperties, pr
                     FontContext(resourceLoader, possyProperties.pdfGenerator.fonts.footer))
             val page = PDPage()
             page.mediaBox = PDRectangle(renderContext.width, renderContext.height)
-            if (renderContext.width > renderContext.height) {
+            if (rotateIfNeeded && renderContext.width > renderContext.height) {
                 page.rotation = 90
             }
             doc.addPage(page)

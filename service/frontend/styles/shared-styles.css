@@ -95,14 +95,71 @@ body[theme~="light"] possy-print-request-item {
 	border-radius: 2px;
 }
 
-.papertype-yellow {
+
+.possy-manually {
+	max-width: 800px;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.possy-manually .manually-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: auto;
+}
+
+.possy-manually .manually-container .manually-form {
+	width: 50%;
+}
+.possy-manually .manually-container.paper-template-story .manually-form {
+	width: 100%;
+}
+
+.possy-manually .manually-container .manually-preview .pdf-preview {
+	width: 100%;
+	margin-left: var(--lumo-space-m);
+	height: auto;
+	object-fit: contain;
+}
+
+.possy-manually .manually-container.paper-template-story {
+	display: block;
+}
+
+.possy-manually .manually-container.paper-type-yellow .manually-preview .pdf-preview {
 	background-color: #f9ffbe;
 }
 
-.papertype-pink {
+.possy-manually .manually-container.paper-type-pink .manually-preview .pdf-preview {
 	background-color: #ffc9f7;
 }
 
-.papertype-white {
+.possy-manually .manually-container.paper-type-white .manually-preview .pdf-preview {
 	background-color: white;
+}
+
+.possy-manually .manually-container.paper-template-story .manually-preview .pdf-preview {
+	margin: var(--lumo-space-m) 0 0 0;
+	width: 100%;
+}
+
+@media (max-width: 700px) {
+	.possy-manually .manually-container {
+		flex-direction: column;
+	}
+	.possy-manually .manually-container .manually-form {
+		width: 100%;
+	}
+	.possy-manually .manually-container .manually-preview .pdf-preview  {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+@media (max-width: 480px) {
+	.possy-manually {
+		width: 100%;
+	}
 }

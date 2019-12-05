@@ -18,13 +18,15 @@ package net.g24.possy.service.ui
 
 import com.vaadin.flow.component.*
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.formlayout.FormLayout
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup
 import com.vaadin.flow.component.textfield.TextArea
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.renderer.TextRenderer
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
 import com.vaadin.flow.server.InputStreamFactory
@@ -44,18 +46,16 @@ class ManuallyView(
 ) : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
 
     private val ctrlOrMeta: KeyModifier = KeyModifier.valueOf("CONTROL")
-    private val printTemplateSelector = ComboBox<PrintTemplate>()
+    private val printTemplateSelector = RadioButtonGroup<PrintTemplate>()
     private val printButton = Button("Print", VaadinIcon.PRINT.create()) { queueIssue() }
     private val header = TextField()
     private val weight = TextField()
     private val content = TextArea()
     private val tag = TextField()
     private val preview = Image()
+    private val container: Div
 
     init {
-        setSizeFull()
-        addClassName("possy-freeform")
-
         initProjectTemplateSelector()
         initHeader()
         initWeight()
@@ -63,21 +63,29 @@ class ManuallyView(
         initPreview()
         initTag()
 
+        setSizeFull()
+        addClassName("possy-manually")
+
+        container = Div().apply {
+            addClassName("manually-container")
+            add(
+                    FormLayout().apply {
+                        addClassName("manually-form")
+                        add(header, weight, tag, content)
+                    },
+                    Div().apply {
+                        addClassName("manually-preview")
+                        add(preview)
+                    }
+
+            )
+        }
         add(
-                HorizontalLayout().apply {
+                Div().apply {
                     add(printTemplateSelector, printButton)
-                    isSpacing = true
                 },
-                HorizontalLayout().apply {
-                    addAndExpand(header)
-                    add(weight, tag)
-                }
+                container
         )
-        addAndExpand(HorizontalLayout().apply {
-            setSizeFull()
-            add(content)
-            add(preview)
-        })
 
         updateAppearance()
         updateFocus()
@@ -99,12 +107,10 @@ class ManuallyView(
 
     private fun initProjectTemplateSelector() {
         val templates = PrintTemplate.values().sorted()// TODO: .stream().filter { it != PrintTemplate.IMAGE }
-        printTemplateSelector.width = "220px"
         printTemplateSelector.setItems(templates)
         printTemplateSelector.value = PrintTemplate.FREEFORM
-        printTemplateSelector.isAllowCustomValue = false
         printTemplateSelector.isRequired = true
-        printTemplateSelector.itemLabelGenerator = ItemLabelGenerator<PrintTemplate> { "$it (${it.paper})" }
+        printTemplateSelector.setRenderer(TextRenderer(ItemLabelGenerator<PrintTemplate> { "$it (${it.paper})" }))
         printTemplateSelector.addValueChangeListener {
             pushCurrentUrlState()
             updateAppearance()
@@ -120,17 +126,22 @@ class ManuallyView(
     }
 
     private fun initHeader() {
-        header.width = "100%"
+        header.maxLength = 30
+        header.element.setAttribute("colspan", "2")
         initField(header, "Header")
     }
 
 
     private fun initWeight() {
+        weight.maxLength = 30
         initField(weight, "Weight")
     }
 
     private fun initContent() {
+        content.label = "Content"
         content.setSizeFull()
+        content.element.style.set("min-height", "200px")
+        content.element.setAttribute("colspan", "2")
         content.placeholder = "Content (press Print-Button or CTRL-ENTER to print)"
         content.valueChangeMode = ValueChangeMode.EAGER
         content.isClearButtonVisible = true
@@ -140,16 +151,17 @@ class ManuallyView(
     }
 
     private fun initTag() {
+        tag.maxLength = 50
         initField(tag, "Tag")
     }
 
     private fun initPreview() {
-        preview.setSizeFull()
+        preview.addClassName("pdf-preview")
         preview.style.set("border", "none")
     }
 
-    private fun initField(field: TextField, placeholder: String) {
-        field.placeholder = placeholder
+    private fun initField(field: TextField, label: String) {
+        field.label = label
         field.valueChangeMode = ValueChangeMode.EAGER
         field.isClearButtonVisible = true
         field.addValueChangeListener { updateAppearance() }
@@ -164,14 +176,14 @@ class ManuallyView(
         tag.isVisible = hasTag()
         printButton.isEnabled = (!header.isVisible || header.isVisible && header.value.isNotBlank()) && content.value.isNotBlank()
 
+        container.removeClassNames(*container.classNames.filter { it.startsWith("paper-") }.toTypedArray())
+        container.addClassName("paper-type-${printTemplateSelector.value.paper.name.toLowerCase()}")
+        container.addClassName("paper-template-${printTemplateSelector.value.name.toLowerCase()}")
 
         val image = pdfGenerator.createImage(createPossyIssue())
-
         val resource = StreamResource("preview.png", InputStreamFactory { ByteArrayInputStream(image) })
         resource.setContentType(MediaType.IMAGE_PNG_VALUE)
         preview.element.setAttribute("src", resource)
-        preview.removeClassNames(*preview.classNames.filter { it.startsWith("papertype-") }.toTypedArray())
-        preview.addClassName("papertype-${printTemplateSelector.value.paper.name.toLowerCase()}")
     }
 
     private fun queueIssue() {

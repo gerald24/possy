@@ -113,6 +113,7 @@ body[theme~="light"] possy-print-request-item {
 .possy-manually .manually-container .manually-form {
 	width: 50%;
 }
+
 .possy-manually .manually-container.paper-template-story .manually-form {
 	width: 100%;
 }
@@ -128,15 +129,15 @@ body[theme~="light"] possy-print-request-item {
 	display: block;
 }
 
-.possy-manually .manually-container.paper-type-yellow .manually-preview .pdf-preview {
+.paper-type-yellow .pdf-preview {
 	background-color: #f9ffbe;
 }
 
-.possy-manually .manually-container.paper-type-pink .manually-preview .pdf-preview {
+.paper-type-pink .pdf-preview {
 	background-color: #ffc9f7;
 }
 
-.possy-manually .manually-container.paper-type-white .manually-preview .pdf-preview {
+.paper-type-white .pdf-preview {
 	background-color: white;
 }
 
@@ -145,14 +146,25 @@ body[theme~="light"] possy-print-request-item {
 	width: 100%;
 }
 
+.planner-story {
+	border: 2px solid slategray;
+	margin: 8px;
+}
+.planner-task .pdf-preview {
+	width: 180px;
+	margin: 4px;
+}
+
 @media (max-width: 700px) {
 	.possy-manually .manually-container {
 		flex-direction: column;
 	}
+
 	.possy-manually .manually-container .manually-form {
 		width: 100%;
 	}
-	.possy-manually .manually-container .manually-preview .pdf-preview  {
+
+	.possy-manually .manually-container .manually-preview .pdf-preview {
 		width: 100%;
 		margin-left: 0;
 	}

@@ -20,7 +20,6 @@ import com.vaadin.flow.component.*
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup
@@ -29,20 +28,15 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.renderer.TextRenderer
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.router.*
-import com.vaadin.flow.server.InputStreamFactory
-import com.vaadin.flow.server.StreamResource
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.model.PrintTemplate
-import net.g24.possy.service.rendering.PdfGenerator
-import org.springframework.http.MediaType
-import java.io.ByteArrayInputStream
 
 
 @Route("manually", layout = MainLayout::class)
 class ManuallyView(
         private val printRequestCreation: PrintRequestCreation,
         private val pageTitleBuilder: PageTitleBuilder,
-        private val pdfGenerator: PdfGenerator
+        private val preview: PdfPreviewView
 ) : VerticalLayout(), HasUrlParameter<String>, HasDynamicTitle {
 
     private val ctrlOrMeta: KeyModifier = KeyModifier.valueOf("CONTROL")
@@ -52,7 +46,6 @@ class ManuallyView(
     private val weight = TextField()
     private val content = TextArea()
     private val tag = TextField()
-    private val preview = Image()
     private val container: Div
 
     init {
@@ -60,7 +53,6 @@ class ManuallyView(
         initHeader()
         initWeight()
         initContent()
-        initPreview()
         initTag()
 
         setSizeFull()
@@ -155,10 +147,6 @@ class ManuallyView(
         initField(tag, "Tag")
     }
 
-    private fun initPreview() {
-        preview.addClassName("pdf-preview")
-        preview.style.set("border", "none")
-    }
 
     private fun initField(field: TextField, label: String) {
         field.label = label
@@ -180,10 +168,8 @@ class ManuallyView(
         container.addClassName("paper-type-${printTemplateSelector.value.paper.name.toLowerCase()}")
         container.addClassName("paper-template-${printTemplateSelector.value.name.toLowerCase()}")
 
-        val image = pdfGenerator.createImage(createPossyIssue())
-        val resource = StreamResource("preview.png", InputStreamFactory { ByteArrayInputStream(image) })
-        resource.setContentType(MediaType.IMAGE_PNG_VALUE)
-        preview.element.setAttribute("src", resource)
+        val possyIssue = createPossyIssue()
+        preview.render(possyIssue)
     }
 
     private fun queueIssue() {

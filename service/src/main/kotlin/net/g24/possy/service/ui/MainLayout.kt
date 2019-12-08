@@ -38,6 +38,7 @@ import net.g24.possy.service.extensions.accessIfAttached
 import net.g24.possy.service.model.PossyIssue
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.components.PossyPrintRequestItem
+import net.g24.possy.service.ui.planner.PlannerView
 import org.springframework.beans.factory.annotation.Value
 import java.util.*
 

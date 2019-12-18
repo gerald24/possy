@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-class TaskPlannerView(private val pdfPreviewView: PdfPreviewView) : Span() {
+class TaskPlannerView(
+        private val plannerSelectionEventAndActionBus: PlannerSelectionStateAndActionBus,
+        private val pdfPreviewView: PdfPreviewView
+) : Span() {
 
     var possyIssue: PossyIssue = PossyIssue(
             template = PrintTemplate.FREEFORM,
@@ -30,23 +33,22 @@ class TaskPlannerView(private val pdfPreviewView: PdfPreviewView) : Span() {
         add(pdfPreviewView)
 
         render()
-        element.addEventListener("click") { editContent() }
-        editContent()
+        element.addEventListener("click") {
+            plannerSelectionEventAndActionBus.selectTask(this)
+        }
     }
 
 
     fun isNotEmpty() = possyIssue.content.isNotBlank()
 
-    fun editContent() {
-        TaskContentDialog(possyIssue.content) {
-            possyIssue = PossyIssue(
-                    template = possyIssue.template,
-                    key = possyIssue.key,
-                    weight = possyIssue.weight,
-                    tag = possyIssue.tag,
-                    content = it)
-            render()
-        }.open()
+    fun setContent(value: String) {
+        possyIssue = PossyIssue(
+                template = possyIssue.template,
+                key = possyIssue.key,
+                weight = possyIssue.weight,
+                tag = possyIssue.tag,
+                content = value)
+        render()
     }
 
 
@@ -58,6 +60,8 @@ class TaskPlannerView(private val pdfPreviewView: PdfPreviewView) : Span() {
                 "paper-template-${possyIssue.template.name.toLowerCase()}"
         )
     }
+
+
 
 
 }

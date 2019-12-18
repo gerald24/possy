@@ -22,7 +22,9 @@
 		<kotlin.version>1.3.61</kotlin.version>
 		<rxkotlin.version>2.4.0</rxkotlin.version>
 
-		<vaadin.version>14.1.1</vaadin.version>
+		<vaadin.version>14.1.2</vaadin.version>
+		<node.version>v12.13.1</node.version>
+		<npm.version>6.13.4</npm.version>
 		<confirm-dialog.version>2.0.0</confirm-dialog.version>
 
 		<swagger.version>2.9.2</swagger.version>
@@ -304,8 +306,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<nodeVersion>v12.13.1</nodeVersion>
-					<npmVersion>6.13.1</npmVersion>
+					<nodeVersion>${node.version}</nodeVersion>
+					<npmVersion>${npm.version}</npmVersion>
 				</configuration>
 			</plugin>
 

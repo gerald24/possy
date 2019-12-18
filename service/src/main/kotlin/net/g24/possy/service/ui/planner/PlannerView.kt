@@ -16,25 +16,26 @@
  */
 package net.g24.possy.service.ui.planner
 
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.Route
 import net.g24.possy.service.service.PrintRequestQueueService
 import net.g24.possy.service.ui.MainLayout
 import net.g24.possy.service.ui.PageTitleBuilder
 import org.springframework.beans.factory.ObjectProvider
+import javax.annotation.PostConstruct
 
 @Route("planner", layout = MainLayout::class)
 class PlannerView(
+        private val plannerSelectionEventAndActionBus: PlannerSelectionStateAndActionBus,
         private val printRequestQueueService: PrintRequestQueueService,
         private val pageTitleBuilder: PageTitleBuilder,
+        private val controlPanel: PlannerControls,
         private val storyViewProvider: ObjectProvider<StoryPlannerView>
-) : VerticalLayout(), HasDynamicTitle {
+
+) : HorizontalLayout(), HasDynamicTitle {
 
     // TODO add persistence!
 
@@ -42,32 +43,28 @@ class PlannerView(
 
     // TODO remove old PossyPlanner
     // private val possyPlanner = PossyPlanner { addPrintRequests(it) }
-    private val storiesContainer = Div().apply { addClassName("planner-stories") }
-    private val addButton = Button("Add Story", VaadinIcon.FOLDER_ADD.create()) { addStory() }
-    private val printButton = Button("Print", VaadinIcon.PRINT.create()) { printStories() }
-    private val resetButton = Button("Reset", VaadinIcon.CLOSE.create()) { reset() }
 
-    init {
+    private val storiesContainer = Div().apply { addClassName("planner-stories") }
+
+    @PostConstruct
+    private fun init() {
+        setSizeFull()
+
         addClassName("planner-view")
-        add(storiesContainer, HorizontalLayout(addButton, printButton, resetButton))
-        refreshAppearance()
+        add(controlPanel, storiesContainer)
+
+        plannerSelectionEventAndActionBus.addStoryClickHandler = this::addStory
     }
+
 
     override fun getPageTitle(): String = pageTitleBuilder.build("Planner")
 
-
     private fun addStory() {
         StoryKeyDialog {
-            val storyPlannerView = storyViewProvider.getObject()
-            storyPlannerView.key = it
-            storyPlannerView.addTask()
-            storyPlannerView.removeHandler = {
-                storiesContainer.remove(storyPlannerView)
-                refreshAppearance()
-            }
-
-            storiesContainer.add(storyPlannerView)
-            refreshAppearance()
+            var storyView = storyViewProvider.getObject()
+            storyView.key = it
+            storiesContainer.add(storyView)
+            plannerSelectionEventAndActionBus.selectStory(storyView, storyView.addTask())
         }.open()
     }
 
@@ -82,12 +79,8 @@ class PlannerView(
     private fun reset() {
         // TODO add confirmation
         storiesContainer.element.removeAllChildren()
-        refreshAppearance()
+        plannerSelectionEventAndActionBus.selectStory(null, null)
     }
 
-    private fun refreshAppearance() {
-        val hasChildren = storiesContainer.element.childCount > 0
-        printButton.isEnabled = hasChildren;
-        resetButton.isEnabled = hasChildren;
-    }
+
 }

@@ -21,7 +21,7 @@
 		<java.version>11</java.version>
 		<kotlin.version>1.3.61</kotlin.version>
 		<cups4j.version>0.7.1</cups4j.version>
-		<pdfbox.version>2.0.16</pdfbox.version>
+		<pdfbox.version>2.0.24</pdfbox.version>
 		<pdfbox2-layout.version>1.0.0</pdfbox2-layout.version>
 
 		<sonar.coverage.exclusions>

@@ -11,7 +11,7 @@ to print out tasks, bugs and other issues on POS printers (e.g. Epson TM-T20II)
 instead of using Post-it®, or print it on regular paper using the scissor.
 
 Possy is intended to be used as addition for ***physical Scrum and Kanban boards***.
-Read this [blog post](https://agsolutions.at/en/blog/printing-issues-with-possy/) for further information.
+Read this [blog post](https://www.agsolutions.at/stories/printing-issues-with-possy) for further information.
 
 ## Overview
 
